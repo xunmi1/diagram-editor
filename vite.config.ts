@@ -10,8 +10,18 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     lib: {
-      entry: resolve('src/main.ts'),
+      entry: resolve('./src/main.ts'),
       name: 'diagram-editor',
+    },
+  },
+  alias: {
+    '@': resolve('./src'),
+  },
+  css: {
+    preprocessorOptions: {
+      less: {
+        javascriptEnabled: true,
+      },
     },
   },
 });

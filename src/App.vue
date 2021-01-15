@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, shallowReactive } from 'vue';
 import Sidebar from './components/Sidebar.vue';
 import { useGraph, useEditor, useGlobalGraph } from '@/use';
 import { merge } from 'lodash-es';
@@ -41,7 +41,7 @@ export default defineComponent({
   },
   props: ['options', 'editor'],
   setup(props) {
-    useEditor(props.editor);
+    useEditor(shallowReactive(props.editor));
     const { container, graph } = useGraph(merge(defaultOptions, props.options));
     useGlobalGraph(graph);
     return { container, graph };

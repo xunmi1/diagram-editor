@@ -17,6 +17,7 @@ export class BasicRect extends Shape.Rect {
         },
       },
     };
+    console.log(merge(defaultOptions, options));
     super(merge(defaultOptions, options));
   }
 }

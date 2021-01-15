@@ -32,6 +32,6 @@ export const useGraph = (options: GraphOptions, effect?: (graph: Graph) => void)
   return { container, graph };
 };
 
-export const useWatchGraph = (source: Ref<Graph>, effect: (graph: Graph) => void) => {
-  watch(source, effect, { flush: 'post' });
+export const useWatchGraph = (source: Ref<Graph | undefined>, effect: (graph: Graph) => void) => {
+  watch(source, graph => graph && effect(graph), { flush: 'post' });
 };

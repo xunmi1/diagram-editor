@@ -3,7 +3,7 @@
     <ACollapse v-model:active-key="activeKey" accordion class="sidebar-collapse">
       <template v-for="[key, panel] in panelList" :key="key">
         <ACollapsePanel :panel-key="key" :header="panel.title">
-          <div ref="container">111</div>
+          <div :ref="el => mountContainer(key, el)"></div>
         </ACollapsePanel>
       </template>
     </ACollapse>
@@ -11,35 +11,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, unref } from 'vue';
-import { useGlobalGraph, useGraph, useWatchGraph } from '@/use';
-import { ShapeType } from '@/constants';
-import { BasicRect } from '@/shapes';
+import { defineComponent, reactive, ref, unref, nextTick } from 'vue';
+import { useEditor, useGlobalGraph, useWatchGraph } from '@/use';
+import { ShapeType, EventType } from '@/constants';
 import { Addon } from '@antv/x6';
-
-interface Panel {
-  title: string;
-}
-
-type PanelMap<T extends string | number = ShapeType> = Map<T, Panel>;
-
-const panelMap: PanelMap = new Map([
-  [ShapeType.NODE_BASE, { title: '基础节点' }],
-  [ShapeType.NODE_COMBINATION, { title: '组合节点' }],
-]);
+import { CellBarView } from '@/cell';
 
 export default defineComponent({
   name: 'Sidebar',
   components: {},
   setup() {
-    const { container, graph: graphRef } = useGraph({
-      height: 300,
-      interacting: false,
-      preventDefaultBlankAction: false,
-    });
     const dndRef = ref<Addon.Dnd>();
+    const editor = useEditor();
+    const globalGraph = useGlobalGraph();
+    const panelList = reactive<Map<string, CellBarView>>(new Map());
+    const cellViewMeta = reactive<{ [key: string]: { isMounted: boolean } }>({});
 
-    useGlobalGraph(graph => {
+    editor.on(EventType.CELL_BAR_VIEW_ADDED, ({ key, view }) => {
+      panelList.set(key, view);
+      cellViewMeta[key] = {};
+    });
+
+    editor.on(EventType.CELL_BAR_VIEW_MOVE, args => {
+      const dnd = unref(dndRef);
+      dnd.start(args.cell, args.e);
+    });
+
+    useWatchGraph(globalGraph, graph => {
       dndRef.value = new Addon.Dnd({
         target: graph,
         scaled: true,
@@ -47,18 +45,17 @@ export default defineComponent({
       });
     });
 
-    useWatchGraph(graphRef, graph => {
-      graph.addNode(new BasicRect());
-      graph.fitToContent({ gridHeight: 1, padding: 12 });
-      graph.on('node:mousedown', args => {
-        const dnd = unref(dndRef);
-        dnd.start(args.node, args.e);
-      });
-    });
+    const mountContainer = async (key, el) => {
+      await nextTick();
+      const meta = cellViewMeta[key];
+      if (meta.isMounted) return;
+      const view = panelList.get(key);
+      view.mount(el);
+      meta.isMounted = true;
+    };
 
-    const panelList = reactive<PanelMap>(panelMap);
     const activeKey = ref([ShapeType.NODE_BASE]);
-    return { container, panelList, activeKey };
+    return { panelList, activeKey, mountContainer };
   },
 });
 </script>

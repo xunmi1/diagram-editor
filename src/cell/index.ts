@@ -1,3 +1,3 @@
 export * from './CellBarView';
-export * from './CellModel';
+export * from './CellBarModel';
 export * from './NodeBarView';

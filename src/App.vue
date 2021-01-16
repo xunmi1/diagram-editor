@@ -23,11 +23,6 @@ const defaultOptions: GraphOptions = {
     enabled: true,
     tolerance: 10,
   },
-  scroller: {
-    enabled: true,
-    pannable: true,
-    autoResize: true,
-  },
   mousewheel: {
     enabled: true,
     modifiers: ['ctrl', 'meta'],

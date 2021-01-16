@@ -1,10 +1,12 @@
 import { CellBarView } from '@/cell/CellBarView';
 import { Graph, Node } from '@antv/x6';
 
-export abstract class NodeBarView extends CellBarView {
-  abstract readonly title: string;
+const DEFAULT_PADDING = 12;
+const NODE_EVENT_MOUSEDOWN = 'node:mousedown';
+
+export class NodeBarView extends CellBarView {
+  public title: string;
   public graph: Graph | undefined;
-  abstract mounted(): void;
 
   mount(container: HTMLElement): void {
     this.graph = new Graph({
@@ -17,18 +19,30 @@ export abstract class NodeBarView extends CellBarView {
     this.fitToContent();
   }
 
-  load(...nodeList: Node[]) {
-    nodeList.forEach(node => {
-      this.graph?.addNode(node);
-    });
+  mounted() {}
+
+  unmount() {
+    this.unbindMoveEvent();
+  }
+
+  load(...nodeList: Node[]): void;
+  load(...nodeList: Node.Metadata[]): void;
+  load(...nodeList: any[]) {
+    const graph = this.graph;
+    if (!graph) return;
+    nodeList.forEach(node => graph.addNode(node));
     this.fitToContent();
   }
 
   fitToContent() {
-    this.graph?.fitToContent({ gridHeight: 1, padding: 12 });
+    this.graph?.fitToContent({ gridHeight: 1, padding: DEFAULT_PADDING });
   }
 
   bindMoveEvent() {
-    this.graph?.on('node:mousedown', args => this.start(args));
+    this.graph?.on(NODE_EVENT_MOUSEDOWN, args => this.start(args));
+  }
+
+  unbindMoveEvent() {
+    this.graph?.off(NODE_EVENT_MOUSEDOWN);
   }
 }

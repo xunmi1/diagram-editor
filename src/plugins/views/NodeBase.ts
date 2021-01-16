@@ -1,9 +1,7 @@
 import { NodeBarView } from '@/cell';
-import { BasicRect } from '@/shapes';
+import { BasicRect } from '@/plugins/shapes';
 
 export default class NodeBase extends NodeBarView {
-  readonly title: string;
-
   public constructor() {
     super();
     this.title = '基础节点';

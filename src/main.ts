@@ -1,23 +1,24 @@
 import { createApp } from 'vue';
-import App from './App.vue';
-import antd from './antd';
-import { Graph } from '@antv/x6';
+import type { Graph } from '@antv/x6';
+import App from '@/App.vue';
+import antd from '@/antd';
 import { useOnceWatch } from '@/use';
-import { EditorOptions } from '@/interfaces';
-import { CellModel, CellBarView } from '@/cell';
-import NodeBase from '@/cell/views/NodeBase';
+import { EditorOptions, Plugin } from '@/interfaces';
+import { CellBarModel, CellBarView, NodeBarView } from '@/cell';
 import { Subject } from '@/utils';
-import { ShapeType } from '@/constants';
+
+export { CellBarView, NodeBarView };
+export * from '@/plugins';
 
 class DiagramEditor extends Subject {
-  protected readonly cellModel: CellModel;
-  private readonly options: EditorOptions;
+  public readonly cellBarModel: CellBarModel;
   public graph: Graph;
+  private readonly options: EditorOptions;
 
   constructor(options: EditorOptions = {}) {
     super({ global: true });
     this.options = options;
-    this.cellModel = new CellModel();
+    this.cellBarModel = new CellBarModel();
   }
 
   mount(rootContainer: string | Element) {
@@ -30,7 +31,6 @@ class DiagramEditor extends Subject {
           this.graph = vm.graph;
           resolve(this.graph);
         }
-        this.registerCellBar(ShapeType.NODE_BASE, new NodeBase());
 
         return !!vm.graph;
       });
@@ -38,7 +38,12 @@ class DiagramEditor extends Subject {
   }
   // 添加节点菜单项
   registerCellBar(key: string, view: CellBarView) {
-    this.cellModel.register(key, view);
+    this.cellBarModel.register(key, view);
+  }
+
+  use(plugin: Plugin) {
+    plugin(this);
+    return this;
   }
 }
 

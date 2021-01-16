@@ -2,7 +2,7 @@ import { Subject } from '@/utils';
 import type { CellBarView } from './CellBarView';
 import { EventType } from '@/constants';
 
-export class CellModel extends Subject {
+export class CellBarModel extends Subject {
   protected readonly list: Map<string, CellBarView>;
 
   constructor() {
@@ -14,5 +14,9 @@ export class CellModel extends Subject {
     this.list.set(key, view);
 
     this.emit(EventType.CELL_BAR_VIEW_ADDED, { key, view });
+  }
+
+  [Symbol.iterator]() {
+    return this.list.entries();
   }
 }

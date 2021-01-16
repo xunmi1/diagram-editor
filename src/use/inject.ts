@@ -12,14 +12,14 @@ export const useInject = <T>(key: InjectionKey<T> | string, value?: T) => {
 const INJECT_EDITOR = Symbol('editor');
 const INJECT_GRAPH = Symbol('graph');
 
-export const useEditor = (value?: DiagramEditor) => useInject(INJECT_EDITOR, value);
+export const useEditor = (value?: DiagramEditor) => useInject(INJECT_EDITOR, value)!;
 
 export const useGlobalGraph = (valueOrEffect?: Ref<Graph | undefined> | ((graph: Graph) => void)) => {
   if (isRef(valueOrEffect)) {
-    return useInject(INJECT_GRAPH, valueOrEffect);
+    return useInject(INJECT_GRAPH, valueOrEffect)!;
   }
 
-  const graphRef = useInject<Ref<Graph | undefined>>(INJECT_GRAPH);
+  const graphRef = useInject<Ref<Graph | undefined>>(INJECT_GRAPH)!;
 
   if (isFunction(valueOrEffect)) {
     useOnceWatch(() => {

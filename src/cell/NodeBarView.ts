@@ -4,7 +4,12 @@ import { Graph, Node } from '@antv/x6';
 const DEFAULT_PADDING = 12;
 const NODE_EVENT_MOUSEDOWN = 'node:mousedown';
 
-export class NodeBarView extends CellBarView {
+interface Lifecycle {
+  mounted(): void;
+  beforeUnmount(): void;
+}
+
+export class NodeBarView extends CellBarView implements Lifecycle {
   public title: string;
   public graph: Graph | undefined;
 
@@ -19,11 +24,13 @@ export class NodeBarView extends CellBarView {
     this.fitToContent();
   }
 
-  mounted() {}
-
   unmount() {
+    this.beforeUnmount();
     this.unbindMoveEvent();
   }
+
+  mounted() {}
+  beforeUnmount() {}
 
   load(...nodeList: Node[]): void;
   load(...nodeList: Node.Metadata[]): void;

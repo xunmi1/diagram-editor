@@ -1,9 +1,9 @@
 <template>
-  <div class="sidebar">
+  <div v-show="panelList.size" class="sidebar">
     <ACollapse v-model:active-key="activeKey" class="sidebar-collapse">
       <template v-for="[key, panel] in panelList" :key="key">
         <ACollapsePanel :panel-key="key" :header="panel.title">
-          <div :ref="el => mountContainer(key, el)"></div>
+          <div v-once :ref="el => render(key, el)"></div>
         </ACollapsePanel>
       </template>
     </ACollapse>
@@ -13,9 +13,9 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, unref, nextTick, onBeforeUnmount } from 'vue';
 import { useEditor, useGlobalGraph, useWatchGraph } from '@/use';
-import { ShapeType, EventType } from '@/constants';
+import { EventType } from '@/constants';
 import { Addon } from '@antv/x6';
-import { CellBarView } from '@/cell';
+import { CellBarModel, CellBarView } from '@/cell';
 
 const useDnd = () => {
   const dndRef = ref<Addon.Dnd>();
@@ -30,13 +30,38 @@ const useDnd = () => {
   return dndRef;
 };
 
+const useMount = (panelList: Map<string, CellBarView>, cellBarModel: CellBarModel) => {
+  return async (key: string, el: HTMLElement) => {
+    await nextTick();
+    const meta = cellBarModel.getMeta(key);
+    if (meta.isMounted) return;
+    const view = panelList.get(key);
+    if (!view) return;
+    view.mount(el);
+    cellBarModel.updateMeta(key, { isMounted: true });
+  };
+};
+
+const useUnmount = (panelList: Map<string, CellBarView>, cellBarModel: CellBarModel) => {
+  const list = [...panelList];
+  onBeforeUnmount(() => {
+    list.forEach(([key, view]) => {
+      const meta = cellBarModel.getMeta(key);
+      if (!meta.isMounted) return;
+      view?.unmount();
+    });
+  });
+};
+
 export default defineComponent({
   name: 'Sidebar',
   components: {},
   setup() {
     const editor = useEditor();
-    const panelList = reactive<Map<string, CellBarView>>(new Map([...editor.cellBarModel]));
-    const cellViewMeta = reactive<Record<string, { isMounted?: boolean } | undefined>>({});
+    const cellBarModel = editor.cellBarModel;
+    const panelList = reactive<Map<string, CellBarView>>(new Map(cellBarModel));
+    // 第一个 bar 的 key
+    const activeKey = ref([...cellBarModel][0]?.[0]);
     const dndRef = useDnd();
 
     editor.on(EventType.CELL_BAR_VIEW_ADDED, ({ key, view }: any) => {
@@ -48,27 +73,10 @@ export default defineComponent({
       dnd?.start(args.cell, args.e);
     });
 
-    onBeforeUnmount(() => {
-      Object.entries(cellViewMeta, (key, meta) => {
-        if (!meta.isMounted) return;
-        const view = panelList.get(key);
-        view?.unmount();
-      });
-    });
+    const render = useMount(panelList, cellBarModel);
+    useUnmount(panelList, cellBarModel);
 
-    const mountContainer = async (key: string, el: HTMLElement) => {
-      await nextTick();
-      if (cellViewMeta[key] == null) cellViewMeta[key] = {};
-      const meta = cellViewMeta[key];
-      const view = panelList.get(key);
-      if (!view) return;
-      view.mount(el);
-      meta.isMounted = true;
-    };
-
-    const activeKey = ref([ShapeType.NODE_BASE]);
-
-    return { panelList, activeKey, mountContainer };
+    return { panelList, activeKey, render };
   },
 });
 </script>

@@ -5,7 +5,7 @@ import antd from '@/antd';
 import { useOnceWatch } from '@/use';
 import { EditorOptions, Plugin } from '@/interfaces';
 import { CellBarModel, CellBarView, NodeBarView } from '@/cell';
-import { Subject } from '@/utils';
+import { Subject, warn } from '@/utils';
 
 export { CellBarView, NodeBarView };
 export * from '@/plugins';
@@ -14,11 +14,13 @@ class DiagramEditor extends Subject {
   public readonly cellBarModel: CellBarModel;
   public graph: Graph;
   private readonly options: EditorOptions;
+  private readonly installedPlugins: Set<Plugin>;
 
   constructor(options: EditorOptions = {}) {
     super({ global: true });
     this.options = options;
     this.cellBarModel = new CellBarModel();
+    this.installedPlugins = new Set();
   }
 
   mount(rootContainer: string | Element) {
@@ -37,12 +39,17 @@ class DiagramEditor extends Subject {
     });
   }
   // 添加节点菜单项
-  registerCellBar(key: string, view: CellBarView) {
-    this.cellBarModel.register(key, view);
+  loadCellBar(key: string, view: CellBarView) {
+    this.cellBarModel.load(key, view);
   }
 
   use(plugin: Plugin) {
-    plugin(this);
+    if (this.installedPlugins.has(plugin)) {
+      warn(`Plugin '${plugin.name}' has already been applied to target editor.`);
+    } else {
+      plugin(this);
+      this.installedPlugins.add(plugin);
+    }
     return this;
   }
 }

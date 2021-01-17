@@ -16,11 +16,11 @@ export class Subject {
     this.emitter.on(type, handler);
   }
 
-  emit<T = any>(type: EventType, event?: T) {
-    this.emitter.emit(type, event);
+  off<T = any>(type: EventType, handler: Observer<T>) {
+    this.emitter.off(type, handler);
   }
 
-  off<T = any>(type: EventType, handler: Observer<T>) {
-    this.emitter.emit(type, handler);
+  protected emit<T = any>(type: EventType, event?: T) {
+    this.emitter.emit(type, event);
   }
 }

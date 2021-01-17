@@ -32,8 +32,8 @@ export class NodeBarView extends CellBarView implements Lifecycle {
   mounted() {}
   beforeUnmount() {}
 
-  load(...nodeList: Node[]): void;
   load(...nodeList: Node.Metadata[]): void;
+  load(...nodeList: Node[]): void;
   load(...nodeList: any[]) {
     const graph = this.graph;
     if (!graph) return;

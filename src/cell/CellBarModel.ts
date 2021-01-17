@@ -16,7 +16,7 @@ export class CellBarModel extends Subject {
     this.viewMeta = new Map();
   }
 
-  register(key: string, view: CellBarView) {
+  load(key: string, view: CellBarView) {
     this.list.set(key, view);
     this.viewMeta.set(key, { isMounted: false });
     this.emit(EventType.CELL_BAR_VIEW_ADDED, { key, view });

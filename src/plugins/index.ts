@@ -7,6 +7,6 @@ export const enum CellBarKey {
 }
 
 export const builtInPlugin: Plugin = editor => {
-  editor.registerCellBar(CellBarKey.NODE_BASE, new NodeBase());
-  editor.registerCellBar(CellBarKey.NODE_COMBINATION, new NodeBase());
+  editor.loadCellBar(CellBarKey.NODE_BASE, new NodeBase());
+  editor.loadCellBar(CellBarKey.NODE_COMBINATION, new NodeBase());
 };

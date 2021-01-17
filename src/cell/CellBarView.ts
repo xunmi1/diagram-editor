@@ -6,7 +6,7 @@ export abstract class CellBarView extends Subject {
   abstract readonly title: string;
 
   protected constructor() {
-    super({ global: true });
+    super();
   }
 
   start(args: { cell: Cell; e: MouseEvent }) {

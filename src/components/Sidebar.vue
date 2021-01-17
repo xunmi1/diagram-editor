@@ -3,7 +3,7 @@
     <ACollapse v-model:active-key="activeKey" class="sidebar-collapse">
       <template v-for="[key, panel] in panelList" :key="key">
         <ACollapsePanel :panel-key="key" :header="panel.title">
-          <div v-once :ref="el => render(key, el)"></div>
+          <div :ref="el => render(key, el)"></div>
         </ACollapsePanel>
       </template>
     </ACollapse>
@@ -30,14 +30,18 @@ const useDnd = () => {
   return dndRef;
 };
 
-const useMount = (panelList: Map<string, CellBarView>, cellBarModel: CellBarModel) => {
+const useMount = (
+  panelList: Map<string, CellBarView>,
+  cellBarModel: CellBarModel,
+  handler: (view: CellBarView) => void
+) => {
   return async (key: string, el: HTMLElement) => {
     await nextTick();
     const meta = cellBarModel.getMeta(key);
     if (meta.isMounted) return;
-    const view = panelList.get(key);
-    if (!view) return;
+    const view = panelList.get(key)!;
     view.mount(el);
+    handler(view);
     cellBarModel.updateMeta(key, { isMounted: true });
   };
 };
@@ -57,23 +61,24 @@ export default defineComponent({
   name: 'Sidebar',
   components: {},
   setup() {
-    const editor = useEditor();
-    const cellBarModel = editor.cellBarModel;
+    const { cellBarModel } = useEditor();
     const panelList = reactive<Map<string, CellBarView>>(new Map(cellBarModel));
     // 第一个 bar 的 key
     const activeKey = ref([...cellBarModel][0]?.[0]);
     const dndRef = useDnd();
 
-    editor.on(EventType.CELL_BAR_VIEW_ADDED, ({ key, view }: any) => {
+    cellBarModel.on(EventType.CELL_BAR_VIEW_ADDED, ({ key, view }: any) => {
       panelList.set(key, view);
     });
 
-    editor.on(EventType.CELL_BAR_VIEW_MOVE, args => {
-      const dnd = unref(dndRef);
-      dnd?.start(args.cell, args.e);
-    });
+    const handler = (view: CellBarView) => {
+      view.on(EventType.CELL_BAR_VIEW_MOVE, args => {
+        const dnd = unref(dndRef);
+        dnd?.start(args.cell, args.e);
+      });
+    };
 
-    const render = useMount(panelList, cellBarModel);
+    const render = useMount(panelList, cellBarModel, handler);
     useUnmount(panelList, cellBarModel);
 
     return { panelList, activeKey, render };

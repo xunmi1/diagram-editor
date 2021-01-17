@@ -17,7 +17,7 @@ class DiagramEditor extends Subject {
   private readonly installedPlugins: Set<Plugin>;
 
   constructor(options: EditorOptions = {}) {
-    super({ global: true });
+    super();
     this.options = options;
     this.cellBarModel = new CellBarModel();
     this.installedPlugins = new Set();

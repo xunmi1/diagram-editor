@@ -11,7 +11,7 @@ export class CellBarModel extends Subject {
   protected readonly viewMeta: Map<string, BarViewMeta>;
 
   constructor() {
-    super({ global: true });
+    super();
     this.list = new Map();
     this.viewMeta = new Map();
   }

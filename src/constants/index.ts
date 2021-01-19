@@ -6,4 +6,6 @@ export const enum ShapeType {
 export const enum EventType {
   CELL_BAR_VIEW_ADDED = 'cellBarView:added',
   CELL_BAR_VIEW_MOVE = 'cellBarView:move',
+
+  CONFIG_BAR_VIEW_ADDED = 'configBarView:added',
 }

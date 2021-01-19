@@ -1,8 +1,8 @@
 import { CellBarView } from '@/cell/CellBarView';
 import { Graph, Node } from '@antv/x6';
 
-const DEFAULT_PADDING = 12;
-const NODE_EVENT_MOUSEDOWN = 'node:mousedown';
+const DEFAULT_PADDING = 16;
+const NODE_EVENT_MOUSEDOWN = 'cell:mousedown';
 
 interface Lifecycle {
   mounted(): void;
@@ -10,7 +10,6 @@ interface Lifecycle {
 }
 
 export class NodeBarView extends CellBarView implements Lifecycle {
-  public title: string;
   public graph: Graph | undefined;
 
   mount(container: HTMLElement): void {
@@ -32,12 +31,10 @@ export class NodeBarView extends CellBarView implements Lifecycle {
   mounted() {}
   beforeUnmount() {}
 
-  load(...nodeList: Node.Metadata[]): void;
-  load(...nodeList: Node[]): void;
-  load(...nodeList: any[]) {
+  load(...nodeList: (Node.Metadata | Node)[]) {
     const graph = this.graph;
     if (!graph) return;
-    nodeList.forEach(node => graph.addNode(node));
+    nodeList.forEach(node => graph.addNode(<Node>node));
     this.fitToContent();
   }
 

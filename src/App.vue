@@ -1,38 +1,26 @@
 <template>
   <section class="editor-layout">
-    <Sidebar class="editor-sidebar" />
+    <Explorer class="editor-sidebar" />
     <div class="editor-graph-wrapper">
       <div ref="container" class="editor-graph"></div>
     </div>
+    <Config class="editor-config" />
   </section>
 </template>
 
 <script lang="ts">
 import { defineComponent, shallowReactive } from 'vue';
-import Sidebar from './components/Sidebar.vue';
 import { useGraph, useEditor, useGlobalGraph } from '@/use';
-import { merge } from 'lodash-es';
-import { GraphOptions } from '@/interfaces';
-
-const defaultOptions: GraphOptions = {
-  grid: {
-    size: 10, // 网格大小 10px
-    visible: true, // 绘制网格，默认绘制 dot 类型网格
-  },
-  snapline: {
-    enabled: true,
-    tolerance: 10,
-  },
-  mousewheel: {
-    enabled: true,
-    modifiers: ['ctrl', 'meta'],
-  },
-};
+import { merge } from '@/utils';
+import { defaultOptions } from '@/defaultOptions';
+import Explorer from '@/components/Explorer.vue';
+import Config from '@/components/Config.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    Sidebar,
+    Explorer,
+    Config,
   },
   props: ['options', 'editor'],
   setup(props) {
@@ -52,14 +40,19 @@ export default defineComponent({
   overflow: hidden;
 }
 
-.editor-sidebar {
+.editor-sidebar,
+.editor-config {
   flex: none;
 }
+
 .editor-graph-wrapper {
   flex: auto;
+  padding: 24px;
+  background: #f0f2f5;
 }
 
 .editor-graph {
   height: 100%;
+  background: #fff;
 }
 </style>

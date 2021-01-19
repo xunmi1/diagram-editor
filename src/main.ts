@@ -5,13 +5,16 @@ import antd from '@/antd';
 import { useOnceWatch } from '@/use';
 import { EditorOptions, Plugin } from '@/interfaces';
 import { CellBarModel, CellBarView, NodeBarView } from '@/cell';
-import { Subject, warn } from '@/utils';
+import { ConfigBarView, ConfigBarModel } from '@/config';
+import { Subject, CommandsRegistry, warn } from '@/utils';
 
-export { CellBarView, NodeBarView };
+export { CellBarView, NodeBarView, ConfigBarView };
 export * from '@/plugins';
 
 class DiagramEditor extends Subject {
   public readonly cellBarModel: CellBarModel;
+  public readonly configBarModel: ConfigBarModel;
+  public readonly commands: CommandsRegistry;
   public graph: Graph;
   private readonly options: EditorOptions;
   private readonly installedPlugins: Set<Plugin>;
@@ -20,6 +23,8 @@ class DiagramEditor extends Subject {
     super();
     this.options = options;
     this.cellBarModel = new CellBarModel();
+    this.configBarModel = new ConfigBarModel();
+    this.commands = new CommandsRegistry();
     this.installedPlugins = new Set();
   }
 
@@ -39,8 +44,13 @@ class DiagramEditor extends Subject {
     });
   }
   // 添加节点菜单项
-  loadCellBar(key: string, view: CellBarView) {
-    this.cellBarModel.load(key, view);
+  loadCellBar(...args: Parameters<CellBarModel['load']>) {
+    return this.cellBarModel.load(...args);
+  }
+
+  // 添加配置项
+  loadConfigBar(...args: Parameters<ConfigBarModel['load']>) {
+    return this.configBarModel.load(...args);
   }
 
   use(plugin: Plugin) {

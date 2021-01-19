@@ -13,6 +13,14 @@ export class Subject {
     this.emitter.on(type, handler);
   }
 
+  once<T = any>(type: EventType, handler: Observer<T>) {
+    const wrapper: Observer<T> = event => {
+      this.off(type, wrapper);
+      handler(event);
+    };
+    this.emitter.on(type, wrapper);
+  }
+
   off<T = any>(type: EventType, handler: Observer<T>) {
     this.emitter.off(type, handler);
   }

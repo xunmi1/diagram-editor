@@ -1,8 +1,8 @@
 import { Shape, Node } from '@antv/x6';
 import { merge } from '@/utils';
 
-const POSITION_START_X = 12;
-const POSITION_START_Y = 12;
+const POSITION_START_X = 16;
+const POSITION_START_Y = 16;
 
 export class BasicRect extends Shape.Rect {
   constructor(options?: Node.Metadata) {

@@ -4,16 +4,16 @@ import App from '@/App.vue';
 import antd from '@/antd';
 import { useOnceWatch } from '@/use';
 import { EditorOptions, Plugin } from '@/interfaces';
-import { CellBarModel, CellBarView, NodeBarView } from '@/cell';
-import { ConfigBarView, ConfigBarModel } from '@/config';
+import { CellPanel, Explorer, NodePanel } from '@/explorer';
+import { ConfigPanel, Controller } from '@/controller';
 import { Subject, CommandsRegistry, warn } from '@/utils';
 
-export { CellBarView, NodeBarView, ConfigBarView };
+export { CellPanel, NodePanel, ConfigPanel };
 export * from '@/plugins';
 
 class DiagramEditor extends Subject {
-  public readonly cellBarModel: CellBarModel;
-  public readonly configBarModel: ConfigBarModel;
+  public readonly explorer: Explorer;
+  public readonly controller: Controller;
   public readonly commands: CommandsRegistry;
   public graph: Graph;
   private readonly options: EditorOptions;
@@ -22,8 +22,8 @@ class DiagramEditor extends Subject {
   constructor(options: EditorOptions = {}) {
     super();
     this.options = options;
-    this.cellBarModel = new CellBarModel();
-    this.configBarModel = new ConfigBarModel();
+    this.explorer = new Explorer();
+    this.controller = new Controller();
     this.commands = new CommandsRegistry();
     this.installedPlugins = new Set();
   }
@@ -42,15 +42,6 @@ class DiagramEditor extends Subject {
         return !!vm.graph;
       });
     });
-  }
-  // 添加节点菜单项
-  loadCellBar(...args: Parameters<CellBarModel['load']>) {
-    return this.cellBarModel.load(...args);
-  }
-
-  // 添加配置项
-  loadConfigBar(...args: Parameters<ConfigBarModel['load']>) {
-    return this.configBarModel.load(...args);
   }
 
   use(plugin: Plugin) {

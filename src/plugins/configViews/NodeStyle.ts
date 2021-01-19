@@ -1,7 +1,7 @@
-import { ConfigBarView } from '@/config';
+import { ConfigPanel } from '@/controller';
 import { Cell, Node } from '@antv/x6';
 
-export default class NodeStyle extends ConfigBarView {
+export default class NodeStyle extends ConfigPanel {
   static title = '节点样式';
 
   mount(container: HTMLElement) {

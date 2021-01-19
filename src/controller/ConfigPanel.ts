@@ -1,9 +1,8 @@
 import { Subject } from '@/utils';
-import { EventType } from '@/constants';
-import type { Cell } from '@antv/x6';
 import type DiagramEditor from '@/main';
+import type { Cell } from '@antv/x6';
 
-export abstract class CellBarView extends Subject {
+export abstract class ConfigPanel extends Subject {
   static readonly title: string;
   protected readonly editor: DiagramEditor;
 
@@ -12,11 +11,9 @@ export abstract class CellBarView extends Subject {
     this.editor = editor;
   }
 
-  start(args: { cell: Cell; e: MouseEvent }) {
-    this.emit(EventType.CELL_BAR_VIEW_MOVE, args);
-  }
-
   abstract mount(rootContainer: string | Element): void;
 
   abstract unmount(): void;
+
+  abstract activate(cell?: Cell): boolean;
 }

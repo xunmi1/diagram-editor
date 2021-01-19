@@ -14,8 +14,8 @@ export const enum ConfigBarKey {
 }
 
 export const builtInPlugin: Plugin = editor => {
-  editor.loadCellBar(CellBarKey.NODE_BASE, NodeBase);
-  editor.loadCellBar(CellBarKey.NODE_COMBINATION, NodeBase);
-  editor.loadConfigBar(ConfigBarKey.NODE_STYLE, NodeStyle);
-  editor.loadConfigBar(ConfigBarKey.NODE_BASE, EdgeStyle);
+  editor.explorer.load(CellBarKey.NODE_BASE, NodeBase);
+  editor.explorer.load(CellBarKey.NODE_COMBINATION, NodeBase);
+  editor.controller.load(ConfigBarKey.NODE_STYLE, NodeStyle);
+  editor.controller.load(ConfigBarKey.NODE_BASE, EdgeStyle);
 };

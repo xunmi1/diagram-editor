@@ -1,4 +1,4 @@
-import { CellBarView } from '@/cell/CellBarView';
+import { CellPanel } from './CellPanel';
 import { Graph, Node } from '@antv/x6';
 
 const DEFAULT_PADDING = 16;
@@ -9,7 +9,7 @@ interface Lifecycle {
   beforeUnmount(): void;
 }
 
-export class NodeBarView extends CellBarView implements Lifecycle {
+export class NodePanel extends CellPanel implements Lifecycle {
   public graph: Graph | undefined;
 
   mount(container: HTMLElement): void {
@@ -42,11 +42,11 @@ export class NodeBarView extends CellBarView implements Lifecycle {
     this.graph?.fitToContent({ gridHeight: 1, padding: DEFAULT_PADDING });
   }
 
-  bindMoveEvent() {
+  protected bindMoveEvent() {
     this.graph?.on(NODE_EVENT_MOUSEDOWN, args => this.start(args));
   }
 
-  unbindMoveEvent() {
+  protected unbindMoveEvent() {
     this.graph?.off(NODE_EVENT_MOUSEDOWN);
   }
 }

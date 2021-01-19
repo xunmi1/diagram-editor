@@ -1,5 +1,5 @@
 <template>
-  <section class="editor-config">
+  <section class="editor-sidebar-right">
     <ATabs>
       <template v-for="[key, panel] in tabList" :key="key">
         <ATabPane :tab="getPanelTitle(panel)">
@@ -12,23 +12,23 @@
 
 <script lang="ts">
 import { defineComponent, computed, reactive, ref, unref } from 'vue';
-import { useGlobalGraph, useEditor } from '@/use';
-import { ConfigBarView } from '@/config';
 import type { Cell } from '@antv/x6';
-import Container from './Container';
+import { useGlobalGraph, useEditor } from '@/use';
 import { EventType } from '@/constants';
+import { ConfigPanel } from '@/controller';
+import Container from './Container';
 
 const CELL_TRIGGER_TYPE = 'cell:click';
 const CELL_CANCEL_TYPE = 'blank:click';
 
-type PanelList = [string, ConfigBarView][];
+type PanelList = [string, ConfigPanel][];
 
 const usePanelList = () => {
   const editor = useEditor();
-  const configBarModel = editor.configBarModel;
-  const model = [...configBarModel].map(([key, View]) => [key, new View(editor)]);
+  const controller = editor.controller;
+  const model = [...controller].map(([key, View]) => [key, new View(editor)]);
   const panelList = reactive<PanelList>(model);
-  configBarModel.on(EventType.CONFIG_BAR_VIEW_ADDED, ({ key, View }: any) => {
+  controller.on(EventType.CONFIG_BAR_VIEW_ADDED, ({ key, View }: any) => {
     panelList.push([key, new View(editor)]);
   });
 
@@ -36,7 +36,7 @@ const usePanelList = () => {
 };
 
 export default defineComponent({
-  name: 'Config',
+  name: 'Controller',
   components: { Container },
   setup() {
     const panelList = usePanelList();
@@ -45,14 +45,13 @@ export default defineComponent({
     useGlobalGraph(graph => {
       graph.on(CELL_TRIGGER_TYPE, ({ cell }) => {
         activeCell.value = cell;
-        console.log(cell.resize);
       });
       graph.on(CELL_CANCEL_TYPE, () => {
         activeCell.value = null;
       });
     });
 
-    const getPanelTitle = (view: ConfigBarView) => {
+    const getPanelTitle = (view: ConfigPanel) => {
       return view.constructor.title;
     };
     // 基于不同启动条件，确定配置面板
@@ -63,7 +62,7 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-.editor-config {
+.editor-sidebar-right {
   width: 360px;
 }
 </style>

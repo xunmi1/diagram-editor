@@ -1,10 +1,10 @@
 <template>
   <section class="editor-layout">
-    <Explorer class="editor-sidebar" />
+    <Explorer class="editor-explorer" />
     <div class="editor-graph-wrapper">
       <div ref="container" class="editor-graph"></div>
     </div>
-    <Config class="editor-config" />
+    <Controller class="editor-controller" />
   </section>
 </template>
 
@@ -14,13 +14,13 @@ import { useGraph, useEditor, useGlobalGraph } from '@/use';
 import { merge } from '@/utils';
 import { defaultOptions } from '@/defaultOptions';
 import Explorer from '@/components/Explorer.vue';
-import Config from '@/components/Config.vue';
+import Controller from '@/components/Controller.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
     Explorer,
-    Config,
+    Controller,
   },
   props: ['options', 'editor'],
   setup(props) {
@@ -40,8 +40,8 @@ export default defineComponent({
   overflow: hidden;
 }
 
-.editor-sidebar,
-.editor-config {
+.editor-explorer,
+.editor-controller {
   flex: none;
 }
 

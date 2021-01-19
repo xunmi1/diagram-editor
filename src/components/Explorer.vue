@@ -1,5 +1,5 @@
 <template>
-  <section class="editor-sidebar">
+  <section class="editor-sidebar-left">
     <ACollapse v-model:active-key="activeKey">
       <template v-for="[key, panel] in panelList" :key="key">
         <ACollapsePanel :panel-key="key" :header="getPanelTitle(panel)">
@@ -15,7 +15,7 @@ import { defineComponent, reactive, ref, unref } from 'vue';
 import { useEditor, useGlobalGraph } from '@/use';
 import { EventType } from '@/constants';
 import { Addon } from '@antv/x6';
-import { CellBarView } from '@/cell';
+import type { CellPanel } from '@/explorer';
 import Container from './Container';
 
 const useDnd = () => {
@@ -30,14 +30,14 @@ const useDnd = () => {
   return dndRef;
 };
 
-type PanelList = [string, CellBarView][];
+type PanelList = [string, CellPanel][];
 
 const usePanelList = () => {
   const editor = useEditor();
-  const cellBarModel = editor.cellBarModel;
-  const model = [...cellBarModel].map(([key, View]) => [key, new View(editor)]);
+  const explorer = editor.explorer;
+  const model = [...explorer].map(([key, View]) => [key, new View(editor)]);
   const panelList = reactive<PanelList>(model);
-  cellBarModel.on(EventType.CELL_BAR_VIEW_ADDED, ({ key, View }: any) => {
+  explorer.on(EventType.CELL_BAR_VIEW_ADDED, ({ key, View }: any) => {
     panelList.push([key, new View(editor)]);
   });
 
@@ -55,7 +55,7 @@ export default defineComponent({
     const activeKey = ref(panelList[0]?.[0]);
     const dndRef = useDnd();
 
-    const getPanelTitle = (view: CellBarView) => {
+    const getPanelTitle = (view: CellPanel) => {
       return view.constructor.title;
     };
 
@@ -78,7 +78,7 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-.editor-sidebar {
+.editor-sidebar-left {
   width: 320px;
 }
 </style>

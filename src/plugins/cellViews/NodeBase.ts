@@ -1,7 +1,7 @@
-import { NodeBarView } from '@/cell';
+import { NodePanel } from '@/explorer';
 import { BasicRect } from '@/plugins/shapes';
 
-export default class NodeBase extends NodeBarView {
+export default class NodeBase extends NodePanel {
   static title = '基础节点';
 
   mounted() {

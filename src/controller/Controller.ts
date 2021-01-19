@@ -1,16 +1,16 @@
 import { Subject } from '@/utils';
-import type { ConfigBarView } from './ConfigBarView';
+import type { ConfigPanel } from './ConfigPanel';
 import { EventType } from '@/constants';
 
-export class ConfigBarModel extends Subject {
-  protected readonly list: Map<string, typeof ConfigBarView>;
+export class Controller extends Subject {
+  protected readonly list: Map<string, typeof ConfigPanel>;
 
   constructor() {
     super();
     this.list = new Map();
   }
 
-  load(key: string, View: typeof ConfigBarView) {
+  load(key: string, View: typeof ConfigPanel) {
     this.list.set(key, View);
     this.emit(EventType.CONFIG_BAR_VIEW_ADDED, { key, View });
   }

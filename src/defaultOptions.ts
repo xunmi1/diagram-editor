@@ -2,16 +2,25 @@ import type { GraphOptions } from '@/interfaces';
 
 export const defaultOptions: GraphOptions = {
   grid: {
-    size: 10, // 网格大小 10px
-    visible: true, // 绘制网格，默认绘制 dot 类型网格
+    size: 10,
+    visible: true,
   },
+  autoResize: true,
   snapline: {
     enabled: true,
     tolerance: 10,
   },
+  background: {
+    color: 'rgba(255, 255, 255, 1)',
+  },
+  // 必须先启用才能禁用
+  scroller: {
+    enabled: true,
+    pannable: false,
+  },
   mousewheel: {
     enabled: true,
-    modifiers: ['ctrl', 'meta'],
+    modifiers: ['ctrl'],
   },
   history: true,
   selecting: {

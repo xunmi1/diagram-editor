@@ -1,21 +1,20 @@
 import { Plugin } from '@/interfaces';
 import NodeBase from './cellViews/NodeBase';
-import NodeStyle from './configViews/NodeStyle';
-import EdgeStyle from './configViews/EdgeStyle';
+import GraphConfigPanel from './views/GraphConfigPanel';
 
-export const enum CellBarKey {
+export const enum ExplorerKey {
   NODE_BASE = 'NODE_BASE',
   NODE_COMBINATION = 'NODE_COMBINATION',
 }
 
-export const enum ConfigBarKey {
+export const enum ControllerKey {
+  GRAPH = 'GRAPH',
   NODE_STYLE = 'NODE_STYLE',
-  NODE_BASE = 'NODE_BASE',
 }
 
 export const builtInPlugin: Plugin = editor => {
-  editor.explorer.load(CellBarKey.NODE_BASE, NodeBase);
-  editor.explorer.load(CellBarKey.NODE_COMBINATION, NodeBase);
-  editor.controller.load(ConfigBarKey.NODE_STYLE, NodeStyle);
-  editor.controller.load(ConfigBarKey.NODE_BASE, EdgeStyle);
+  editor.explorer.load(ExplorerKey.NODE_BASE, NodeBase);
+  editor.explorer.load(ExplorerKey.NODE_COMBINATION, NodeBase);
+
+  editor.controller.load(ControllerKey.GRAPH, GraphConfigPanel);
 };

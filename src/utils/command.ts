@@ -16,12 +16,16 @@ export class CommandsRegistry {
     }
   }
 
-  register(commandId: string, command: Command) {
+  register(commandId: string, command: Command): void {
     const list = this.commands.get(commandId);
     if (list) {
       list.push(command);
     } else {
       this.commands.set(commandId, [command]);
     }
+  }
+
+  getAll(): string[] {
+    return [...this.commands.keys()];
   }
 }

@@ -1,4 +1,5 @@
 import { defineComponent, onMounted, onBeforeUnmount, ref, unref } from 'vue';
+import { Lifecycle } from '@/interfaces';
 
 export default defineComponent({
   name: 'Container',
@@ -6,13 +7,17 @@ export default defineComponent({
   emits: ['mounted', 'unmounted'],
   setup(props, { emit }) {
     const domRef = ref<HTMLElement>();
-    const view = props.view;
+    const view = props.view as Lifecycle;
+
     onMounted(() => {
-      view.mount(unref(domRef));
+      view.mount(unref(domRef)!);
       emit('mounted', view);
+      view.mounted?.();
     });
+
     onBeforeUnmount(() => {
-      view.unmount();
+      view.beforeUnmount?.();
+      view.unmount(unref(domRef)!);
       emit('unmounted', view);
     });
 

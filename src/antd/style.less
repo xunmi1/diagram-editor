@@ -1,10 +1,81 @@
-@import 'ant-design-vue/es/style/index.less';
-@import 'ant-design-vue/es/collapse/style/index.less';
-@import 'ant-design-vue/es/tabs/style/index.less';
+@import 'node_modules/ant-design-vue/es/style/index';
+// TODO: 待废弃 grid，明显增加 css 体积
+@import 'node_modules/ant-design-vue/es/grid/style/index';
+@import 'node_modules/ant-design-vue/es/config-provider/style/index';
 
+@import 'node_modules/ant-design-vue/es/collapse/style/index';
+@import 'node_modules/ant-design-vue/es/tabs/style/index';
+@import 'node_modules/ant-design-vue/es/tabs/style/index';
+@import 'node_modules/ant-design-vue/es/tooltip/style/index';
+@import 'node_modules/ant-design-vue/es/dropdown/style/index';
+@import 'node_modules/ant-design-vue/es/spin/style/index';
+
+@import 'node_modules/ant-design-vue/es/form/style/index';
+@import 'node_modules/ant-design-vue/es/input/style/index';
+@import 'node_modules/ant-design-vue/es/input-number/style/index';
+@import 'node_modules/ant-design-vue/es/slider/style/index';
+@import 'node_modules/ant-design-vue/es/select/style/index';
+@import 'node_modules/ant-design-vue/es/switch/style/index';
+
+@ant-prefix: editor;
+
+@primary-color: #1890ff;
 @padding-md: 16px;
+@padding-sm: 12px;
+
+@border-color-base: #d9d9d9;
 
 @collapse-header-padding-extra: 40px;
 @collapse-content-padding: 0;
+@collapse-header-padding: 10px @padding-md;
+@collapse-panel-border-radius: 0;
 
 @tabs-bar-margin: 0;
+@tabs-horizontal-margin: 0 @padding-md 0 0;
+@tabs-horizontal-padding: 10px @padding-md;
+@form-item-margin-bottom: @padding-sm;
+
+.editor {
+  --primary-color: @primary-color;
+  --hover-color: color(~`colorPalette('@{primary-color}', 5) `);
+  --text-color: rgba(0, 0, 0, 0.65);
+  --heading-color: rgba(0, 0, 0, 0.85);
+  --border-color: @border-color-base;
+  --widget-color: #fff;
+  --layout-background: #f0f2f5;
+
+  --padding-large: 24px;
+  --padding-middle: @padding-md;
+  --padding-small: @padding-sm;
+}
+
+.editor {
+  &-widget-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--heading-color);
+    padding: var(--padding-small);
+    margin: 0;
+  }
+
+  &-border-right {
+    border-right: 1px solid var(--border-color);
+  }
+
+  &-border-bottom {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  &-border-left {
+    border-left: 1px solid var(--border-color);
+  }
+
+  &-flex-col {
+    display: flex;
+    width: 100%;
+  }
+
+  &-flex-auto {
+    flex: auto;
+  }
+}

@@ -1,11 +1,8 @@
-export const enum ShapeType {
-  NODE_BASE = 'NODE_BASE',
-  NODE_COMBINATION = 'NODE_COMBINATION',
-}
-
 export const enum EventType {
-  CELL_BAR_VIEW_ADDED = 'cellBarView:added',
-  CELL_BAR_VIEW_MOVE = 'cellBarView:move',
+  EDITOR_MOUNTED = 'editor:mounted',
 
-  CONFIG_BAR_VIEW_ADDED = 'configBarView:added',
+  EXPLORER_ADDED = 'explorer:added',
+  EXPLORER_CELL_MOVE = 'explorer.cell:move',
+
+  CONTROLLER_ADDED = 'controller:added',
 }

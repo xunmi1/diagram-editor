@@ -1,8 +1,8 @@
 import { Subject } from '@/utils';
-import type DiagramEditor from '@/main';
 import type { Cell } from '@antv/x6';
+import { Lifecycle, DiagramEditor } from '@/interfaces';
 
-export abstract class ConfigPanel extends Subject {
+export abstract class ConfigPanel extends Subject implements Lifecycle {
   static readonly title: string;
   protected readonly editor: DiagramEditor;
 
@@ -11,9 +11,9 @@ export abstract class ConfigPanel extends Subject {
     this.editor = editor;
   }
 
-  abstract mount(rootContainer: string | Element): void;
+  abstract mount(rootContainer: Element): void;
 
-  abstract unmount(): void;
+  abstract unmount(rootContainer: Element): void;
 
   abstract activate(cell?: Cell): boolean;
 }

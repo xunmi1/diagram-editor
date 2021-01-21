@@ -4,12 +4,7 @@ import { Graph, Node } from '@antv/x6';
 const DEFAULT_PADDING = 16;
 const NODE_EVENT_MOUSEDOWN = 'cell:mousedown';
 
-interface Lifecycle {
-  mounted(): void;
-  beforeUnmount(): void;
-}
-
-export class NodePanel extends CellPanel implements Lifecycle {
+export class NodePanel extends CellPanel {
   public graph: Graph | undefined;
 
   mount(container: HTMLElement): void {
@@ -19,17 +14,12 @@ export class NodePanel extends CellPanel implements Lifecycle {
       preventDefaultBlankAction: false,
     });
     this.bindMoveEvent();
-    this.mounted();
     this.fitToContent();
   }
 
-  unmount() {
-    this.beforeUnmount();
+  unmount(rootContainer: Element) {
     this.unbindMoveEvent();
   }
-
-  mounted() {}
-  beforeUnmount() {}
 
   load(...nodeList: (Node.Metadata | Node)[]) {
     const graph = this.graph;

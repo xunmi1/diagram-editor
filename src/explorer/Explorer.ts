@@ -12,7 +12,7 @@ export class Explorer extends Subject {
 
   load(key: string, View: typeof CellPanel) {
     this.list.set(key, View);
-    this.emit(EventType.CELL_BAR_VIEW_ADDED, { key, View });
+    this.emit(EventType.EXPLORER_ADDED, { key, View });
   }
 
   [Symbol.iterator]() {

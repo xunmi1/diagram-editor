@@ -1,6 +1,7 @@
 <template>
-  <section class="editor-sidebar-left">
-    <ACollapse v-model:active-key="activeKey">
+  <section class="editor-sidebar-left editor-border-right">
+    <h4 class="editor-widget-title editor-border-bottom">资源管理器</h4>
+    <ACollapse v-model:active-key="activeKey" class="editor-collapse">
       <template v-for="[key, panel] in panelList" :key="key">
         <ACollapsePanel :panel-key="key" :header="getPanelTitle(panel)">
           <Container :view="panel" @mounted="mounted" @unmounted="unmounted" />
@@ -32,19 +33,23 @@ const useDnd = () => {
 
 type PanelList = [string, CellPanel][];
 
+const createView = (Ctor: typeof CellPanel, ...args) => {
+  const view = new Ctor(...args);
+  view.created?.();
+  return view;
+};
+
 const usePanelList = () => {
   const editor = useEditor();
   const explorer = editor.explorer;
-  const model = [...explorer].map(([key, View]) => [key, new View(editor)]);
+  const model = [...explorer].map(([key, View]) => [key, createView(View, editor)]);
   const panelList = reactive<PanelList>(model);
-  explorer.on(EventType.CELL_BAR_VIEW_ADDED, ({ key, View }: any) => {
-    panelList.push([key, new View(editor)]);
+  explorer.on(EventType.EXPLORER_ADDED, ({ key, View }: any) => {
+    panelList.push([key, createView(View, editor)]);
   });
 
   return panelList;
 };
-
-const createView = (model, ...args: any[]) => [...model].map(([key, View]) => [key, new View(...args)]);
 
 export default defineComponent({
   name: 'Explorer',
@@ -65,11 +70,11 @@ export default defineComponent({
     };
 
     const mounted = view => {
-      view.on(EventType.CELL_BAR_VIEW_MOVE, drag);
+      view.on(EventType.EXPLORER_CELL_MOVE, drag);
     };
 
     const unmounted = view => {
-      view.off(EventType.CELL_BAR_VIEW_MOVE, drag);
+      view.off(EventType.EXPLORER_CELL_MOVE, drag);
     };
 
     return { panelList, activeKey, getPanelTitle, mounted, unmounted };
@@ -80,5 +85,10 @@ export default defineComponent({
 <style lang="less">
 .editor-sidebar-left {
   width: 320px;
+}
+
+.editor .editor-collapse {
+  border-right: none;
+  border-top: none;
 }
 </style>

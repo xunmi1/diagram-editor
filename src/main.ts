@@ -7,6 +7,7 @@ import { EditorOptions, Plugin } from '@/interfaces';
 import { CellPanel, Explorer, NodePanel } from '@/explorer';
 import { ConfigPanel, Controller } from '@/controller';
 import { Subject, CommandsRegistry, warn } from '@/utils';
+import { EventType } from '@/constants';
 
 export { CellPanel, NodePanel, ConfigPanel };
 export * from '@/plugins';
@@ -32,11 +33,12 @@ class DiagramEditor extends Subject {
     const app = createApp(App, { options: this.options.graph, editor: this });
     const vm = app.use(antd).mount(rootContainer) as any;
 
-    return new Promise<Graph>(resolve => {
+    return new Promise<void>(resolve => {
       useOnceWatch(() => {
         if (vm.graph) {
           this.graph = vm.graph;
-          resolve(this.graph);
+          resolve();
+          this.emit(EventType.EDITOR_MOUNTED);
         }
 
         return !!vm.graph;

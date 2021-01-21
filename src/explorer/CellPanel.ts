@@ -1,9 +1,9 @@
 import { Subject } from '@/utils';
 import { EventType } from '@/constants';
 import type { Cell } from '@antv/x6';
-import type DiagramEditor from '@/main';
+import { Lifecycle, DiagramEditor } from '@/interfaces';
 
-export abstract class CellPanel extends Subject {
+export abstract class CellPanel extends Subject implements Lifecycle {
   static readonly title: string;
   protected readonly editor: DiagramEditor;
 
@@ -13,10 +13,10 @@ export abstract class CellPanel extends Subject {
   }
 
   start(args: { cell: Cell; e: MouseEvent }) {
-    this.emit(EventType.CELL_BAR_VIEW_MOVE, args);
+    this.emit(EventType.EXPLORER_CELL_MOVE, args);
   }
 
-  abstract mount(rootContainer: string | Element): void;
+  abstract mount(rootContainer: Element): void;
 
-  abstract unmount(): void;
+  abstract unmount(rootContainer: Element): void;
 }

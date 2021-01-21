@@ -12,7 +12,7 @@ export class Controller extends Subject {
 
   load(key: string, View: typeof ConfigPanel) {
     this.list.set(key, View);
-    this.emit(EventType.CONFIG_BAR_VIEW_ADDED, { key, View });
+    this.emit(EventType.CONTROLLER_ADDED, { key, View });
   }
 
   [Symbol.iterator]() {

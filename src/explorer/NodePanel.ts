@@ -1,8 +1,22 @@
 import { CellPanel } from './CellPanel';
 import { Graph, Node } from '@antv/x6';
+import { grid } from '@antv/x6/es/layout/grid';
 
-const DEFAULT_PADDING = 16;
+type LayoutOptions = Parameters<typeof grid>[1];
+
+// 默认间距
+const DEFAULT_SPACING = 16;
+// 默认每行节点数量
+const DEFAULT_COLUMNS = 3;
 const NODE_EVENT_MOUSEDOWN = 'cell:mousedown';
+
+const defaultLayoutOptions: LayoutOptions = {
+  columns: DEFAULT_COLUMNS,
+  dx: DEFAULT_SPACING,
+  dy: DEFAULT_SPACING,
+  center: false,
+  resizeToFit: true,
+};
 
 export class NodePanel extends CellPanel {
   public graph: Graph | undefined;
@@ -24,16 +38,23 @@ export class NodePanel extends CellPanel {
   load(...nodeList: (Node.Metadata | Node)[]) {
     const graph = this.graph;
     if (!graph) return;
-    nodeList.forEach(node => graph.addNode(<Node>node));
+    const cellList: any[] = nodeList.map(node => (Node.isNode(node) ? node : Node.create(node)));
+    cellList.forEach(node => graph.addNode(<Node>node));
+    this.applyLayout();
+  }
+
+  applyLayout(options?: LayoutOptions) {
+    const model: any = this.graph?.model;
+    grid(model, { ...defaultLayoutOptions, ...options });
     this.fitToContent();
   }
 
   fitToContent() {
-    this.graph?.fitToContent({ gridHeight: 1, padding: DEFAULT_PADDING });
+    this.graph?.fitToContent({ gridHeight: 1, gridWidth: 1, padding: DEFAULT_SPACING });
   }
 
   protected bindMoveEvent() {
-    this.graph?.on(NODE_EVENT_MOUSEDOWN, args => this.start(args));
+    this.graph?.on(NODE_EVENT_MOUSEDOWN, args => this.start({ cell: args.cell, event: args.e }));
   }
 
   protected unbindMoveEvent() {

@@ -12,7 +12,7 @@ export abstract class CellPanel extends Subject implements Lifecycle {
     this.editor = editor;
   }
 
-  start(args: { cell: Cell; e: MouseEvent }) {
+  start(args: { cell: Cell; event: MouseEvent }) {
     this.emit(EventType.EXPLORER_CELL_MOVE, args);
   }
 

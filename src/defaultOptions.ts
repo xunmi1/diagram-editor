@@ -57,7 +57,7 @@ export const defaultOptions: GraphOptions = {
         padding: 4,
         attrs: {
           strokeWidth: 4,
-          stroke: 'rgba(223,234,255)',
+          stroke: 'rgba(223, 234, 255)',
         },
       },
     },

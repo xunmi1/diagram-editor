@@ -1,5 +1,5 @@
 import { Plugin } from '@/interfaces';
-import NodeBase from './cellViews/NodeBase';
+import NodeBasePanel from './views/NodeBasePanel';
 import GraphConfigPanel from './views/GraphConfigPanel';
 
 export const enum ExplorerKey {
@@ -13,8 +13,7 @@ export const enum ControllerKey {
 }
 
 export const builtInPlugin: Plugin = editor => {
-  editor.explorer.load(ExplorerKey.NODE_BASE, NodeBase);
-  editor.explorer.load(ExplorerKey.NODE_COMBINATION, NodeBase);
+  editor.explorer.load(ExplorerKey.NODE_BASE, NodeBasePanel);
 
   editor.controller.load(ControllerKey.GRAPH, GraphConfigPanel);
 };

@@ -15,7 +15,7 @@
 import { defineComponent, reactive, ref, unref } from 'vue';
 import { useEditor, useGlobalGraph } from '@/use';
 import { EventType } from '@/constants';
-import { Addon } from '@antv/x6';
+import { Addon, Cell } from '@antv/x6';
 import type { CellPanel } from '@/explorer';
 import Container from './Container';
 
@@ -64,9 +64,9 @@ export default defineComponent({
       return view.constructor.title;
     };
 
-    const drag = args => {
+    const drag = (args: { cell: Cell; event: MouseEvent }) => {
       const dnd = unref(dndRef);
-      dnd?.start(args.cell, args.e);
+      dnd?.start(args.cell, args.event);
     };
 
     const mounted = view => {

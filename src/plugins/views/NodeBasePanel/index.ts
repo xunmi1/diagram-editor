@@ -1,11 +1,11 @@
 import { NodePanel } from '@/explorer';
 import { BasicRect } from '@/plugins/shapes';
 
-export default class NodeBase extends NodePanel {
+export default class NodeBasePanel extends NodePanel {
   static title = '基础节点';
 
   mounted() {
-    this.load(new BasicRect(), {
+    this.load(new BasicRect(), new BasicRect(), new BasicRect(), new BasicRect(), new BasicRect(), {
       shape: 'image',
       x: 120,
       y: 240,
@@ -13,5 +13,6 @@ export default class NodeBase extends NodePanel {
       height: 28,
       imageUrl: 'https://gw.alipayobjects.com/os/s/prod/antv/assets/image/logo-with-text-73b8a.svg',
     });
+    this.load(new BasicRect(), new BasicRect());
   }
 }

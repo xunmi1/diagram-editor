@@ -13,6 +13,7 @@ export default defineComponent({
 <style lang="less">
 .editor-toolbar {
   &-wrapper {
+    background: var(--widget-color);
     border-bottom: 1px solid var(--border-color);
   }
 }

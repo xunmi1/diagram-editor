@@ -28,13 +28,18 @@
 
 @collapse-header-padding-extra: 40px;
 @collapse-content-padding: 0;
-@collapse-header-padding: 10px @padding-md;
+@collapse-header-padding: 10px @padding-sm;
 @collapse-panel-border-radius: 0;
+@collapse-content-bg: var(--widget-color);
 
 @tabs-bar-margin: 0;
 @tabs-horizontal-margin: 0 @padding-md 0 0;
 @tabs-horizontal-padding: 10px @padding-md;
 @form-item-margin-bottom: @padding-sm;
+
+.editor-collapse-content {
+  border-top-color: transparent;
+}
 
 .editor {
   --primary-color: @primary-color;
@@ -42,12 +47,16 @@
   --text-color: rgba(0, 0, 0, 0.65);
   --heading-color: rgba(0, 0, 0, 0.85);
   --border-color: @border-color-base;
-  --widget-color: #fff;
+  --widget-color: #fafafa;
   --layout-background: #f0f2f5;
 
   --padding-large: 24px;
   --padding-middle: @padding-md;
   --padding-small: @padding-sm;
+
+  --toolbar-height: 32px;
+  --statusbar-height: 22px;
+  --sash-size: 8px;
 }
 
 .editor {

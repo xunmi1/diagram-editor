@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, reactive, ref, unref } from 'vue';
+import { defineComponent, computed, reactive, shallowRef, unref } from 'vue';
 import type { Cell } from '@antv/x6';
 import { useGlobalGraph, useEditor } from '@/use';
 import { EventType } from '@/constants';
@@ -52,7 +52,7 @@ export default defineComponent({
   components: { Container },
   setup() {
     const panelList = usePanelList();
-    const activeCell = ref<Cell>(null);
+    const activeCell = shallowRef<Cell>(null);
 
     useGlobalGraph(graph => {
       graph.on(CELL_TRIGGER_TYPE, ({ cell }) => {
@@ -79,6 +79,8 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     border-left: 1px solid var(--border-color);
+    background: var(--widget-color);
+    height: 100%;
   }
   &-header {
     border-bottom: 1px solid var(--border-color);

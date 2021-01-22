@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, unref } from 'vue';
+import { defineComponent, reactive, shallowRef, ref, unref } from 'vue';
 import { useEditor, useGlobalGraph } from '@/use';
 import { EventType } from '@/constants';
 import { Addon, Cell } from '@antv/x6';
@@ -25,7 +25,7 @@ import type { CellPanel } from '@/explorer';
 import Container from './Container';
 
 const useDnd = () => {
-  const dndRef = ref<Addon.Dnd>();
+  const dndRef = shallowRef<Addon.Dnd>();
   useGlobalGraph(graph => {
     dndRef.value = new Addon.Dnd({
       target: graph,
@@ -91,6 +91,7 @@ export default defineComponent({
 .editor-sidebar {
   &-wrapper {
     border-right: 1px solid var(--border-color);
+    background: var(--widget-color);
   }
   &-header {
     border-bottom: 1px solid var(--border-color);

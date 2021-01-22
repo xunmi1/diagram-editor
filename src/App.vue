@@ -2,13 +2,21 @@
   <ConfigProvider>
     <div class="editor editor-layout">
       <Toolbar class="editor-toolbar" />
-      <Explorer class="editor-explorer" />
-      <section class="editor-container">
-        <div class="editor-instance">
-          <div ref="container"></div>
-        </div>
-      </section>
-      <Controller class="editor-controller" />
+      <Split class="editor-content">
+        <SplitPanel key="explorer" class="editor-layout-left">
+          <Explorer class="editor-explorer" />
+        </SplitPanel>
+        <SplitPanel key="editor" class="editor-layout-middle" flexible>
+          <section class="editor-container">
+            <div class="editor-instance">
+              <div ref="container"></div>
+            </div>
+          </section>
+        </SplitPanel>
+        <SplitPanel key="controller" class="editor-layout-right">
+          <Controller class="editor-controller" />
+        </SplitPanel>
+      </Split>
     </div>
   </ConfigProvider>
 </template>
@@ -18,7 +26,7 @@ import { defineComponent } from 'vue';
 import { useGraph, useEditor, useGlobalGraph } from '@/use';
 import { merge } from '@/utils';
 import { defaultOptions } from '@/defaultOptions';
-import { ConfigProvider } from '@/shared';
+import { ConfigProvider, Split, SplitPanel } from '@/shared';
 import Toolbar from '@/components/Toolbar.vue';
 import Explorer from '@/components/Explorer.vue';
 import Controller from '@/components/Controller.vue';
@@ -26,6 +34,8 @@ import Controller from '@/components/Controller.vue';
 export default defineComponent({
   name: 'App',
   components: {
+    Split,
+    SplitPanel,
     ConfigProvider,
     Toolbar,
     Explorer,
@@ -43,36 +53,48 @@ export default defineComponent({
 
 <style lang="less">
 .editor-layout {
-  display: grid;
-  place-content: stretch;
   height: 100%;
-  grid-template: 32px minmax(auto, 1fr) / 300px minmax(auto, 1fr) 320px;
-  grid-template-areas:
-    'toolbar toolbar toolbar'
-    'explorer editor controller';
 
   .editor-toolbar {
-    grid-area: toolbar;
-  }
-  .editor-explorer {
-    grid-area: explorer;
-  }
-  .editor-controller {
-    grid-area: controller;
+    position: absolute;
+    top: 0;
+    height: var(--toolbar-height);
+    width: 100%;
   }
 
-  .editor-container {
-    grid-area: editor;
+  .editor-content {
+    position: absolute;
+    top: var(--toolbar-height);
+    bottom: var(--statusbar-height);
+    width: 100%;
+  }
+
+  &-left {
+    width: 320px;
+    left: 0;
+    overflow: auto;
+  }
+  &-right {
+    width: 320px;
+    right: 0;
+    overflow: auto;
+  }
+
+  &-middle {
     overflow: hidden;
-    padding: var(--padding-middle);
-    background: var(--layout-background);
   }
 }
+
+.editor-container {
+  height: 100%;
+  background: var(--layout-background);
+}
+
 .editor-instance {
   display: grid;
   height: 100%;
   place-content: stretch;
-  background: var(--widget-color);
+  background: #fff;
 
   > .x6-graph-scroller,
   > .x6-graph {

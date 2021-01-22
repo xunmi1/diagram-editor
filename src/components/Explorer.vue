@@ -1,10 +1,15 @@
 <template>
-  <section class="editor-sidebar-left editor-border-right">
-    <h4 class="editor-widget-title editor-border-bottom">资源管理器</h4>
-    <ACollapse v-model:active-key="activeKey" class="editor-collapse">
+  <section class="editor-sidebar-wrapper">
+    <h4 class="editor-widget-title editor-sidebar-header">资源管理器</h4>
+    <ACollapse v-model:active-key="activeKey" class="editor-sidebar-collapse">
       <template v-for="[key, panel] in panelList" :key="key">
         <ACollapsePanel :panel-key="key" :header="getPanelTitle(panel)">
-          <Container :view="panel" @mounted="mounted" @unmounted="unmounted" />
+          <Suspense>
+            <Container :view="panel" @mounted="mounted" @unmounted="unmounted" />
+            <template #fallback>
+              <ASkeleton active :paragraph="{ rows: 4 }" :title="false" class="editor-widget-skeleton" />
+            </template>
+          </Suspense>
         </ACollapsePanel>
       </template>
     </ACollapse>
@@ -83,12 +88,16 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-.editor-sidebar-left {
-  width: 320px;
-}
-
-.editor .editor-collapse {
-  border-right: none;
-  border-top: none;
+.editor-sidebar {
+  &-wrapper {
+    border-right: 1px solid var(--border-color);
+  }
+  &-header {
+    border-bottom: 1px solid var(--border-color);
+  }
+  &-collapse {
+    border-right: none !important;
+    border-top: none !important;
+  }
 }
 </style>

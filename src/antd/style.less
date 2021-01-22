@@ -9,6 +9,7 @@
 @import 'node_modules/ant-design-vue/es/tooltip/style/index';
 @import 'node_modules/ant-design-vue/es/dropdown/style/index';
 @import 'node_modules/ant-design-vue/es/spin/style/index';
+@import 'node_modules/ant-design-vue/es/skeleton/style/index';
 
 @import 'node_modules/ant-design-vue/es/form/style/index';
 @import 'node_modules/ant-design-vue/es/input/style/index';
@@ -51,31 +52,15 @@
 
 .editor {
   &-widget-title {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     color: var(--heading-color);
     padding: var(--padding-small);
     margin: 0;
   }
 
-  &-border-right {
-    border-right: 1px solid var(--border-color);
-  }
-
-  &-border-bottom {
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  &-border-left {
-    border-left: 1px solid var(--border-color);
-  }
-
-  &-flex-col {
-    display: flex;
-    width: 100%;
-  }
-
-  &-flex-auto {
-    flex: auto;
+  &-widget-skeleton {
+    padding: var(--padding-middle);
+    padding-bottom: 0;
   }
 }

@@ -43,23 +43,4 @@ export const defaultOptions: GraphOptions = {
   rotating: {
     enabled: true,
   },
-  connecting: {
-    anchor: 'center',
-    connectionPoint: 'anchor',
-    allowBlank: false,
-    highlight: true,
-    snap: true,
-  },
-  highlighting: {
-    magnetAvailable: {
-      name: 'stroke',
-      args: {
-        padding: 4,
-        attrs: {
-          strokeWidth: 4,
-          stroke: 'rgba(223, 234, 255)',
-        },
-      },
-    },
-  },
 };

@@ -21,10 +21,10 @@ export interface Plugin {
 export interface Lifecycle {
   created?(): void;
 
-  mount(rootContainer: Element): void;
-  mounted?(): void;
-  beforeUnmount?(): void;
-  unmount(rootContainer: Element): void;
+  mount(rootContainer: Element): void | Promise<void>;
+  mounted?(): void | Promise<void>;
+  beforeUnmount?(): void | Promise<void>;
+  unmount(rootContainer: Element): void | Promise<void>;
 
   destroy?(): void;
 }

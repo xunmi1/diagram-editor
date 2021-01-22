@@ -1,25 +1,35 @@
 import { defineComponent, onMounted, onBeforeUnmount, ref, unref } from 'vue';
+import { useGlobalGraph } from '@/use';
 import { Lifecycle } from '@/interfaces';
+
+const asyncGlobalGraph = () => {
+  return new Promise(resolve => {
+    useGlobalGraph(graph => resolve(graph));
+  });
+};
 
 export default defineComponent({
   name: 'Container',
   props: ['view'],
   emits: ['mounted', 'unmounted'],
-  setup(props, { emit }) {
+  async setup(props, { emit }) {
     const domRef = ref<HTMLElement>();
     const view = props.view as Lifecycle;
 
-    onMounted(() => {
-      view.mount(unref(domRef)!);
+    onMounted(async () => {
+      await view.mount(unref(domRef)!);
       emit('mounted', view);
-      view.mounted?.();
+      await view.mounted?.();
     });
 
-    onBeforeUnmount(() => {
-      view.beforeUnmount?.();
-      view.unmount(unref(domRef)!);
+    onBeforeUnmount(async () => {
+      await view.beforeUnmount?.();
       emit('unmounted', view);
+      await view.unmount(unref(domRef)!);
+      domRef.value = undefined;
     });
+
+    await asyncGlobalGraph();
 
     return () => <div ref={domRef} />;
   },

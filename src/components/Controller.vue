@@ -1,10 +1,15 @@
 <template>
-  <section class="editor-sidebar-right editor-border-left">
-    <h4 class="editor-widget-title editor-border-bottom">属性配置</h4>
-    <ATabs v-if="tabList.length" class="editor-tabs">
+  <section class="editor-sidebar-wrapper">
+    <h4 class="editor-widget-title editor-sidebar-header">属性配置</h4>
+    <ATabs v-if="tabList.length" class="editor-sidebar-tabs">
       <template v-for="[key, panel] in tabList" :key="key">
         <ATabPane :tab="getPanelTitle(panel)">
-          <Container :view="panel" />
+          <Suspense>
+            <Container :view="panel" />
+            <template #fallback>
+              <ASkeleton active :paragraph="{ rows: 10 }" :title="false" class="editor-widget-skeleton" />
+            </template>
+          </Suspense>
         </ATabPane>
       </template>
     </ATabs>
@@ -69,13 +74,18 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-.editor-sidebar-right {
-  display: flex;
-  flex-direction: column;
-  width: 360px;
-}
+.editor-sidebar {
+  &-wrapper {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--border-color);
+  }
+  &-header {
+    border-bottom: 1px solid var(--border-color);
+  }
 
-.editor-tabs {
-  flex: auto;
+  &-tabs {
+    flex: auto;
+  }
 }
 </style>

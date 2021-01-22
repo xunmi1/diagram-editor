@@ -38,8 +38,7 @@ export class NodePanel extends CellPanel {
   load(...nodeList: (Node.Metadata | Node)[]) {
     const graph = this.graph;
     if (!graph) return;
-    const cellList: any[] = nodeList.map(node => (Node.isNode(node) ? node : Node.create(node)));
-    cellList.forEach(node => graph.addNode(<Node>node));
+    nodeList.forEach(node => graph.addNode(<Node>node));
     this.applyLayout();
   }
 

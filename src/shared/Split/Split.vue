@@ -18,26 +18,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, shallowRef, unref, computed, watch, onBeforeUnmount, Ref } from 'vue';
+import {
+  defineComponent,
+  reactive,
+  ref,
+  shallowRef,
+  unref,
+  computed,
+  watch,
+  onMounted,
+  onBeforeUnmount,
+  Ref,
+} from 'vue';
 import ResizeObserver from 'resize-observer-polyfill';
-import { throttle, addEvent, removeEvent } from '@/utils';
+import { throttle, addEvent, removeEvent, setProperty } from '@/utils';
 import { useInject } from '@/use';
 import { INJECT_KEY } from './contants';
 
-const setProperty = <T extends ElementCSSInlineStyle>(
-  target: T,
-  propertyName: string,
-  value: number | string,
-  priority?: string
-) => {
-  target.style.setProperty(propertyName, String(value), priority);
-};
-
 const useResizeObserver = (handler: ResizeObserverCallback, container: Ref<HTMLElement | undefined>) => {
-  const observer = shallowRef<ResizeObserver>();
-  watch(container, el => {
-    observer.value = new ResizeObserver(handler);
-    if (el) observer.value.observe(el);
+  const observer = shallowRef(new ResizeObserver(handler));
+  onMounted(() => {
+    const el = unref(container)!;
+    observer.value.observe(el);
   });
 
   onBeforeUnmount(() => {
@@ -92,7 +94,7 @@ export default defineComponent({
     const container = shallowRef<HTMLElement>();
     const panelList = computed<HTMLElement[]>(() => [...(unref(container)?.children as any)]);
     const styleList = ref<{ left: number; width: number }[]>([]);
-    const childrenMeta = reactive<Map<HTMLElement, { flexible: boolean }>>(new Map());
+    const childrenMeta = reactive<Map<HTMLElement, { flexible: boolean; left: number; width: number }>>(new Map());
     useInject(INJECT_KEY, childrenMeta);
 
     const weights = computed(() => [...childrenMeta.values()].filter(v => v.flexible).length);

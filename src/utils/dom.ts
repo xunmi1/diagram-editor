@@ -15,3 +15,12 @@ export const removeEvent = <T extends EventTarget, K extends keyof WindowEventMa
 ) => {
   el.removeEventListener(eventName, listener as EventListener, options);
 };
+
+export const setProperty = <T extends ElementCSSInlineStyle>(
+  target: T,
+  propertyName: string,
+  value: number | string,
+  priority?: string
+) => {
+  target.style.setProperty(propertyName, String(value), priority);
+};

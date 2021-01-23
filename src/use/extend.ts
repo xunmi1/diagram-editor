@@ -1,4 +1,15 @@
-import { ref, unref, Ref, WatchEffect, watchEffect, watch, WatchOptionsBase } from 'vue';
+import {
+  ref,
+  shallowRef,
+  unref,
+  Ref,
+  WatchEffect,
+  watchEffect,
+  watch,
+  onMounted,
+  onBeforeUnmount,
+  WatchOptionsBase,
+} from 'vue';
 import { Graph } from '@antv/x6';
 
 export type OnceEffect = (...args: Parameters<WatchEffect>) => boolean;
@@ -14,22 +25,21 @@ export const useOnceWatch = (effect: OnceEffect, options?: WatchOptionsBase) => 
 
 type GraphOptions = ConstructorParameters<typeof Graph>[0];
 
-export const useGraph = (options: GraphOptions, effect?: (graph: Graph) => void) => {
-  const container = ref<HTMLElement>();
-  const graph = ref<Graph>();
-
-  const cb = () => {
-    if (!container.value) return;
+export const useGraph = (container: Ref<HTMLElement | undefined>, options: GraphOptions) => {
+  const graph = shallowRef<Graph>();
+  onMounted(() => {
+    const el = unref(container)!;
     graph.value = new Graph({
-      container: container.value,
+      container: el,
       ...options,
     });
-    effect?.(unref(graph)!);
-  };
+  });
 
-  watchEffect(cb, { flush: 'post' });
+  onBeforeUnmount(() => {
+    graph.value?.dispose();
+  });
 
-  return { container, graph };
+  return graph;
 };
 
 export const useWatchGraph = (source: Ref<Graph | undefined>, effect: (graph: Graph) => void) => {

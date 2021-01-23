@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useGraph, useEditor, useGlobalGraph } from '@/use';
 import { merge } from '@/utils';
 import { defaultOptions } from '@/defaultOptions';
@@ -44,7 +44,8 @@ export default defineComponent({
   props: ['options', 'editor'],
   setup(props) {
     useEditor(props.editor);
-    const { container, graph } = useGraph(merge(defaultOptions, props.options));
+    const container = ref<HTMLElement>();
+    const graph = useGraph(container, merge(defaultOptions, props.options));
     useGlobalGraph(graph);
     return { container, graph };
   },

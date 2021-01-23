@@ -1,11 +1,11 @@
 <template>
-  <div class="editor-split-panel" :ref="getContainer">
+  <div class="editor-split-panel" ref="container" :style="{}">
     <slot />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref, unref, onMounted } from 'vue';
 import { useInject } from '@/use';
 import { INJECT_KEY } from './contants';
 
@@ -20,11 +20,14 @@ export default defineComponent({
   },
   setup(props) {
     const meta = useInject<Map<HTMLElement, Props>>(INJECT_KEY)!;
-    const getContainer = (el: HTMLElement) => {
-      meta.set(el, props);
-    };
+    const container = ref<HTMLElement>();
 
-    return { getContainer };
+    onMounted(() => {
+      const el = unref(container)!;
+      meta.set(el, props);
+    });
+
+    return { container };
   },
 });
 </script>

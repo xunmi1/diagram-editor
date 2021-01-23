@@ -6,7 +6,7 @@ import { useOnceWatch } from '@/use';
 import { EditorOptions, Plugin } from '@/interfaces';
 import { CellPanel, Explorer, NodePanel } from '@/explorer';
 import { ConfigPanel, Controller } from '@/controller';
-import { Subject, CommandsRegistry, warn } from '@/utils';
+import { Subject, CommandsRegistry, warn, Observer } from '@/utils';
 import { EventType } from '@/constants';
 
 export { CellPanel, NodePanel, ConfigPanel };
@@ -44,6 +44,10 @@ class DiagramEditor extends Subject {
         return !!vm.graph;
       });
     });
+  }
+
+  onMounted(callback: Observer<void>) {
+    return this.once(EventType.EDITOR_MOUNTED, callback);
   }
 
   use(plugin: Plugin) {

@@ -2,7 +2,6 @@ import { createApp, reactive, App } from 'vue';
 import antd from '@/antd';
 import { ConfigPanel } from '@/controller';
 import Panel from './Panel.vue';
-import { EventType } from '@/constants';
 import { DiagramEditor } from '@/interfaces';
 import { registerCommands } from './commands';
 
@@ -22,7 +21,7 @@ export interface RootProps extends Record<string, unknown> {
 }
 
 const initState = (editor: DiagramEditor, state: State) => {
-  editor.on(EventType.EDITOR_MOUNTED, async () => {
+  editor.onMounted(async () => {
     const options = editor.graph.options;
     state.gridVisible = options.grid.visible;
     state.gridSize = editor.graph?.getGridSize();

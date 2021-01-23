@@ -21,15 +21,15 @@ import { defineComponent, computed, reactive, shallowRef, unref } from 'vue';
 import type { Cell } from '@antv/x6';
 import { useGlobalGraph, useEditor } from '@/use';
 import { EventType } from '@/constants';
-import { ConfigPanel } from '@/controller';
+import { ControllerItem } from '@/controller';
 import Container from './Container';
 
 const CELL_TRIGGER_TYPE = 'cell:click';
 const CELL_CANCEL_TYPE = 'blank:click';
 
-type PanelList = [string, ConfigPanel][];
+type PanelList = [string, ControllerItem][];
 
-const createView = (Ctor: typeof ConfigPanel, ...args) => {
+const createView = (Ctor: typeof ControllerItem, ...args) => {
   const view = new Ctor(...args);
   view.created?.();
   return view;
@@ -63,7 +63,7 @@ export default defineComponent({
       });
     });
 
-    const getPanelTitle = (view: ConfigPanel) => {
+    const getPanelTitle = (view: ControllerItem) => {
       return view.constructor.title;
     };
     // 基于不同启动条件，确定配置面板

@@ -1,7 +1,7 @@
-import { NodePanel } from '@/explorer';
+import { ExplorerNodeItem } from '@/explorer';
 import { BasicRect } from '@/plugins/shapes';
 
-export default class NodeBasePanel extends NodePanel {
+export default class NodeBasePanel extends ExplorerNodeItem {
   static title = '基础节点';
 
   mounted() {

@@ -21,7 +21,7 @@ import { defineComponent, reactive, shallowRef, ref, unref } from 'vue';
 import { useEditor, useGlobalGraph } from '@/use';
 import { EventType } from '@/constants';
 import { Addon, Cell } from '@antv/x6';
-import type { CellPanel } from '@/explorer';
+import type { ExplorerItem } from '@/explorer';
 import Container from './Container';
 
 const useDnd = () => {
@@ -36,9 +36,9 @@ const useDnd = () => {
   return dndRef;
 };
 
-type PanelList = [string, CellPanel][];
+type PanelList = [string, ExplorerItem][];
 
-const createView = (Ctor: typeof CellPanel, ...args) => {
+const createView = (Ctor: typeof ExplorerItem, ...args) => {
   const view = new Ctor(...args);
   view.created?.();
   return view;
@@ -65,7 +65,7 @@ export default defineComponent({
     const activeKey = ref(panelList[0]?.[0]);
     const dndRef = useDnd();
 
-    const getPanelTitle = (view: CellPanel) => {
+    const getPanelTitle = (view: ExplorerItem) => {
       return view.constructor.title;
     };
 

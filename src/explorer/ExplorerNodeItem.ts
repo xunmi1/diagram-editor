@@ -1,4 +1,4 @@
-import { CellPanel } from './CellPanel';
+import { ExplorerItem } from './ExplorerItem';
 import { Graph, Node } from '@antv/x6';
 import { grid } from '@antv/x6/es/layout/grid';
 
@@ -18,7 +18,7 @@ const defaultLayoutOptions: LayoutOptions = {
   resizeToFit: true,
 };
 
-export class NodePanel extends CellPanel {
+export class ExplorerNodeItem extends ExplorerItem {
   public graph: Graph | undefined;
 
   mount(container: HTMLElement): void {

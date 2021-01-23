@@ -4,12 +4,12 @@ import App from '@/App.vue';
 import antd from '@/antd';
 import { useOnceWatch } from '@/use';
 import { EditorOptions, Plugin } from '@/interfaces';
-import { CellPanel, Explorer, NodePanel } from '@/explorer';
-import { ConfigPanel, Controller } from '@/controller';
+import { ExplorerItem, Explorer, ExplorerNodeItem } from '@/explorer';
+import { ControllerItem, Controller } from '@/controller';
 import { Subject, CommandsRegistry, warn, Observer } from '@/utils';
 import { EventType } from '@/constants';
 
-export { CellPanel, NodePanel, ConfigPanel };
+export { ExplorerItem, ExplorerNodeItem, ControllerItem };
 export * from '@/plugins';
 
 class DiagramEditor extends Subject {

@@ -1,2 +1,2 @@
-export * from './ConfigPanel';
+export * from './ControllerItem';
 export * from './Controller';

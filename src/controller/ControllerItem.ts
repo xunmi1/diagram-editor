@@ -2,7 +2,7 @@ import { Subject } from '@/utils';
 import type { Cell } from '@antv/x6';
 import { Lifecycle, DiagramEditor } from '@/interfaces';
 
-export abstract class ConfigPanel extends Subject implements Lifecycle {
+export abstract class ControllerItem extends Subject implements Lifecycle {
   static readonly title: string;
   protected readonly editor: DiagramEditor;
 

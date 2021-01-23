@@ -1,3 +1,3 @@
-export * from './CellPanel';
-export * from './NodePanel';
+export * from './ExplorerItem';
+export * from './ExplorerNodeItem';
 export * from './Explorer';

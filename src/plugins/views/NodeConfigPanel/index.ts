@@ -1,7 +1,7 @@
 import { createApp, reactive, App } from 'vue';
 import antd from '@/antd';
 import { Node } from '@antv/x6';
-import { ConfigPanel } from '@/controller';
+import { ControllerItem } from '@/controller';
 import { EventType } from '@/constants';
 import { DiagramEditor } from '@/interfaces';
 import { registerCommands } from './commands';
@@ -22,7 +22,7 @@ const initState = (editor: DiagramEditor, state: State) => {
   editor.on(EventType.EDITOR_MOUNTED, async () => {});
 };
 
-export default class NodeConfigPanel extends ConfigPanel {
+export default class NodeConfigPanel extends ControllerItem {
   static title = '节点属性';
 
   private app: App;

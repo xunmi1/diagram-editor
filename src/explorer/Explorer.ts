@@ -1,16 +1,16 @@
 import { Subject } from '@/utils';
-import type { CellPanel } from './CellPanel';
+import type { ExplorerItem } from './ExplorerItem';
 import { EventType } from '@/constants';
 
 export class Explorer extends Subject {
-  protected readonly list: Map<string, typeof CellPanel>;
+  protected readonly list: Map<string, typeof ExplorerItem>;
 
   constructor() {
     super();
     this.list = new Map();
   }
 
-  load(key: string, View: typeof CellPanel) {
+  load(key: string, View: typeof ExplorerItem) {
     this.list.set(key, View);
     this.emit(EventType.EXPLORER_ADDED, { key, View });
   }

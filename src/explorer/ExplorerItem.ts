@@ -3,7 +3,7 @@ import { EventType } from '@/constants';
 import type { Cell } from '@antv/x6';
 import { Lifecycle, DiagramEditor } from '@/interfaces';
 
-export abstract class CellPanel extends Subject implements Lifecycle {
+export abstract class ExplorerItem extends Subject implements Lifecycle {
   static readonly title: string;
   protected readonly editor: DiagramEditor;
 

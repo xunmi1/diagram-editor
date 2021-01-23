@@ -1,6 +1,6 @@
 import { createApp, reactive, App } from 'vue';
 import antd from '@/antd';
-import { ConfigPanel } from '@/controller';
+import { ControllerItem } from '@/controller';
 import Panel from './Panel.vue';
 import { DiagramEditor } from '@/interfaces';
 import { registerCommands } from './commands';
@@ -31,7 +31,7 @@ const initState = (editor: DiagramEditor, state: State) => {
   });
 };
 
-export default class GraphConfigPanel extends ConfigPanel {
+export default class GraphConfigPanel extends ControllerItem {
   static title = '画布属性';
 
   private app: App;

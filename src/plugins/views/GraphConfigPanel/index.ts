@@ -21,7 +21,7 @@ export interface RootProps extends Record<string, unknown> {
 }
 
 const initState = (editor: DiagramEditor, state: State) => {
-  editor.onMounted(async () => {
+  editor.onDidMount(async () => {
     const options = editor.graph.options;
     state.gridVisible = options.grid.visible;
     state.gridSize = editor.graph?.getGridSize();
@@ -32,13 +32,14 @@ const initState = (editor: DiagramEditor, state: State) => {
 };
 
 export default class GraphConfigPanel extends ControllerItem {
-  static title = '画布属性';
+  title = '画布属性';
 
   private app: App;
   private state: State;
+  private editor: DiagramEditor;
 
-  created() {
-    const editor = this.editor;
+  created(editor: DiagramEditor) {
+    this.editor = editor;
     const state = reactive<State>({
       gridVisible: true,
       gridSize: 10,

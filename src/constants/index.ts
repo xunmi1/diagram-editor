@@ -1,8 +1,13 @@
-export const enum EventType {
-  EDITOR_MOUNTED = 'editor:mounted',
+export const EventType = {
+  EDITOR_MOUNTED: 'editor:mounted',
 
-  EXPLORER_ADDED = 'explorer:added',
-  EXPLORER_CELL_MOVE = 'explorer.cell:move',
+  CONTROLLER_WILL_MOUNT: Symbol('WILL_MOUNT'),
+  CONTROLLER_DID_MOUNT: Symbol('DID_MOUNT'),
+  CONTROLLER_WILL_UNMOUNT: Symbol('WILL_UNMOUNT'),
+  CONTROLLER_DID_UNMOUNT: Symbol('DID_UNMOUNT'),
 
-  CONTROLLER_ADDED = 'controller:added',
-}
+  EXPLORER_WILL_MOUNT: Symbol('WILL_MOUNT'),
+  EXPLORER_DID_MOUNT: Symbol('DID_MOUNT'),
+  EXPLORER_WILL_UNMOUNT: Symbol('WILL_UNMOUNT'),
+  EXPLORER_DID_UNMOUNT: Symbol('DID_UNMOUNT'),
+};

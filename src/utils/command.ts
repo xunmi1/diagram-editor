@@ -1,4 +1,4 @@
-import { Disposable, DisposableDelegate } from '@antv/x6';
+import { DisposableDelegate, Disposable } from '@/utils';
 
 export interface Command<T = any> {
   (params: T): void | Promise<void>;

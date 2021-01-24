@@ -1,14 +1,32 @@
 import { Subject } from '@/utils';
+import { EventType } from '@/constants';
 import type { Cell } from '@antv/x6';
-import { Lifecycle, DiagramEditor } from '@/interfaces';
+import { DiagramEditor, Lifecycle, LifecycleCallback } from '@/interfaces';
 
 export abstract class ControllerItem extends Subject implements Lifecycle {
-  static readonly title: string;
-  protected readonly editor: DiagramEditor;
+  readonly title: string;
 
-  protected constructor(editor: DiagramEditor) {
+  constructor() {
     super();
-    this.editor = editor;
+  }
+
+  created?(editor: DiagramEditor): void;
+  destroy?(editor: DiagramEditor): void;
+
+  onWillMount(callback: LifecycleCallback) {
+    return this.on(EventType.CONTROLLER_WILL_MOUNT, callback);
+  }
+
+  onDidMount(callback: LifecycleCallback) {
+    return this.on(EventType.CONTROLLER_DID_MOUNT, callback);
+  }
+
+  onWillUnmount(callback: LifecycleCallback) {
+    return this.on(EventType.CONTROLLER_WILL_UNMOUNT, callback);
+  }
+
+  onDidUnmount(callback: LifecycleCallback) {
+    return this.on(EventType.CONTROLLER_DID_UNMOUNT, callback);
   }
 
   abstract mount(rootContainer: Element): void;

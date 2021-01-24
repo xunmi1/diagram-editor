@@ -1,7 +1,7 @@
-import mitt, { Emitter, Handler, EventType } from 'mitt';
-import { DisposableDelegate, Disposable } from '@antv/x6';
+import mitt, { Emitter, EventType } from 'mitt';
+import { DisposableDelegate, Disposable } from '@/utils';
 
-export type Observer<T> = Handler<T>;
+export type Observer<T> = (event: T) => void;
 
 /**
  * Observer pattern & [Dispose pattern](https://wikipedia.org/wiki/Dispose_pattern)
@@ -14,6 +14,7 @@ export class Subject {
   }
 
   on<T = any>(type: EventType, handler: Observer<T>): Disposable {
+    // @ts-ignore
     this.emitter.on(type, handler);
     return new DisposableDelegate(() => this.off(type, handler));
   }
@@ -27,10 +28,11 @@ export class Subject {
   }
 
   off<T = any>(type: EventType, handler: Observer<T>) {
+    // @ts-ignore
     this.emitter.off(type, handler);
   }
 
-  protected emit<T = any>(type: EventType, event?: T) {
+  emit<T = any>(type: EventType, event?: T) {
     this.emitter.emit(type, event);
   }
 }

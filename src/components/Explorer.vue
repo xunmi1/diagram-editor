@@ -3,9 +3,15 @@
     <h4 class="editor-widget-title editor-sidebar-header">资源管理器</h4>
     <ACollapse v-model:active-key="activeKey" class="editor-sidebar-collapse">
       <template v-for="[key, panel] in panelList" :key="key">
-        <ACollapsePanel :panel-key="key" :header="getPanelTitle(panel)">
+        <ACollapsePanel :panel-key="key" :header="panel.title">
           <Suspense>
-            <Container :view="panel" @mounted="mounted" @unmounted="unmounted" />
+            <Container
+              :view="panel"
+              @will-mount="willMount"
+              @did-mount="didMount"
+              @will-unmount="willUnmount"
+              @did-unmount="didUnmount"
+            />
             <template #fallback>
               <ASkeleton active :paragraph="{ rows: 4 }" :title="false" class="editor-widget-skeleton" />
             </template>
@@ -17,12 +23,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, shallowRef, ref, unref } from 'vue';
+import { defineComponent, shallowReactive, shallowRef, ref, unref, onBeforeUnmount } from 'vue';
 import { useEditor, useGlobalGraph } from '@/use';
-import { EventType } from '@/constants';
 import { Addon, Cell } from '@antv/x6';
 import type { ExplorerItem } from '@/explorer';
 import Container from './Container';
+import { Node } from '@antv/x6/lib/model/node';
+import { EventType } from '@/constants';
 
 const useDnd = () => {
   const dndRef = shallowRef<Addon.Dnd>();
@@ -38,51 +45,64 @@ const useDnd = () => {
 
 type PanelList = [string, ExplorerItem][];
 
-const createView = (Ctor: typeof ExplorerItem, ...args) => {
-  const view = new Ctor(...args);
-  view.created?.();
-  return view;
-};
-
-const usePanelList = () => {
-  const editor = useEditor();
-  const explorer = editor.explorer;
-  const model = [...explorer].map(([key, View]) => [key, createView(View, editor)]);
-  const panelList = reactive<PanelList>(model);
-  explorer.on(EventType.EXPLORER_ADDED, ({ key, View }: any) => {
-    panelList.push([key, createView(View, editor)]);
+const usePanelList = (callback: (item: ExplorerItem) => void) => {
+  const { explorer } = useEditor();
+  const panelList = shallowReactive<PanelList>([...explorer]);
+  panelList.forEach(([_, item]) => callback(item));
+  const disposable = explorer.onDidLoad(({ key, item }) => {
+    panelList.push([key, item]);
+    callback(item);
   });
+  onBeforeUnmount(() => disposable.dispose());
 
   return panelList;
+};
+
+const useLifecycle = () => {
+  const editor = useEditor();
+  const willMount = (item: ExplorerItem) => {
+    item.emit(EventType.EXPLORER_WILL_MOUNT, editor);
+  };
+  const didMount = (item: ExplorerItem) => {
+    item.emit(EventType.EXPLORER_DID_MOUNT, editor);
+  };
+  const willUnmount = (item: ExplorerItem) => {
+    item.emit(EventType.EXPLORER_WILL_UNMOUNT, editor);
+  };
+  const didUnmount = (item: ExplorerItem) => {
+    item.emit(EventType.EXPLORER_DID_UNMOUNT, editor);
+  };
+
+  return { willMount, didMount, willUnmount, didUnmount };
 };
 
 export default defineComponent({
   name: 'Explorer',
   components: { Container },
   setup() {
-    const panelList = usePanelList();
-    // 第一个 bar 的 key
-    const activeKey = ref(panelList[0]?.[0]);
+    const editor = useEditor();
     const dndRef = useDnd();
-
-    const getPanelTitle = (view: ExplorerItem) => {
-      return view.constructor.title;
-    };
 
     const drag = (args: { cell: Cell; event: MouseEvent }) => {
       const dnd = unref(dndRef);
-      dnd?.start(args.cell, args.event);
+      dnd?.start(args.cell as Node, args.event);
     };
 
-    const mounted = view => {
-      view.on(EventType.EXPLORER_CELL_MOVE, drag);
-    };
+    const panelList = usePanelList(item => {
+      item.created?.(editor);
+      const disposable = item.onWillDrag?.(drag);
+      onBeforeUnmount(() => {
+        item.destroy?.(editor);
+        disposable?.dispose();
+      });
+    });
 
-    const unmounted = view => {
-      view.off(EventType.EXPLORER_CELL_MOVE, drag);
-    };
+    // 第一个 bar 的 key
+    const activeKey = ref(panelList[0]?.[0]);
 
-    return { panelList, activeKey, getPanelTitle, mounted, unmounted };
+    const lifecycle = useLifecycle();
+
+    return { panelList, activeKey, ...lifecycle };
   },
 });
 </script>

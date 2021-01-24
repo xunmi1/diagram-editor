@@ -1,18 +1,23 @@
-import { Subject } from '@/utils';
+import { Subject, Observer } from '@/utils';
 import type { ExplorerItem } from './ExplorerItem';
-import { EventType } from '@/constants';
+
+const EVENT_TYPE_LOAD = Symbol('EXPLORER_ITEM_LOAD');
 
 export class Explorer extends Subject {
-  protected readonly list: Map<string, typeof ExplorerItem>;
+  protected readonly list: Map<string, ExplorerItem>;
 
   constructor() {
     super();
     this.list = new Map();
   }
 
-  load(key: string, View: typeof ExplorerItem) {
-    this.list.set(key, View);
-    this.emit(EventType.EXPLORER_ADDED, { key, View });
+  load(key: string, item: ExplorerItem) {
+    this.list.set(key, item);
+    this.emit(EVENT_TYPE_LOAD, { key, item });
+  }
+
+  onDidLoad(callback: Observer<{ key: string; item: ExplorerItem }>) {
+    return this.on(EVENT_TYPE_LOAD, callback);
   }
 
   [Symbol.iterator]() {

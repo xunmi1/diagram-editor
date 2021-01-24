@@ -1,5 +1,5 @@
 import { ExplorerItem } from './ExplorerItem';
-import { Graph, Node } from '@antv/x6';
+import { Cell, Graph, Node } from '@antv/x6';
 import { grid } from '@antv/x6/es/layout/grid';
 
 type LayoutOptions = Parameters<typeof grid>[1];
@@ -8,7 +8,6 @@ type LayoutOptions = Parameters<typeof grid>[1];
 const DEFAULT_SPACING = 16;
 // 默认每行节点数量
 const DEFAULT_COLUMNS = 3;
-const NODE_EVENT_MOUSEDOWN = 'cell:mousedown';
 
 const defaultLayoutOptions: LayoutOptions = {
   columns: DEFAULT_COLUMNS,
@@ -18,7 +17,11 @@ const defaultLayoutOptions: LayoutOptions = {
   resizeToFit: true,
 };
 
+const NODE_EVENT_MOUSEDOWN = 'cell:mousedown';
+const EVENT_TYPE_WILL_DRAG = Symbol('WILL_DRAG');
+
 export class ExplorerNodeItem extends ExplorerItem {
+  public readonly title: string;
   public graph: Graph | undefined;
 
   mount(container: HTMLElement): void {
@@ -31,8 +34,9 @@ export class ExplorerNodeItem extends ExplorerItem {
     this.fitToContent();
   }
 
-  unmount(rootContainer: Element) {
+  unmount() {
     this.unbindMoveEvent();
+    this.graph?.dispose();
   }
 
   load(...nodeList: (Node.Metadata | Node)[]) {
@@ -52,8 +56,14 @@ export class ExplorerNodeItem extends ExplorerItem {
     this.graph?.fitToContent({ gridHeight: 1, gridWidth: 1, padding: DEFAULT_SPACING });
   }
 
+  onWillDrag(callback: (args: { cell: Cell; event: MouseEvent }) => void) {
+    return this.on(EVENT_TYPE_WILL_DRAG, callback);
+  }
+
   protected bindMoveEvent() {
-    this.graph?.on(NODE_EVENT_MOUSEDOWN, args => this.start({ cell: args.cell, event: args.e }));
+    this.graph?.on(NODE_EVENT_MOUSEDOWN, args => {
+      this.emit(EVENT_TYPE_WILL_DRAG, { cell: args.cell, event: args.e });
+    });
   }
 
   protected unbindMoveEvent() {

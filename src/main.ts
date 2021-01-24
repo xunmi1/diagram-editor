@@ -6,16 +6,20 @@ import { useOnceWatch } from '@/use';
 import { EditorOptions, Plugin } from '@/interfaces';
 import { ExplorerItem, Explorer, ExplorerNodeItem } from '@/explorer';
 import { ControllerItem, Controller } from '@/controller';
+import { Menubar, MenubarItem } from '@/menubar';
 import { Subject, CommandsRegistry, warn, Observer } from '@/utils';
 import { EventType } from '@/constants';
 
 export { ExplorerItem, ExplorerNodeItem, ControllerItem };
+export type { MenubarItem };
+
 export * from '@/plugins';
 
 class DiagramEditor extends Subject {
   public readonly explorer: Explorer;
   public readonly controller: Controller;
   public readonly commands: CommandsRegistry;
+  public readonly menubar: Menubar;
   public graph: Graph;
   private readonly options: EditorOptions;
   private readonly installedPlugins: Set<Plugin>;
@@ -26,6 +30,7 @@ class DiagramEditor extends Subject {
     this.explorer = new Explorer();
     this.controller = new Controller();
     this.commands = new CommandsRegistry();
+    this.menubar = new Menubar();
     this.installedPlugins = new Set();
   }
 
@@ -46,7 +51,7 @@ class DiagramEditor extends Subject {
     });
   }
 
-  onMounted(callback: Observer<void>) {
+  onDidMount(callback: Observer<void>) {
     return this.once(EventType.EDITOR_MOUNTED, callback);
   }
 

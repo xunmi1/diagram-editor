@@ -1,18 +1,23 @@
-import { Subject } from '@/utils';
+import { Observer, Subject } from '@/utils';
 import type { ControllerItem } from './ControllerItem';
-import { EventType } from '@/constants';
+
+const EVENT_TYPE_LOAD = Symbol('CONTROLLER_ITEM_LOAD');
 
 export class Controller extends Subject {
-  protected readonly list: Map<string, typeof ControllerItem>;
+  protected readonly list: Map<string, ControllerItem>;
 
   constructor() {
     super();
     this.list = new Map();
   }
 
-  load(key: string, View: typeof ControllerItem) {
-    this.list.set(key, View);
-    this.emit(EventType.CONTROLLER_ADDED, { key, View });
+  load(key: string, item: ControllerItem) {
+    this.list.set(key, item);
+    this.emit(EVENT_TYPE_LOAD, { key, item });
+  }
+
+  onDidLoad(callback: Observer<{ key: string; item: ControllerItem }>) {
+    return this.on(EVENT_TYPE_LOAD, callback);
   }
 
   [Symbol.iterator]() {

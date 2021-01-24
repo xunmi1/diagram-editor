@@ -1,7 +1,7 @@
 <template>
   <ConfigProvider>
     <div class="editor editor-layout">
-      <Toolbar class="editor-toolbar" />
+      <Menubar class="editor-menubar" />
       <Split class="editor-content">
         <SplitPanel key="explorer" class="editor-layout-left">
           <Explorer class="editor-explorer" />
@@ -27,7 +27,7 @@ import { useGraph, useEditor, useGlobalGraph } from '@/use';
 import { merge } from '@/utils';
 import { defaultOptions } from '@/defaultOptions';
 import { ConfigProvider, Split, SplitPanel } from '@/shared';
-import Toolbar from '@/components/Toolbar.vue';
+import Menubar from '@/components/Menubar.vue';
 import Explorer from '@/components/Explorer.vue';
 import Controller from '@/components/Controller.vue';
 
@@ -37,7 +37,7 @@ export default defineComponent({
     Split,
     SplitPanel,
     ConfigProvider,
-    Toolbar,
+    Menubar,
     Explorer,
     Controller,
   },
@@ -56,16 +56,16 @@ export default defineComponent({
 .editor-layout {
   height: 100%;
 
-  .editor-toolbar {
+  .editor-menubar {
     position: absolute;
     top: 0;
-    height: var(--toolbar-height);
+    height: var(--menubar-height);
     width: 100%;
   }
 
   .editor-content {
     position: absolute;
-    top: var(--toolbar-height);
+    top: var(--menubar-height);
     bottom: var(--statusbar-height);
     width: 100%;
   }

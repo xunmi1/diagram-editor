@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, onBeforeUnmount, ref, unref } from 'vue';
+import { defineComponent, onBeforeMount, onMounted, onBeforeUnmount, onUnmounted, ref, unref } from 'vue';
 import { useGlobalGraph } from '@/use';
 import { Lifecycle } from '@/interfaces';
 
@@ -11,23 +11,25 @@ const asyncGlobalGraph = () => {
 export default defineComponent({
   name: 'Container',
   props: ['view'],
-  emits: ['mounted', 'unmounted'],
+  emits: ['will-mount', 'did-mount', 'will-unmount', 'did-unmount'],
   async setup(props, { emit }) {
     const domRef = ref<HTMLElement>();
     const view = props.view as Lifecycle;
 
+    onBeforeMount(() => emit('will-mount', view));
+
     onMounted(async () => {
       await view.mount(unref(domRef)!);
-      emit('mounted', view);
-      await view.mounted?.();
+      emit('did-mount', view);
     });
 
     onBeforeUnmount(async () => {
-      await view.beforeUnmount?.();
-      emit('unmounted', view);
+      emit('will-unmount', view);
       await view.unmount(unref(domRef)!);
       domRef.value = undefined;
     });
+
+    onUnmounted(() => emit('did-unmount', view));
 
     await asyncGlobalGraph();
 

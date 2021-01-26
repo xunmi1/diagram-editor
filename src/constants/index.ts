@@ -1,5 +1,5 @@
 export const EventType = {
-  EDITOR_MOUNTED: 'editor:mounted',
+  EDITOR_DID_MOUNT: 'editor:did-mount',
 
   CONTROLLER_WILL_MOUNT: Symbol('WILL_MOUNT'),
   CONTROLLER_DID_MOUNT: Symbol('DID_MOUNT'),

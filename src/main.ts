@@ -20,7 +20,7 @@ class DiagramEditor extends Subject {
   public readonly controller: Controller;
   public readonly commands: CommandsRegistry;
   public readonly menubar: Menubar;
-  public graph: Graph;
+  public graph: Graph | undefined;
   private readonly options: EditorOptions;
   private readonly installedPlugins: Set<Plugin>;
 
@@ -43,7 +43,7 @@ class DiagramEditor extends Subject {
         if (vm.graph) {
           this.graph = vm.graph;
           resolve();
-          this.emit(EventType.EDITOR_MOUNTED);
+          this.emit(EventType.EDITOR_DID_MOUNT);
         }
 
         return !!vm.graph;
@@ -52,7 +52,8 @@ class DiagramEditor extends Subject {
   }
 
   onDidMount(callback: Observer<void>) {
-    return this.once(EventType.EDITOR_MOUNTED, callback);
+    if (this.graph) callback();
+    return this.once(EventType.EDITOR_DID_MOUNT, callback);
   }
 
   use(plugin: Plugin) {

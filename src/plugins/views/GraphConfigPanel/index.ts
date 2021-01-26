@@ -22,12 +22,13 @@ export interface RootProps extends Record<string, unknown> {
 
 const initState = (editor: DiagramEditor, state: State) => {
   editor.onDidMount(async () => {
-    const options = editor.graph.options;
+    const graph = editor.graph!;
+    const options = graph.options;
     state.gridVisible = options.grid.visible;
-    state.gridSize = editor.graph?.getGridSize();
+    state.gridSize = graph.getGridSize();
     state.backgroundColor = (options.background ? options.background.color : null) ?? 'transparent';
     state.scrollerEnable = options.scroller.enabled ?? false;
-    state.scrollerPannable = options.scroller.pannable ?? false;
+    state.scrollerPannable = graph.isPannable();
   });
 };
 

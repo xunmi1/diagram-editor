@@ -30,12 +30,12 @@ export class ExplorerNodeItem extends ExplorerItem {
       interacting: false,
       preventDefaultBlankAction: false,
     });
-    this.bindMoveEvent();
+    this.bindDragEvent();
     this.fitToContent();
   }
 
   unmount() {
-    this.unbindMoveEvent();
+    this.unbindDragEvent();
     this.graph?.dispose();
     this.graph = undefined;
   }
@@ -67,13 +67,13 @@ export class ExplorerNodeItem extends ExplorerItem {
     return this.on(EVENT_TYPE_WILL_DRAG, callback);
   }
 
-  protected bindMoveEvent() {
+  protected bindDragEvent() {
     this.graph?.on(NODE_EVENT_MOUSEDOWN, args => {
       this.emit(EVENT_TYPE_WILL_DRAG, { cell: args.cell, event: args.e });
     });
   }
 
-  protected unbindMoveEvent() {
+  protected unbindDragEvent() {
     this.graph?.off(NODE_EVENT_MOUSEDOWN);
   }
 }

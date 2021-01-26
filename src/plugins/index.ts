@@ -27,7 +27,8 @@ export const builtInPlugin: Plugin = editor => {
   const m = new MenubarItem({ title: '2222', command: 'xxxx' });
   editor.menubar.load('2222', m, 'xxxx1');
   editor.commands.register('xxxx', (menu: MenubarItem) => {
-    menu.state = { ...menu.state, checked: !menu.state.checked, disabled: true };
+    const state = menu.state;
+    menu.state = { ...state, checked: !state.checked, disabled: true };
   });
   editor.menubar.load('3333', new MenubarItem({ title: '3333' }), 'xxxx1');
   editor.menubar.load('44444', new MenubarItem({ title: '444444' }), '3333');

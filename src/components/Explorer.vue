@@ -43,14 +43,15 @@ const useDnd = () => {
   return dndRef;
 };
 
-type PanelList = [string, ExplorerItem][];
+type PanelList = Map<string, ExplorerItem>;
 
 const usePanelList = (callback: (item: ExplorerItem) => void) => {
   const { explorer } = useEditor();
-  const panelList = shallowReactive<PanelList>([...explorer]);
-  panelList.forEach(([_, item]) => callback(item));
+  const panelList = shallowReactive<PanelList>(new Map([...explorer]));
+  explorer.forEach(callback);
+
   const disposable = explorer.onDidLoad(({ key, item }) => {
-    panelList.push([key, item]);
+    panelList.set(key, item);
     callback(item);
   });
   onBeforeUnmount(() => disposable.dispose());
@@ -98,7 +99,7 @@ export default defineComponent({
     });
 
     // 第一个 bar 的 key
-    const activeKey = ref(panelList[0]?.[0]);
+    const activeKey = ref([...panelList][0]?.[0]);
 
     const lifecycle = useLifecycle();
 

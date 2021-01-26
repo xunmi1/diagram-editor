@@ -87,7 +87,7 @@ export default defineComponent({
     // 阈值
     threshold: {
       type: Number,
-      default: 180,
+      default: 160,
     },
   },
   setup(props) {

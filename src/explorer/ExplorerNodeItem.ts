@@ -1,5 +1,5 @@
-import { ExplorerItem } from './ExplorerItem';
-import { Cell, Graph, Node } from '@antv/x6';
+import { ExplorerItem, DragEvent } from './ExplorerItem';
+import { Graph, Node } from '@antv/x6';
 import { grid } from '@antv/x6/es/layout/grid';
 
 type LayoutOptions = Parameters<typeof grid>[1];
@@ -37,13 +37,20 @@ export class ExplorerNodeItem extends ExplorerItem {
   unmount() {
     this.unbindMoveEvent();
     this.graph?.dispose();
+    this.graph = undefined;
   }
 
   load(...nodeList: (Node.Metadata | Node)[]) {
-    const graph = this.graph;
-    if (!graph) return;
-    nodeList.forEach(node => graph.addNode(<Node>node));
-    this.applyLayout();
+    const loadNode = () => {
+      nodeList.forEach(node => this.graph?.addNode(<Node>node));
+      this.applyLayout();
+    };
+    if (this.graph) {
+      loadNode();
+    } else {
+      const disposable = this.onDidMount(loadNode);
+      this.onWillUnmount(() => disposable.dispose());
+    }
   }
 
   applyLayout(options?: LayoutOptions) {
@@ -56,7 +63,7 @@ export class ExplorerNodeItem extends ExplorerItem {
     this.graph?.fitToContent({ gridHeight: 1, gridWidth: 1, padding: DEFAULT_SPACING });
   }
 
-  onWillDrag(callback: (args: { cell: Cell; event: MouseEvent }) => void) {
+  onWillDrag(callback: DragEvent) {
     return this.on(EVENT_TYPE_WILL_DRAG, callback);
   }
 

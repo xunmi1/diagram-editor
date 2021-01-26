@@ -23,4 +23,8 @@ export class Controller extends Subject {
   [Symbol.iterator]() {
     return this.list.entries();
   }
+
+  forEach(callback: (value: ControllerItem, key: string) => void) {
+    return this.list.forEach((v, k) => callback(v, k));
+  }
 }

@@ -5,6 +5,7 @@ import {
   Tabs,
   Tooltip,
   Dropdown,
+  Menu,
   Spin,
   Skeleton,
   Form,
@@ -21,7 +22,7 @@ const antd: Plugin = {
   install(app) {
     app.use(ConfigProvider);
     // data display
-    app.use(Collapse).use(Tabs).use(Tooltip).use(Spin).use(Skeleton).use(Dropdown);
+    app.use(Collapse).use(Tabs).use(Tooltip).use(Spin).use(Skeleton).use(Dropdown).use(Menu);
     // form
     app.use(Form).use(Input).use(InputNumber).use(Slider).use(Switch).use(Select);
   },

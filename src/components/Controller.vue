@@ -33,14 +33,14 @@ import Container from './Container';
 const CELL_TRIGGER_TYPE = 'cell:click';
 const CELL_CANCEL_TYPE = 'blank:click';
 
-type PanelList = [string, ControllerItem][];
+type PanelList = Map<string, ControllerItem>;
 
 const usePanelList = (callback: (item: ControllerItem) => void) => {
   const { controller } = useEditor();
-  const panelList = shallowReactive<PanelList>([...controller]);
-  panelList.forEach(([_, item]) => callback(item));
+  const panelList = shallowReactive<PanelList>(new Map([...controller]));
+  controller.forEach(callback);
   const disposable = controller.onDidLoad(({ key, item }) => {
-    panelList.push([key, item]);
+    panelList.set(key, item);
     callback(item);
   });
   onBeforeUnmount(() => disposable.dispose());
@@ -89,7 +89,7 @@ export default defineComponent({
     });
     const lifecycle = useLifecycle();
     // 基于不同启动条件，确定配置面板
-    const tabList = computed(() => panelList.filter(([_, v]) => v.activate(unref(activeCell))));
+    const tabList = computed(() => [...panelList].filter(([_, v]) => v.activate(unref(activeCell))));
     return { tabList, ...lifecycle };
   },
 });

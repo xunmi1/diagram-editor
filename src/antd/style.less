@@ -10,6 +10,7 @@
 @import 'node_modules/ant-design-vue/es/dropdown/style/index';
 @import 'node_modules/ant-design-vue/es/spin/style/index';
 @import 'node_modules/ant-design-vue/es/skeleton/style/index';
+@import 'node_modules/ant-design-vue/es/menu/style/index';
 
 @import 'node_modules/ant-design-vue/es/form/style/index';
 @import 'node_modules/ant-design-vue/es/input/style/index';
@@ -21,6 +22,8 @@
 @ant-prefix: editor;
 
 @primary-color: #1890ff;
+@item-hover-bg: rgba(0, 0, 0, 0.08);
+@item-active-bg: @item-hover-bg;
 @padding-md: 16px;
 @padding-sm: 12px;
 
@@ -43,7 +46,8 @@
 
 .editor {
   --primary-color: @primary-color;
-  --hover-color: color(~`colorPalette('@{primary-color}', 5) `);
+  --hover-background: @item-hover-bg;
+  --active-background: @item-active-bg;
   --text-color: rgba(0, 0, 0, 0.65);
   --heading-color: rgba(0, 0, 0, 0.85);
   --border-color: @border-color-base;
@@ -54,12 +58,14 @@
   --padding-middle: @padding-md;
   --padding-small: @padding-sm;
 
-  --menubar-height: 32px;
+  --menubar-height: 36px;
   --statusbar-height: 22px;
   --sash-size: 8px;
 }
 
 .editor {
+  position: relative;
+
   &-widget-title {
     font-size: 14px;
     font-weight: 500;

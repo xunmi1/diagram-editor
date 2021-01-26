@@ -4,21 +4,23 @@ export interface Command<T = any> {
   (params: T): void | Promise<void>;
 }
 
+export type CommandId = string | symbol;
+
 export class CommandsRegistry {
-  private readonly commands: Map<string, Command[]>;
+  private readonly commands: Map<CommandId, Command[]>;
 
   constructor() {
     this.commands = new Map();
   }
 
-  async execute(commandId: string, params: any): Promise<void> {
+  async execute(commandId: CommandId, params?: unknown): Promise<void> {
     const list = this.commands.get(commandId);
     if (list) {
       await Promise.all(list.map(command => command(params)));
     }
   }
 
-  register<T = any>(commandId: string, command: Command<T>): Disposable {
+  register<T = any>(commandId: CommandId, command: Command<T>): Disposable {
     const list = this.commands.get(commandId);
     if (list) {
       list.unshift(command);
@@ -37,7 +39,7 @@ export class CommandsRegistry {
     return new DisposableDelegate(dispose);
   }
 
-  getAll(): string[] {
+  getAll(): CommandId[] {
     return [...this.commands.keys()];
   }
 }

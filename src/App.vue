@@ -27,7 +27,7 @@ import { useGraph, useEditor, useGlobalGraph } from '@/use';
 import { merge } from '@/utils';
 import { defaultOptions } from '@/defaultOptions';
 import { ConfigProvider, Split, SplitPanel } from '@/shared';
-import Menubar from '@/components/Menubar.vue';
+import Menubar from '@/components/menubar/Menubar.vue';
 import Explorer from '@/components/Explorer.vue';
 import Controller from '@/components/Controller.vue';
 

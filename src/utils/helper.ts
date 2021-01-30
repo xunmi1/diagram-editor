@@ -1,4 +1,6 @@
 export { merge, throttle } from 'lodash-es';
+import type { IconDefinition } from '@ant-design/icons-svg/es/types';
+import { renderIconDefinitionToSVGElement } from '@ant-design/icons-svg/es/helpers';
 
 export const warn = (msg: string, ...args: any[]) => {
   console.warn(`[Editor warn]: ${msg}`, ...args);
@@ -19,4 +21,9 @@ export const lazyTask = <T extends (...args: any[]) => any>(func: T) => {
 
     return result;
   };
+};
+
+const extraSVGAttrs = { width: '1em', height: '1em', fill: 'currentColor' };
+export const stringifySVG = (icon: IconDefinition) => {
+  return renderIconDefinitionToSVGElement(icon, { extraSVGAttrs });
 };

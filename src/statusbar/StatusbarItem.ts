@@ -3,8 +3,7 @@ import { CommandId, Observer, Subject, lazyTask } from '@/utils';
 export interface StatusbarItemOptions {
   command?: CommandId;
   text?: string;
-  /** TODO: 图标来源，引入方式待商榷，暂不提供 */
-  // icon?: string;
+  icon?: string;
   tooltip?: string;
   visible?: boolean;
 }
@@ -15,6 +14,7 @@ export class StatusbarItem extends Subject {
   public readonly command?: CommandId;
   private _text?: string;
   private _tooltip?: string;
+  private _icon?: string | undefined;
   private _visible: boolean;
 
   constructor(options: StatusbarItemOptions = {}) {
@@ -23,6 +23,7 @@ export class StatusbarItem extends Subject {
     this._tooltip = options.tooltip;
     this._text = options.text;
     this._visible = options.visible ?? true;
+    this._icon = options.icon;
     // 同一个任务队列只执行一次
     this._emitUpdate = lazyTask(this._emitUpdate);
   }
@@ -42,6 +43,15 @@ export class StatusbarItem extends Subject {
 
   set tooltip(tooltip: string | undefined) {
     this._tooltip = tooltip;
+    this.update();
+  }
+
+  get icon() {
+    return this._icon;
+  }
+
+  set icon(icon: string | undefined) {
+    this._icon = icon;
     this.update();
   }
 

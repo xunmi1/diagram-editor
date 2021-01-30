@@ -27,6 +27,6 @@ export default defineConfig({
   },
 
   optimizeDeps: {
-    include: ['ant-design-vue/es/locale/zh_CN', '@ant-design/icons-vue', '@antv/x6/es/layout/grid'],
+    include: ['ant-design-vue/es/locale/zh_CN', '@antv/x6/es/layout/grid', '@ant-design/icons-svg/es/helpers'],
   },
 });

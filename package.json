@@ -17,8 +17,8 @@
   "author": "xunmi <xunmi1@outlook.com>",
   "license": "MIT",
   "dependencies": {
+    "@ant-design/icons-svg": "^4.1.0",
     "@antv/x6": "^1.12.20",
-    "@ant-design/icons-vue": "^6.0.0",
     "ant-design-vue": "^2.0.0-0",
     "lodash-es": "^4.17.20",
     "mitt": "^2.1.0",
@@ -33,7 +33,7 @@
     "@types/lodash-es": "^4.17.4",
     "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.14.1",
-    "@vitejs/plugin-vue": "^1.1.2",
+    "@vitejs/plugin-vue": "^1.1.3",
     "@vitejs/plugin-vue-jsx": "^1.0.2",
     "@vue/compiler-sfc": "^3.0.5",
     "@vue/eslint-config-prettier": "^6.0.0",
@@ -48,7 +48,7 @@
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.1.3",
-    "vite": "2.0.0-beta.50"
+    "vite": "2.0.0-beta.59"
   },
   "husky": {
     "hooks": {

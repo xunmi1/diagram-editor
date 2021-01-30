@@ -1,4 +1,5 @@
 import { createApp, App as VueApp } from 'vue';
+import type { ComponentPublicInstance } from '@vue/runtime-core';
 import type { Graph, Cell } from '@antv/x6';
 import App from '@/App.vue';
 import antd from '@/antd';
@@ -6,23 +7,15 @@ import { useOnceWatch } from '@/use';
 import { EditorOptions, Plugin } from '@/interfaces';
 import { ExplorerItem, Explorer, ExplorerNodeItem, DragEvent, LayoutOptions } from '@/explorer';
 import { ControllerItem, Controller } from '@/controller';
-import { Menubar, MenubarItem, MenubarItemOptions, MenubarItemState } from '@/menubar';
-import { Statusbar, StatusbarItem, StatusbarItemOptions, StatusbarItemState } from '@/statusbar';
+import { Menubar, MenubarItem, MenubarItemOptions } from '@/menubar';
+import { Statusbar, StatusbarItem, StatusbarItemOptions } from '@/statusbar';
 import { Subject, Observer, CommandsRegistry, warn } from '@/utils';
 import { EventType } from '@/constants';
-import { ComponentPublicInstance } from '@vue/runtime-core';
 
 export { ExplorerItem, ExplorerNodeItem, ControllerItem, MenubarItem, StatusbarItem };
 export * from '@/plugins';
 
-export type {
-  DragEvent,
-  LayoutOptions,
-  MenubarItemOptions,
-  MenubarItemState,
-  StatusbarItemOptions,
-  StatusbarItemState,
-};
+export type { DragEvent, LayoutOptions, MenubarItemOptions, StatusbarItemOptions };
 export type { Observer, Disposable } from '@/utils';
 export * from '@/interfaces';
 

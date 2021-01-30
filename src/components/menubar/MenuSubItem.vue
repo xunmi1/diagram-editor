@@ -6,7 +6,7 @@
   </ASubMenu>
   <AMenuItem v-else :title="item.title" :disabled="item.disabled">
     <div class="editor-menubar-item-inner">
-      <CheckOutlined v-if="item.checked" class="editor-menubar-item-icon-prefix" />
+      <span v-if="item.checked" v-html="checkOutlinedSVG" class="editor-menubar-item-icon" />
       <span class="editor-menubar-item-title">{{ item.title }}</span>
     </div>
   </AMenuItem>
@@ -14,13 +14,15 @@
 
 <script lang="ts">
 import { computed, defineComponent, unref } from 'vue';
-import { CheckOutlined } from '@ant-design/icons-vue';
+import { CheckOutlined } from '@ant-design/icons-svg';
+import { stringifySVG } from '@/utils';
 import { MenubarItem } from '@/menubar';
 import { useMenuItem } from './use';
 
+const checkOutlinedSVG = stringifySVG(CheckOutlined);
+
 export default defineComponent({
   name: 'MenuSubItem',
-  components: { CheckOutlined },
   props: {
     item: {
       type: MenubarItem,
@@ -31,7 +33,7 @@ export default defineComponent({
     //const { item } = toRefs(props);
     const item = useMenuItem(props.item);
     const hasChild = computed(() => !!unref(item).children?.size);
-    return { item, hasChild };
+    return { item, hasChild, checkOutlinedSVG };
   },
 });
 </script>
@@ -51,8 +53,9 @@ export default defineComponent({
     padding-left: @menu-item-prefix;
   }
 
-  &-icon-prefix {
+  &-icon {
     position: absolute;
+    display: flex;
   }
 }
 .editor {

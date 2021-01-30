@@ -7,6 +7,7 @@
       :class="{ 'editor-pointer': !!item.command }"
       @click="trigger"
     >
+      <span v-show="item.icon" v-html="item.icon" class="editor-statusbar-item-icon"></span>
       <span>{{ item.text }}</span>
     </div>
   </ATooltip>
@@ -45,6 +46,14 @@ export default defineComponent({
 
     &:hover {
       background: var(--hover-bg);
+    }
+
+    &-icon {
+      margin-right: 4px;
+      max-height: 100%;
+      display: flex;
+      overflow: hidden;
+      object-fit: contain;
     }
   }
 }

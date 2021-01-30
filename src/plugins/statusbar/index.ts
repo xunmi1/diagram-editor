@@ -12,7 +12,7 @@ export const nodeCountPlugin: Plugin = editor => {
   const change = () => {
     const count = editor.graph?.getNodes().length;
     item.text = `节点: ${count}`;
-    item.tooltip = `当前画布中节点数量: ${count}`;
+    item.tooltip = `当前画布节点数量: ${count}`;
   };
   editor.onDidMount(graph => {
     change();
@@ -27,7 +27,7 @@ export const edgeCountPlugin: Plugin = editor => {
   const change = () => {
     const count = editor.graph?.getEdges().length;
     item.text = `边: ${count}`;
-    item.tooltip = `当前画布中边的数量: ${count}`;
+    item.tooltip = `当前画布边的数量: ${count}`;
   };
   editor.onDidMount(graph => {
     change();

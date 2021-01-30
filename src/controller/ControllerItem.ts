@@ -1,14 +1,9 @@
 import { Subject } from '@/utils';
 import { EventType } from '@/constants';
-import type { Cell } from '@antv/x6';
 import { DiagramEditor, Lifecycle, LifecycleCallback } from '@/interfaces';
 
 export abstract class ControllerItem extends Subject implements Lifecycle {
   readonly title: string;
-
-  constructor() {
-    super();
-  }
 
   created?(editor: DiagramEditor): void;
   destroy?(editor: DiagramEditor): void;
@@ -33,5 +28,5 @@ export abstract class ControllerItem extends Subject implements Lifecycle {
 
   abstract unmount(rootContainer: Element): void;
 
-  abstract activate(cell?: Cell): boolean;
+  abstract activate(cell: DiagramEditor['activeCell']): boolean;
 }

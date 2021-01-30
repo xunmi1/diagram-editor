@@ -7,19 +7,19 @@ export type Observer<T> = (event: T) => void;
  * Observer pattern & [Dispose pattern](https://wikipedia.org/wiki/Dispose_pattern)
  */
 export class Subject {
-  private readonly emitter: Emitter;
+  private readonly _emitter: Emitter;
 
   constructor() {
-    this.emitter = mitt();
+    this._emitter = mitt();
   }
 
-  on<T = any>(type: EventType, handler: Observer<T>): Disposable {
+  on<T = unknown>(type: EventType, handler: Observer<T>): Disposable {
     // @ts-ignore
-    this.emitter.on(type, handler);
+    this._emitter.on(type, handler);
     return new DisposableDelegate(() => this.off(type, handler));
   }
 
-  once<T = any>(type: EventType, handler: Observer<T>) {
+  once<T = unknown>(type: EventType, handler: Observer<T>) {
     const wrapper: Observer<T> = event => {
       this.off(type, wrapper);
       handler(event);
@@ -27,12 +27,12 @@ export class Subject {
     return this.on(type, wrapper);
   }
 
-  off<T = any>(type: EventType, handler: Observer<T>) {
+  off<T = unknown>(type: EventType, handler: Observer<T>) {
     // @ts-ignore
-    this.emitter.off(type, handler);
+    this._emitter.off(type, handler);
   }
 
-  emit<T = any>(type: EventType, event?: T) {
-    this.emitter.emit(type, event);
+  emit<T = unknown>(type: EventType, event?: T) {
+    this._emitter.emit(type, event);
   }
 }

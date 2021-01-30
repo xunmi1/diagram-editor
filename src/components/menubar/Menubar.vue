@@ -3,7 +3,7 @@
     <div class="editor-menubar-content">
       <div class="editor-menubar-inner">
         <template v-for="[key, menu] in menubarList" :key="key">
-          <MenuItem :menu="menu" :menu-key="key" @click="clickMenu" />
+          <MenuItem :menu="menu" :menu-key="key" @click="executeCommand" />
         </template>
       </div>
     </div>
@@ -39,12 +39,12 @@ export default defineComponent({
     const menubarList = useMenubarList();
     const { menubar, commands } = useEditor();
 
-    const clickMenu = async (key: string) => {
+    const executeCommand = async (key: string) => {
       const item = menubar.get(key);
       if (item?.command) await commands.execute(item.command, item);
     };
 
-    return { menubarList, clickMenu };
+    return { menubarList, executeCommand };
   },
 });
 </script>
@@ -52,24 +52,25 @@ export default defineComponent({
 <style lang="less">
 .editor-menubar {
   &-wrapper {
+    height: 100%;
+    overflow: hidden;
     background: var(--widget-color);
     border-bottom: 1px solid var(--border-color);
   }
 
   &-content {
     display: flex;
-    flex: auto;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: stretch;
+    align-items: center;
     height: 100%;
   }
 
   &-inner {
     display: flex;
-    flex-direction: row;
     align-items: stretch;
+    margin-right: auto;
     height: 100%;
+    padding: 0 var(--padding-sm);
+    cursor: default;
   }
 }
 </style>

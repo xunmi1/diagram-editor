@@ -4,6 +4,7 @@ import { ControllerItem } from '@/controller';
 import Panel from './Panel.vue';
 import { DiagramEditor } from '@/interfaces';
 import { registerCommands } from './commands';
+import { Cell } from '@antv/x6';
 
 export interface State {
   gridVisible: boolean;
@@ -64,7 +65,7 @@ export default class GraphConfigPanel extends ControllerItem {
     this.app.unmount(container);
   }
 
-  activate(cell: any): boolean {
+  activate(cell: Cell<Cell.Properties> | undefined): boolean {
     return !cell;
   }
 }

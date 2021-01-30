@@ -1,51 +1,70 @@
-import { CommandId, Observer, Subject } from '@/utils';
+import { CommandId, Observer, Subject, lazyTask } from '@/utils';
 
 export interface MenubarItemOptions {
   title: string;
   command?: CommandId;
-}
-
-export interface MenubarItemState {
   checked?: boolean;
   disabled?: boolean;
 }
 
-const EVENT_TYPE_CHANGE_STATE = Symbol('CHANGE_STATE');
-const EVENT_TYPE_APPEND_CHILD = Symbol('APPEND_CHILD');
+const EVENT_TYPE_UPDATE = Symbol('UPDATE');
+const EVENT_TYPE_CHILD_APPEND = Symbol('CHILD_APPEND');
 
 export class MenubarItem extends Subject {
   public readonly title: string;
   public readonly command?: CommandId;
   public children?: Map<string, MenubarItem>;
-  private _state: MenubarItemState;
+
+  private _checked: boolean;
+  private _disabled: boolean;
 
   constructor(options: MenubarItemOptions) {
     super();
     this.title = options.title;
     this.command = options.command;
-    this._state = {};
+    this._checked = options.checked ?? false;
+    this._disabled = options.disabled ?? false;
+
+    this._emitUpdate = lazyTask(this._emitUpdate);
+  }
+
+  get checked() {
+    return this._checked;
+  }
+
+  set checked(checked: boolean) {
+    this._checked = checked;
+    this.change();
+  }
+
+  get disabled() {
+    return this._disabled;
+  }
+
+  set disabled(disabled: boolean) {
+    this._disabled = disabled;
+    this.change();
   }
 
   appendChild(key: string, child: MenubarItem) {
     if (!this.children) this.children = new Map();
     this.children.set(key, child);
-    this.emit(EVENT_TYPE_APPEND_CHILD, { key, child });
+    this.emit(EVENT_TYPE_CHILD_APPEND, { key, child });
   }
 
   onDidAppendChild(callback: Observer<{ key: string; child: MenubarItem }>) {
-    return this.on(EVENT_TYPE_APPEND_CHILD, callback);
+    return this.on(EVENT_TYPE_CHILD_APPEND, callback);
   }
 
-  get state() {
-    return { ...this._state };
+  onDidChangeState(callback: Observer<MenubarItem>) {
+    return this.on(EVENT_TYPE_UPDATE, callback);
   }
 
-  set state(state: MenubarItemState) {
-    this._state = { ...state };
-    this.emit(EVENT_TYPE_CHANGE_STATE, this.state);
+  change() {
+    this._emitUpdate();
   }
 
-  onDidChangeState(callback: Observer<MenubarItemState>) {
-    return this.on(EVENT_TYPE_CHANGE_STATE, callback);
+  private _emitUpdate() {
+    this.emit(EVENT_TYPE_UPDATE, this);
   }
 }

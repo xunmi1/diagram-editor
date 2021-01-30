@@ -20,7 +20,7 @@ export class CommandsRegistry {
     }
   }
 
-  register<T = any>(commandId: CommandId, command: Command<T>): Disposable {
+  register<T = unknown>(commandId: CommandId, command: Command<T>): Disposable {
     const list = this.commands.get(commandId);
     if (list) {
       list.unshift(command);

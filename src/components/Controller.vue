@@ -1,7 +1,7 @@
 <template>
-  <section class="editor-sidebar-wrapper">
-    <h4 class="editor-widget-title editor-sidebar-header">属性配置</h4>
-    <ATabs v-if="tabList.length" class="editor-sidebar-tabs">
+  <section class="editor-controller-wrapper">
+    <h4 class="editor-widget-title editor-controller-header">属性配置</h4>
+    <ATabs v-if="tabList.length" class="editor-controller-tabs">
       <template v-for="[key, panel] in tabList" :key="key">
         <ATabPane :tab="panel.title">
           <Suspense>
@@ -23,15 +23,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, shallowReactive, shallowRef, unref, onBeforeUnmount } from 'vue';
+import {
+  defineComponent,
+  computed,
+  shallowReactive,
+  shallowRef,
+  unref,
+  onBeforeUnmount,
+  getCurrentInstance,
+} from 'vue';
 import type { Cell } from '@antv/x6';
-import { useGlobalGraph, useEditor } from '@/use';
+import { useEditor } from '@/use';
 import { ControllerItem } from '@/controller';
 import { EventType } from '@/constants';
 import Container from './Container';
-
-const CELL_TRIGGER_TYPE = 'cell:click';
-const CELL_CANCEL_TYPE = 'blank:click';
+import { DiagramEditor } from '@/interfaces';
 
 type PanelList = Map<string, ControllerItem>;
 
@@ -66,29 +72,28 @@ const useLifecycle = () => {
   return { willMount, didMount, willUnmount, didUnmount };
 };
 
+const useActiveCell = (editor: DiagramEditor) => {
+  const activeCell = shallowRef<Cell>();
+  const disposable = editor.onDidChangeActiveCell(() => {
+    activeCell.value = editor.activeCell;
+  });
+  onBeforeUnmount(() => disposable.dispose());
+  return activeCell;
+};
+
 export default defineComponent({
   name: 'Controller',
   components: { Container },
   setup() {
     const editor = useEditor();
+    const instance = getCurrentInstance();
     const panelList = usePanelList(item => {
       item.created?.(editor);
-      onBeforeUnmount(() => {
-        item.destroy?.(editor);
-      });
+      onBeforeUnmount(() => item.destroy?.(editor), instance);
     });
-    const activeCell = shallowRef<Cell>();
-
-    useGlobalGraph(graph => {
-      graph.on(CELL_TRIGGER_TYPE, ({ cell }) => {
-        activeCell.value = cell;
-      });
-      graph.on(CELL_CANCEL_TYPE, () => {
-        activeCell.value = undefined;
-      });
-    });
+    const activeCell = useActiveCell(editor);
     const lifecycle = useLifecycle();
-    // 基于不同启动条件，确定配置面板
+    // 基于不同激活条件，确定配置面板
     const tabList = computed(() => [...panelList].filter(([_, v]) => v.activate(unref(activeCell))));
     return { tabList, ...lifecycle };
   },
@@ -96,7 +101,7 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-.editor-sidebar {
+.editor-controller {
   &-wrapper {
     display: flex;
     flex-direction: column;

@@ -1,7 +1,9 @@
 <template>
   <ConfigProvider>
     <div class="editor editor-layout">
-      <Menubar class="editor-menubar" />
+      <div class="editor-layout-top">
+        <Menubar class="editor-menubar" />
+      </div>
       <Split class="editor-content">
         <SplitPanel key="explorer" class="editor-layout-left">
           <Explorer class="editor-explorer" />
@@ -9,7 +11,7 @@
         <SplitPanel key="editor" class="editor-layout-middle" flexible>
           <section class="editor-container">
             <div class="editor-instance">
-              <div ref="container"></div>
+              <div ref="container" class="editor-graph"></div>
             </div>
           </section>
         </SplitPanel>
@@ -17,6 +19,9 @@
           <Controller class="editor-controller" />
         </SplitPanel>
       </Split>
+      <div class="editor-layout-bottom">
+        <Statusbar class="editor-statusbar" />
+      </div>
     </div>
   </ConfigProvider>
 </template>
@@ -28,6 +33,7 @@ import { merge } from '@/utils';
 import { defaultOptions } from '@/defaultOptions';
 import { ConfigProvider, Split, SplitPanel } from '@/shared';
 import Menubar from '@/components/menubar/Menubar.vue';
+import Statusbar from '@/components/statusbar/Statusbar.vue';
 import Explorer from '@/components/Explorer.vue';
 import Controller from '@/components/Controller.vue';
 
@@ -40,6 +46,7 @@ export default defineComponent({
     Menubar,
     Explorer,
     Controller,
+    Statusbar,
   },
   props: ['options', 'editor'],
   setup(props) {
@@ -56,13 +63,6 @@ export default defineComponent({
 .editor-layout {
   height: 100%;
 
-  .editor-menubar {
-    position: absolute;
-    top: 0;
-    height: var(--menubar-height);
-    width: 100%;
-  }
-
   .editor-content {
     position: absolute;
     top: var(--menubar-height);
@@ -70,37 +70,56 @@ export default defineComponent({
     width: 100%;
   }
 
+  &-top {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: var(--menubar-height);
+  }
+
+  &-bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: var(--statusbar-height);
+  }
+
   &-left {
-    width: 320px;
+    width: var(--explorer-width);
     left: 0;
     overflow: auto;
   }
+
   &-right {
-    width: 320px;
+    width: var(--controller-width);
     right: 0;
     overflow: auto;
   }
 
   &-middle {
     overflow: hidden;
+    width: calc(100% - var(--explorer-width) - var(--controller-width));
   }
 }
 
 .editor-container {
   height: 100%;
-  background: var(--layout-background);
+  background: var(--layout-bg);
 }
 
 .editor-instance {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  place-content: stretch;
   background: #fff;
 
-  > .x6-graph-scroller,
-  > .x6-graph {
-    width: unset !important;
-    height: unset !important;
+  .editor-graph {
+    flex: auto;
+  }
+
+  > .x6-graph-scroller {
+    min-width: 100%;
+    min-height: 100%;
   }
 }
 </style>

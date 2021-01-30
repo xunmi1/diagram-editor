@@ -62,15 +62,14 @@ export default defineComponent({
 .editor-menubar {
   &-item {
     display: flex;
-    padding: 0 var(--padding-middle);
-    height: 100%;
-    justify-content: center;
+    padding: 0 var(--padding-sm);
+    line-height: 1;
     align-items: center;
     cursor: pointer;
 
     &:hover,
     &-hover {
-      background: var(--hover-background);
+      background: var(--hover-bg);
     }
   }
 

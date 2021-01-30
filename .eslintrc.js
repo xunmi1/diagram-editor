@@ -6,7 +6,7 @@ module.exports = {
   },
   plugins: ['@typescript-eslint'],
   extends: [
-    'plugin:vue/vue3-essential',
+    'plugin:vue/vue3-strongly-recommended',
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     // Uses `eslint-config-prettier` to disable ESLint rules from `@typescript-eslint/eslint-plugin`

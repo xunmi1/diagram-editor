@@ -37,6 +37,7 @@ export const useGraph = (container: Ref<HTMLElement | undefined>, options: Graph
 
   onBeforeUnmount(() => {
     graph.value?.dispose();
+    graph.value = undefined;
   });
 
   return graph;

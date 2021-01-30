@@ -2,7 +2,7 @@ import { ExplorerItem, DragEvent } from './ExplorerItem';
 import { Graph, Node } from '@antv/x6';
 import { grid } from '@antv/x6/es/layout/grid';
 
-type LayoutOptions = Parameters<typeof grid>[1];
+export type LayoutOptions = Parameters<typeof grid>[1];
 
 // 默认间距
 const DEFAULT_SPACING = 16;
@@ -21,8 +21,12 @@ const NODE_EVENT_MOUSEDOWN = 'cell:mousedown';
 const EVENT_TYPE_WILL_DRAG = Symbol('WILL_DRAG');
 
 export class ExplorerNodeItem extends ExplorerItem {
-  public readonly title: string;
+  public title: string;
   public graph: Graph | undefined;
+
+  constructor() {
+    super();
+  }
 
   mount(container: HTMLElement): void {
     this.graph = new Graph({
@@ -30,12 +34,12 @@ export class ExplorerNodeItem extends ExplorerItem {
       interacting: false,
       preventDefaultBlankAction: false,
     });
-    this.bindDragEvent();
+    this._bindDragEvent();
     this.fitToContent();
   }
 
   unmount() {
-    this.unbindDragEvent();
+    this._unbindDragEvent();
     this.graph?.dispose();
     this.graph = undefined;
   }
@@ -67,13 +71,13 @@ export class ExplorerNodeItem extends ExplorerItem {
     return this.on(EVENT_TYPE_WILL_DRAG, callback);
   }
 
-  protected bindDragEvent() {
+  private _bindDragEvent() {
     this.graph?.on(NODE_EVENT_MOUSEDOWN, args => {
       this.emit(EVENT_TYPE_WILL_DRAG, { cell: args.cell, event: args.e });
     });
   }
 
-  protected unbindDragEvent() {
+  private _unbindDragEvent() {
     this.graph?.off(NODE_EVENT_MOUSEDOWN);
   }
 }

@@ -1,12 +1,12 @@
 <template>
-  <ASubMenu v-if="hasChild" :title="item.title" :disabled="item.state.disabled" :popup-offset="[-4, -4]">
+  <ASubMenu v-if="hasChild" :title="item.title" :disabled="item.disabled" :popup-offset="[-4, -4]">
     <template v-for="[key, child] in item.children" :key="key">
       <MenuSubItem :item="child" />
     </template>
   </ASubMenu>
-  <AMenuItem v-else :title="item.title" :disabled="item.state.disabled">
+  <AMenuItem v-else :title="item.title" :disabled="item.disabled">
     <div class="editor-menubar-item-inner">
-      <CheckOutlined v-if="item.state.checked" class="editor-menubar-item-icon-prefix" />
+      <CheckOutlined v-if="item.checked" class="editor-menubar-item-icon-prefix" />
       <span class="editor-menubar-item-title">{{ item.title }}</span>
     </div>
   </AMenuItem>

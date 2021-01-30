@@ -60,6 +60,6 @@ export default defineComponent({
 
 <style lang="less">
 .editor-graph-config-panel {
-  padding: var(--padding-middle);
+  padding: var(--padding-md);
 }
 </style>

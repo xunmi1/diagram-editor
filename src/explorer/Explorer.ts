@@ -24,6 +24,10 @@ export class Explorer extends Subject {
     return this.list.entries();
   }
 
+  get(key: string) {
+    return this.list.get(key);
+  }
+
   forEach(callback: (value: ExplorerItem, key: string) => void) {
     return this.list.forEach((v, k) => callback(v, k));
   }

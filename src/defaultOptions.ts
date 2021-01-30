@@ -1,14 +1,16 @@
 import type { GraphOptions } from '@/interfaces';
 
+const DEFAULT_SIZE = 10;
+
 export const defaultOptions: GraphOptions = {
   grid: {
-    size: 10,
+    size: DEFAULT_SIZE,
     visible: true,
   },
   autoResize: true,
   snapline: {
     enabled: true,
-    tolerance: 10,
+    tolerance: DEFAULT_SIZE,
   },
   background: {
     color: 'rgba(255, 255, 255, 1)',
@@ -30,6 +32,13 @@ export const defaultOptions: GraphOptions = {
     movable: true,
     showNodeSelectionBox: true,
     showEdgeSelectionBox: true,
+  },
+  connecting: {
+    snap: {
+      radius: DEFAULT_SIZE * 1.2,
+    },
+    allowBlank: false,
+    allowLoop: false,
   },
   clipboard: {
     enabled: true,

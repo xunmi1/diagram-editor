@@ -24,16 +24,21 @@
 @primary-color: #1890ff;
 @item-hover-bg: rgba(0, 0, 0, 0.08);
 @item-active-bg: @item-hover-bg;
+@padding-lg: 24px;
 @padding-md: 16px;
 @padding-sm: 12px;
+@padding-xs: 8px;
 
-@border-color-base: #d9d9d9;
+@border-color-base: #e1e4e8;
 
 @collapse-header-padding-extra: 40px;
 @collapse-content-padding: 0;
 @collapse-header-padding: 10px @padding-sm;
 @collapse-panel-border-radius: 0;
 @collapse-content-bg: var(--widget-color);
+
+@tooltip-color: var(--text-color);
+@tooltip-bg: var(--widget-color);
 
 @tabs-bar-margin: 0;
 @tabs-horizontal-margin: 0 @padding-md 0 0;
@@ -46,20 +51,22 @@
 
 .editor {
   --primary-color: @primary-color;
-  --hover-background: @item-hover-bg;
-  --active-background: @item-active-bg;
+  --hover-bg: @item-hover-bg;
   --text-color: rgba(0, 0, 0, 0.65);
   --heading-color: rgba(0, 0, 0, 0.85);
   --border-color: @border-color-base;
   --widget-color: #fafafa;
-  --layout-background: #f0f2f5;
+  --layout-bg: #f0f2f5;
 
-  --padding-large: 24px;
-  --padding-middle: @padding-md;
-  --padding-small: @padding-sm;
+  --padding-lg: @padding-lg;
+  --padding-md: @padding-md;
+  --padding-sm: @padding-sm;
+  --padding-xs: @padding-xs;
 
   --menubar-height: 36px;
-  --statusbar-height: 22px;
+  --statusbar-height: 24px;
+  --explorer-width: 320px;
+  --controller-width: 320px;
   --sash-size: 8px;
 }
 
@@ -70,12 +77,16 @@
     font-size: 14px;
     font-weight: 500;
     color: var(--heading-color);
-    padding: var(--padding-small);
+    padding: var(--padding-sm);
     margin: 0;
   }
 
   &-widget-skeleton {
-    padding: var(--padding-middle);
+    padding: var(--padding-md);
     padding-bottom: 0;
+  }
+
+  &-pointer {
+    cursor: pointer;
   }
 }

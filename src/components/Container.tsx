@@ -1,4 +1,4 @@
-import { defineComponent, onBeforeMount, onMounted, onBeforeUnmount, onUnmounted, ref, unref } from 'vue';
+import { defineComponent, ref, unref, onBeforeMount, onMounted, onBeforeUnmount, onUnmounted } from 'vue';
 import { useGlobalGraph } from '@/use';
 import { Lifecycle } from '@/interfaces';
 

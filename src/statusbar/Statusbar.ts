@@ -1,22 +1,23 @@
 import { Observer, Subject } from '@/utils';
-import type { ControllerItem } from './ControllerItem';
+import { StatusbarItem } from './StatusbarItem';
 
-const EVENT_TYPE_LOAD = Symbol('CONTROLLER_ITEM_LOAD');
+const EVENT_TYPE_LOAD = Symbol('STATUSBAR_ITEM_LOAD');
 
-export class Controller extends Subject {
-  protected readonly list: Map<string, ControllerItem>;
+export class Statusbar extends Subject {
+  protected readonly list: Map<string, StatusbarItem>;
 
   constructor() {
     super();
     this.list = new Map();
   }
 
-  load(key: string, item: ControllerItem) {
+  load(key: string, item: StatusbarItem) {
     this.list.set(key, item);
     this.emit(EVENT_TYPE_LOAD, { key, item });
+    return;
   }
 
-  onDidLoad(callback: Observer<{ key: string; item: ControllerItem }>) {
+  onDidLoad(callback: Observer<{ key: string; item: StatusbarItem }>) {
     return this.on(EVENT_TYPE_LOAD, callback);
   }
 
@@ -28,7 +29,7 @@ export class Controller extends Subject {
     return this.list.get(key);
   }
 
-  forEach(callback: (value: ControllerItem, key: string) => void) {
+  forEach(callback: (value: StatusbarItem, key: string) => void) {
     return this.list.forEach((v, k) => callback(v, k));
   }
 }

@@ -1,7 +1,7 @@
 <template>
-  <section class="editor-sidebar-wrapper">
-    <h4 class="editor-widget-title editor-sidebar-header">资源管理器</h4>
-    <ACollapse v-model:active-key="activeKey" class="editor-sidebar-collapse">
+  <section class="editor-explorer-wrapper">
+    <h4 class="editor-widget-title editor-explorer-header">资源管理器</h4>
+    <ACollapse v-model:active-key="activeKey" class="editor-explorer-collapse">
       <template v-for="[key, panel] in panelList" :key="key">
         <ACollapsePanel :panel-key="key" :header="panel.title">
           <Suspense>
@@ -109,8 +109,9 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-.editor-sidebar {
+.editor-explorer {
   &-wrapper {
+    height: 100%;
     border-right: 1px solid var(--border-color);
     background: var(--widget-color);
   }

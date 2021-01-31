@@ -1,7 +1,7 @@
 import { CommandId, Observer, Subject, lazyTask } from '@/utils';
 
 export interface MenubarItemOptions {
-  title: string;
+  text: string;
   command?: CommandId;
   checked?: boolean;
   disabled?: boolean;
@@ -11,21 +11,30 @@ const EVENT_TYPE_UPDATE = Symbol('UPDATE');
 const EVENT_TYPE_CHILD_APPEND = Symbol('CHILD_APPEND');
 
 export class MenubarItem extends Subject {
-  public readonly title: string;
   public readonly command?: CommandId;
   public children?: Map<string, MenubarItem>;
 
+  private _text: string;
   private _checked: boolean;
   private _disabled: boolean;
 
   constructor(options: MenubarItemOptions) {
     super();
-    this.title = options.title;
+    this._text = options.text;
     this.command = options.command;
     this._checked = options.checked ?? false;
     this._disabled = options.disabled ?? false;
 
     this._emitUpdate = lazyTask(this._emitUpdate);
+  }
+
+  get text() {
+    return this._text;
+  }
+
+  set text(text: string) {
+    this._text = text;
+    this.change();
   }
 
   get checked() {

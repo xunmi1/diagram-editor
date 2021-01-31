@@ -13,7 +13,8 @@
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, ref } from 'vue';
 import { useEditor } from '@/use';
-import { StatusbarItem } from '@/statusbar';
+import { lazyTask } from '@/utils';
+import type { StatusbarItem } from '@/statusbar';
 import StatusItem from './StatusItem.vue';
 
 type MenubarList = Map<string, StatusbarItem>;
@@ -21,9 +22,11 @@ type MenubarList = Map<string, StatusbarItem>;
 const useStatusbarList = () => {
   const { statusbar } = useEditor();
   const statusbarList = ref<MenubarList>(new Map([...statusbar]));
-  const disposable = statusbar.onDidLoad(() => {
-    statusbarList.value = new Map([...statusbar]);
-  });
+  const disposable = statusbar.onDidLoad(
+    lazyTask(() => {
+      statusbarList.value = new Map([...statusbar]);
+    })
+  );
 
   onBeforeUnmount(() => disposable.dispose());
 

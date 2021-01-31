@@ -8,14 +8,15 @@ import { EditorOptions, Plugin } from '@/interfaces';
 import { ExplorerItem, Explorer, ExplorerNodeItem, DragEvent, LayoutOptions } from '@/explorer';
 import { ControllerItem, Controller } from '@/controller';
 import { Menubar, MenubarItem, MenubarItemOptions } from '@/menubar';
+import { Toolbar, ToolbarItem, ToolbarItemOptions } from '@/toolbar';
 import { Statusbar, StatusbarItem, StatusbarItemOptions } from '@/statusbar';
 import { Subject, Observer, CommandsRegistry, warn } from '@/utils';
 import { EventType } from '@/constants';
 
-export { ExplorerItem, ExplorerNodeItem, ControllerItem, MenubarItem, StatusbarItem };
+export { ExplorerItem, ExplorerNodeItem, ControllerItem, MenubarItem, ToolbarItem, StatusbarItem };
 export * from '@/plugins';
 
-export type { DragEvent, LayoutOptions, MenubarItemOptions, StatusbarItemOptions };
+export type { DragEvent, LayoutOptions, MenubarItemOptions, ToolbarItemOptions, StatusbarItemOptions };
 export type { Observer, Disposable } from '@/utils';
 export * from '@/interfaces';
 
@@ -27,14 +28,16 @@ class DiagramEditor extends Subject {
   public readonly controller: Controller;
   public readonly commands: CommandsRegistry;
   public readonly menubar: Menubar;
+  public readonly toolbar: Toolbar;
   public readonly statusbar: Statusbar;
 
   private readonly _options: EditorOptions;
   private readonly _installedPlugins: Set<Plugin>;
+  private _rootContainer?: string | Element;
 
-  private _graph: Graph | undefined;
-  private _activeCell: Cell | undefined;
-  private _app: VueApp;
+  private _graph?: Graph;
+  private _activeCell?: Cell;
+  private _app?: VueApp;
 
   constructor(options?: EditorOptions) {
     super();
@@ -42,6 +45,7 @@ class DiagramEditor extends Subject {
     this.controller = new Controller();
     this.commands = new CommandsRegistry();
     this.menubar = new Menubar();
+    this.toolbar = new Toolbar();
     this.statusbar = new Statusbar();
 
     this._options = { ...options };
@@ -59,20 +63,27 @@ class DiagramEditor extends Subject {
   }
 
   mount(rootContainer: string | Element) {
-    const vm = this._app.mount(rootContainer) as ComponentPublicInstance<{}, {}, { graph: Graph }>;
+    this._rootContainer = rootContainer;
+    const vm = this._app?.mount(rootContainer) as ComponentPublicInstance<{}, {}, { graph: Graph }>;
 
-    return new Promise<void>(resolve => {
+    return new Promise<Graph>(resolve => {
       useOnceWatch(() => {
         if (vm.graph) {
           this._graph = vm.graph as Graph;
-          resolve();
           this._bindActiveCell();
           this.emit(EventType.EDITOR_DID_MOUNT, vm.graph);
+          resolve(vm.graph);
         }
 
         return !!vm.graph;
       });
     });
+  }
+
+  unmount(rootContainer = this._rootContainer) {
+    this._graph?.dispose();
+    this._app?.unmount(rootContainer);
+    this._app = undefined;
   }
 
   onDidMount(callback: Observer<Graph>) {

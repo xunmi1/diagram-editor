@@ -6,7 +6,6 @@ import {
   Tooltip,
   Dropdown,
   Menu,
-  Spin,
   Skeleton,
   Form,
   Input,
@@ -17,15 +16,14 @@ import {
 } from 'ant-design-vue';
 
 import './style.less';
+import './scrollbar.less';
 
-const antd: Plugin = {
-  install(app) {
-    app.use(ConfigProvider);
-    // data display
-    app.use(Collapse).use(Tabs).use(Tooltip).use(Spin).use(Skeleton).use(Dropdown).use(Menu);
-    // form
-    app.use(Form).use(Input).use(InputNumber).use(Slider).use(Switch).use(Select);
-  },
+const antd: Plugin = app => {
+  app.use(ConfigProvider);
+  // data display
+  app.use(Collapse).use(Tabs).use(Tooltip).use(Skeleton).use(Dropdown).use(Menu);
+  // form
+  app.use(Form).use(Input).use(InputNumber).use(Slider).use(Switch).use(Select);
 };
 
 export default antd;

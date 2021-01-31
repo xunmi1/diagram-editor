@@ -1,9 +1,9 @@
 <template>
-  <section class="editor-menubar-wrapper">
-    <div class="editor-menubar-content">
-      <div class="editor-menubar-inner">
-        <template v-for="[key, menu] in menubarList" :key="key">
-          <MenuItem :menu="menu" :menu-key="key" @click="executeCommand" />
+  <section class="editor-toolbar-wrapper">
+    <div class="editor-toolbar-content">
+      <div class="editor-toolbar-inner">
+        <template v-for="[key, item] in toolbarList" :key="key">
+          <ToolItem :item="item" @click="executeCommand(key)" />
         </template>
       </div>
     </div>
@@ -14,46 +14,44 @@
 import { defineComponent, onBeforeUnmount, ref } from 'vue';
 import { useEditor } from '@/use';
 import { lazyTask } from '@/utils';
-import type { MenubarItem } from '@/menubar';
-import MenuItem from './MenuItem.vue';
+import type { ToolbarItem } from '@/toolbar';
+import ToolItem from './ToolItem.vue';
 
-type MenubarList = Map<string, MenubarItem>;
+type ToolbarList = Map<string, ToolbarItem>;
 
-const useMenubarList = () => {
-  const { menubar } = useEditor();
-  const menubarList = ref<MenubarList>(new Map([...menubar]));
-  const disposable = menubar.onDidLoad(
+const useToolbarList = () => {
+  const { toolbar } = useEditor();
+  const statusbarList = ref<ToolbarList>(new Map([...toolbar]));
+  const disposable = toolbar.onDidLoad(
     lazyTask(() => {
-      menubarList.value = new Map([...menubar]);
+      statusbarList.value = new Map([...toolbar]);
     })
   );
 
   onBeforeUnmount(() => disposable.dispose());
 
-  return menubarList;
+  return statusbarList;
 };
 
 export default defineComponent({
-  name: 'Menubar',
-  components: {
-    MenuItem,
-  },
+  name: 'Toolbar',
+  components: { ToolItem },
   setup() {
-    const menubarList = useMenubarList();
-    const { menubar, commands } = useEditor();
+    const toolbarList = useToolbarList();
+    const { toolbar, commands } = useEditor();
 
     const executeCommand = async (key: string) => {
-      const item = menubar.get(key);
+      const item = toolbar.get(key);
       if (item?.command) await commands.execute(item.command, item);
     };
 
-    return { menubarList, executeCommand };
+    return { toolbarList, executeCommand };
   },
 });
 </script>
 
 <style lang="less">
-.editor-menubar {
+.editor-toolbar {
   &-wrapper {
     height: 100%;
     overflow: hidden;

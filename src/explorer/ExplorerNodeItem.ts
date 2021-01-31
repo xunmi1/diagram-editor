@@ -21,11 +21,12 @@ const NODE_EVENT_MOUSEDOWN = 'cell:mousedown';
 const EVENT_TYPE_WILL_DRAG = Symbol('WILL_DRAG');
 
 export class ExplorerNodeItem extends ExplorerItem {
-  public title: string;
+  public readonly title: string;
   public graph: Graph | undefined;
 
-  constructor() {
+  constructor(options?: { title: string }) {
     super();
+    if (options?.title) this.title = options?.title;
   }
 
   mount(container: HTMLElement): void {

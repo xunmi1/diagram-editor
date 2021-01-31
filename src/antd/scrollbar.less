@@ -1,0 +1,25 @@
+.editor {
+  ::-webkit-scrollbar {
+    width: var(--scrollbar-size);
+    height: var(--scrollbar-size);
+
+    &-track {
+      background-clip: padding-box;
+    }
+
+    &-corner {
+      background-color: transparent;
+    }
+
+    &-thumb {
+      background-clip: padding-box;
+      border: 2px solid transparent;
+      border-radius: var(--scrollbar-size);
+      background-color: rgba(0, 0, 0, 0.14);
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+    }
+  }
+}

@@ -27,14 +27,8 @@ export class Menubar extends Subject {
     }
   }
 
-  get(key: string, list = this.list): MenubarItem | undefined {
-    for (const [k, v] of list) {
-      if (k === key) return v;
-      if (v.children?.size) {
-        const target = this.get(key, v.children);
-        if (target) return target;
-      }
-    }
+  get(key: string) {
+    return this._get(key, this.list);
   }
 
   onDidLoad(callback: Observer<{ parentKey?: string; parent?: MenubarItem; key: string; item: MenubarItem }>) {
@@ -47,5 +41,15 @@ export class Menubar extends Subject {
 
   forEach(callback: (value: MenubarItem, key: string) => void) {
     return this.list.forEach((v, k) => callback(v, k));
+  }
+
+  private _get(key: string, list: Map<string, MenubarItem>): MenubarItem | undefined {
+    for (const [k, v] of list) {
+      if (k === key) return v;
+      if (v.children?.size) {
+        const target = this._get(key, v.children);
+        if (target) return target;
+      }
+    }
   }
 }

@@ -37,24 +37,22 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-.editor-statusbar {
-  &-item {
+.editor-statusbar-item {
+  display: flex;
+  padding: 0 var(--padding-xs);
+  align-items: center;
+  line-height: 1;
+
+  &:hover {
+    background: var(--hover-bg);
+  }
+
+  &-icon {
+    margin-right: 4px;
+    max-height: 100%;
     display: flex;
-    padding: 0 var(--padding-xs);
-    align-items: center;
-    line-height: 1;
-
-    &:hover {
-      background: var(--hover-bg);
-    }
-
-    &-icon {
-      margin-right: 4px;
-      max-height: 100%;
-      display: flex;
-      overflow: hidden;
-      object-fit: contain;
-    }
+    overflow: hidden;
+    object-fit: contain;
   }
 }
 </style>

@@ -1,25 +1,25 @@
 <template>
-  <ASubMenu v-if="hasChild" :title="item.title" :disabled="item.disabled" :popup-offset="[-4, -4]">
+  <ASubMenu v-if="hasChild" :title="item.text" :disabled="item.disabled" :popup-offset="[-4, -4]">
     <template v-for="[key, child] in item.children" :key="key">
       <MenuSubItem :item="child" />
     </template>
   </ASubMenu>
-  <AMenuItem v-else :title="item.title" :disabled="item.disabled">
+  <AMenuItem v-else :title="item.text" :disabled="item.disabled">
     <div class="editor-menubar-item-inner">
-      <span v-if="item.checked" v-html="checkOutlinedSVG" class="editor-menubar-item-icon" />
-      <span class="editor-menubar-item-title">{{ item.title }}</span>
+      <span v-if="item.checked" v-html="checkSVG" class="editor-menubar-item-icon" />
+      <span class="editor-menubar-item-text">{{ item.text }}</span>
     </div>
   </AMenuItem>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, unref } from 'vue';
-import { CheckOutlined } from '@ant-design/icons-svg';
+import { Check } from '@icon-park/svg';
 import { stringifySVG } from '@/utils';
 import { MenubarItem } from '@/menubar';
 import { useMenuItem } from './use';
 
-const checkOutlinedSVG = stringifySVG(CheckOutlined);
+const checkSVG = stringifySVG(Check);
 
 export default defineComponent({
   name: 'MenuSubItem',
@@ -30,10 +30,9 @@ export default defineComponent({
     },
   },
   setup(props) {
-    //const { item } = toRefs(props);
     const item = useMenuItem(props.item);
     const hasChild = computed(() => !!unref(item).children?.size);
-    return { item, hasChild, checkOutlinedSVG };
+    return { item, hasChild, checkSVG };
   },
 });
 </script>
@@ -49,12 +48,13 @@ export default defineComponent({
     align-items: center;
   }
 
-  &-title {
+  &-text {
     padding-left: @menu-item-prefix;
   }
 
   &-icon {
     position: absolute;
+    left: 10px;
     display: flex;
   }
 }

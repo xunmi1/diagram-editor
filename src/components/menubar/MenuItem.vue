@@ -6,7 +6,7 @@
       :class="{ 'editor-menubar-item-hover': visible }"
       @click="!hasChild && clickMenu({ key: menuKey })"
     >
-      <span>{{ menu.title }}</span>
+      <span>{{ menu.text }}</span>
     </div>
     <template v-if="hasChild" #overlay>
       <AMenu @click="clickMenu" class="editor-menubar-dropdown">

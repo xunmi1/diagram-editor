@@ -3,6 +3,7 @@ import NodeBasePanel from './views/NodeBasePanel';
 import GraphConfigPanel from './views/GraphConfigPanel';
 import { installMenubar } from './menubar';
 import { nodeCountPlugin, edgeCountPlugin } from './statusbar';
+import { historyPlugin } from './toolbar';
 
 export * from './statusbar';
 
@@ -23,4 +24,5 @@ export const builtInPlugin: Plugin = editor => {
   installMenubar(editor);
   nodeCountPlugin(editor);
   edgeCountPlugin(editor);
+  historyPlugin(editor);
 };

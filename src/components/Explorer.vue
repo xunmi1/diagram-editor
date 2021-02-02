@@ -114,6 +114,7 @@ export default defineComponent({
     height: 100%;
     border-right: 1px solid var(--border-color);
     background: var(--widget-color);
+    overflow: auto;
   }
   &-header {
     border-bottom: 1px solid var(--border-color);

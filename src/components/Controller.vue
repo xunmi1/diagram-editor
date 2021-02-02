@@ -99,18 +99,13 @@ export default defineComponent({
 <style lang="less">
 .editor-controller {
   &-wrapper {
-    display: flex;
-    flex-direction: column;
     border-left: 1px solid var(--border-color);
     background: var(--widget-color);
     height: 100%;
+    overflow: auto;
   }
   &-header {
     border-bottom: 1px solid var(--border-color);
-  }
-
-  &-tabs {
-    flex: auto;
   }
 }
 </style>

@@ -17,7 +17,7 @@
   "author": "xunmi <xunmi1@outlook.com>",
   "license": "MIT",
   "dependencies": {
-    "@antv/x6": "^1.12.23",
+    "@antv/x6": "^1.12.24",
     "@icon-park/svg": "^1.2.4",
     "ant-design-vue": "^2.0.0-0",
     "lodash-es": "^4.17.20",

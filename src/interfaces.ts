@@ -8,6 +8,13 @@ export type GraphOptions = ConstructorParameters<typeof Graph>[0];
 
 export interface EditorOptions {
   graph?: GraphOptions;
+
+  explorer?: boolean;
+  controller?: boolean;
+  menubar?: boolean;
+  toolbar?: boolean;
+  statusbar?: boolean;
+  contextMenu?: boolean;
 }
 
 export interface Plugin {

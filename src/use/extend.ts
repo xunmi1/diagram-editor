@@ -25,7 +25,7 @@ export const useOnceWatch = (effect: OnceEffect, options?: WatchOptionsBase) => 
 
 type GraphOptions = ConstructorParameters<typeof Graph>[0];
 
-export const useGraph = (container: Ref<HTMLElement | undefined>, options: GraphOptions) => {
+export const useGraph = (container: Ref<HTMLElement | undefined>, options?: GraphOptions) => {
   const graph = shallowRef<Graph>();
   onMounted(() => {
     const el = unref(container)!;

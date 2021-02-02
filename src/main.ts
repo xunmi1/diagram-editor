@@ -11,8 +11,10 @@ import { Menubar, MenubarItem, MenubarItemOptions } from '@/menubar';
 import { ContextMenu, ContextMenuItem, ContextMenuItemOptions } from '@/contextMenu';
 import { Toolbar, ToolbarItem, ToolbarItemOptions } from '@/toolbar';
 import { Statusbar, StatusbarItem, StatusbarItemOptions } from '@/statusbar';
-import { Subject, Observer, CommandsRegistry, warn } from '@/utils';
+import { Subject, Observer, CommandsRegistry, warn, merge } from '@/utils';
 import { EventType } from '@/constants';
+import { defaultOptions } from '@/defaultOptions';
+import { bindActiveEvent, bindMouseEvent } from '@/events';
 
 export { ExplorerItem, ExplorerNodeItem, ControllerItem, MenubarItem, ContextMenuItem, ToolbarItem, StatusbarItem };
 export * from '@/plugins';
@@ -56,10 +58,14 @@ class DiagramEditor extends Subject {
     this.toolbar = new Toolbar();
     this.statusbar = new Statusbar();
 
-    this._options = { ...options };
+    this._options = merge(defaultOptions, options);
     this._installedPlugins = new Set();
 
-    this._app = createApp(App, { options: this._options.graph, editor: this }).use(antd);
+    this._app = createApp(App, { options: this._options, editor: this }).use(antd);
+  }
+
+  get options() {
+    return { ...this._options };
   }
 
   get graph() {
@@ -82,8 +88,16 @@ class DiagramEditor extends Subject {
       useOnceWatch(() => {
         if (vm.graph) {
           this._graph = vm.graph as Graph;
-          this._bindActiveCell();
-          this._bindMouseCell();
+          bindActiveEvent(this._graph, cell => {
+            this._activeCell = cell;
+            this.emit(EventType.EDITOR_DID_CHANGE_ACTIVE_CELL, this._activeCell);
+          });
+
+          bindMouseEvent(this._graph, cell => {
+            this._mouseCell = cell;
+            this.emit(EventType.EDITOR_DID_CHANGE_MOUSE_CELL, this._mouseCell);
+          });
+
           this.emit(EventType.EDITOR_DID_MOUNT, vm.graph);
           resolve(vm.graph);
         }
@@ -121,28 +135,6 @@ class DiagramEditor extends Subject {
       installed.add(plugin);
     }
     return this;
-  }
-
-  private _bindActiveCell() {
-    const graph = this._graph as Graph;
-    const handler = ({ cell }: { cell?: Cell }) => {
-      if (cell?.id === this._activeCell?.id) return;
-      this._activeCell = cell;
-      this.emit(EventType.EDITOR_DID_CHANGE_ACTIVE_CELL, this._activeCell);
-    };
-    graph.on('cell:click', handler);
-    graph.on('blank:click', handler);
-  }
-
-  private _bindMouseCell() {
-    const graph = this._graph as Graph;
-    const handler = (cell?: Cell) => {
-      if (cell?.id === this._mouseCell?.id) return;
-      this._mouseCell = cell;
-      this.emit(EventType.EDITOR_DID_CHANGE_MOUSE_CELL, this._mouseCell);
-    };
-    graph.on('cell:mouseenter', ({ cell }) => handler(cell));
-    graph.on('cell:mouseleave', () => handler());
   }
 }
 

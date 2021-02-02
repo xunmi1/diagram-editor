@@ -5,7 +5,7 @@
         <div
           v-if="index"
           class="editor-split-sash"
-          :class="{ 'editor-split-sash-highlight': active && moveIndex === index }"
+          :class="{ 'editor-split-sash-highlight': active && axisIndex === index }"
           :style="{ left: `${style.left}px` }"
           @mousedown="start($event, index)"
         />
@@ -18,20 +18,9 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  reactive,
-  ref,
-  shallowRef,
-  unref,
-  computed,
-  watch,
-  onMounted,
-  onBeforeUnmount,
-  Ref,
-} from 'vue';
+import { defineComponent, reactive, ref, shallowRef, unref, watch, onMounted, onBeforeUnmount, Ref } from 'vue';
 import ResizeObserver from 'resize-observer-polyfill';
-import { throttle, addEvent, removeEvent, setProperty } from '@/utils';
+import { throttle, lazyTask, addEvent, removeEvent, setProperty } from '@/utils';
 import { useInject } from '@/use';
 import { INJECT_KEY } from './contants';
 
@@ -49,17 +38,18 @@ const useResizeObserver = (handler: ResizeObserverCallback, container: Ref<HTMLE
   return observer;
 };
 
-const useSplit = (callback: (offsetX: number, totalX: number, index: number) => void) => {
+const useSplit = (callback: (offsetX: number, totalX: number) => void) => {
   const active = ref(false);
-  let moveIndex = ref(0);
+  let axisIndex = ref(0);
   let startOffsetX = 0;
   let offsetX = 0;
 
   const handleMove = throttle((event: MouseEvent) => {
     const x = event.pageX - offsetX;
+    if (x === 0) return;
     const totalX = event.pageX - startOffsetX;
     // 本次偏移量，累计偏移量，当前移动的轴的索引
-    callback(x, totalX, moveIndex.value);
+    callback(x, totalX);
     offsetX = event.pageX;
   }, 60);
 
@@ -73,100 +63,119 @@ const useSplit = (callback: (offsetX: number, totalX: number, index: number) => 
     active.value = true;
     startOffsetX = event.pageX;
     offsetX = event.pageX;
-    moveIndex.value = index;
+    axisIndex.value = index;
     addEvent(document, 'mousemove', handleMove);
     addEvent(document, 'mouseup', handleUp);
   };
 
-  return { start, active, moveIndex };
+  return { start, active, axisIndex };
 };
-
+/**
+ * 面板自动分割
+ * 仅支持水平方向
+ */
 export default defineComponent({
   name: 'Split',
   props: {
     // 阈值
     threshold: {
       type: Number,
-      default: 160,
+      default: 120,
     },
   },
   setup(props) {
     const container = shallowRef<HTMLElement>();
-    const panelList = computed<HTMLElement[]>(() => [...(unref(container)?.children as any)]);
     const styleList = ref<{ left: number; width: number }[]>([]);
     const childrenMeta = reactive<Map<HTMLElement, { flexible: boolean; left: number; width: number }>>(new Map());
     useInject(INJECT_KEY, childrenMeta);
 
-    const weights = computed(() => [...childrenMeta.values()].filter(v => v.flexible).length);
+    const getChildren = (): HTMLElement[] => Array.prototype.slice.call(unref(container)?.children, 0);
 
     // 计算自动伸缩元素所需的补偿距离
-    const calculateMakeup = (entries: ResizeObserverEntry[], rectList: any[]): number => {
-      if (!weights.value) return 0;
-      const totalWidth = entries[0].contentRect.width;
+    const calculateMakeup = (rectList: DOMRect[]): number => {
+      // 权重
+      const weights = [...childrenMeta.values()].filter(v => v.flexible).length;
+      if (!weights) return 0;
+      const rect = unref(container)!.getBoundingClientRect();
       const childWidth = rectList.reduce((prev, current) => prev + current.width, 0);
-      return (totalWidth - childWidth) / weights.value;
+      return Math.floor((rect.width - childWidth) / weights);
     };
-
-    const getResizeRect = (makeup: number, rectList: DOMRect[]) => {
+    // 计算出新的布局样式
+    const getResizeRect = (rectList: DOMRect[], makeup: number = 0) => {
+      const children = getChildren();
       return rectList.reduce<{ left: number; width: number }[]>((total, rect, index) => {
-        const flexible = childrenMeta.get(unref(panelList)[index])?.flexible;
+        const flexible = childrenMeta.get(children[index])?.flexible;
         const prev = total[index - 1];
-        const left = prev ? prev.left + prev.width : rect.left;
+        const left = prev ? prev.left + prev.width : 0;
         const width = flexible ? rect.width + makeup : rect.width;
         total.push({ left, width });
         return total;
       }, []);
     };
 
-    const handler: ResizeObserverCallback = entries => {
-      const rectList = unref(panelList).map(child => child.getBoundingClientRect());
-      const makeup = calculateMakeup(entries, rectList);
-      styleList.value = getResizeRect(makeup, rectList);
+    // 自动更新布局
+    const update = () => {
+      if (!unref(container)) return;
+      const children = getChildren();
+      // 获取现有的布局样式
+      const rectList = children.map(child => child.getBoundingClientRect());
+      // 可分配的剩余空间
+      const makeup = calculateMakeup(rectList);
+      // 设置新的布局
+      styleList.value = getResizeRect(rectList, makeup);
     };
 
-    watch(
-      styleList,
-      list => {
-        unref(panelList).forEach((child, i) => {
-          const style = list[i];
-          setProperty(child, 'left', `${style.left}px`);
-          setProperty(child, 'width', `${style.width}px`);
-        });
-      },
-      { deep: true, flush: 'post' }
-    );
+    useResizeObserver(throttle(update, 200), container);
+    // 监听面板元素变化，以触发布局的改变
+    watch(childrenMeta, lazyTask(update), { flush: 'post' });
 
-    useResizeObserver(throttle(handler, 200), container);
-
-    const { start, active, moveIndex } = useSplit((offsetX, totalX, index) => {
-      const threshold = props.threshold;
+    // 手动操纵面板的移动策略
+    const moveStrategy = (offsetX: number, totalX: number) => {
       const list = unref(styleList);
-      const prevStyle = list[index - 1];
-      const nextStyle = list[index];
+      // 当前在移动的轴的索引
+      const axis = axisIndex.value;
+      const [prev, next] = [list[axis - 1], list[axis]];
+      const threshold = props.threshold;
+
       let x = offsetX;
       // 如果向右移动且右侧面板宽度低于阈值， 或者向右移动且右侧面板宽度低于阈值
-      if ((x > 0 && prevStyle.width < threshold) || (x < 0 && nextStyle.width < threshold)) {
+      if ((x > 0 && prev.width < threshold) || (x < 0 && next.width < threshold)) {
         // 如果累计位移低于阈值, 则不移动; 相反，移动已累计的距离
         if (Math.abs(totalX) < threshold) return;
         else x = totalX;
       }
       // 向左移动，左侧已经低于阈值, 则隐藏左侧面板
-      if (x < 0 && prevStyle.width < threshold) {
-        const boundary = index === 1 ? 4 : 8;
-        x = -(prevStyle.width - boundary);
+      if (x < 0 && prev.width < threshold) {
+        const boundary = axis === 1 ? 4 : 8;
+        x = -(prev.width - boundary);
       }
       // 向右移动，右侧已经低于阈值，则隐藏右侧面板
-      if (x > 0 && nextStyle.width < threshold) {
-        const boundary = index === list.length - 1 ? 4 : 8;
-        x = nextStyle.width - boundary;
+      if (x > 0 && next.width < threshold) {
+        const boundary = axis === list.length - 1 ? 4 : 8;
+        x = next.width - boundary;
       }
 
-      prevStyle.width += x;
-      nextStyle.width -= x;
-      nextStyle.left += x;
-    });
+      prev.width += x;
+      next.width -= x;
+      next.left += x;
+    };
+    const { start, active, axisIndex } = useSplit(moveStrategy);
 
-    return { container, styleList, start, active, moveIndex };
+    // 监听 styleList 变化，设置面板样式
+    watch(
+      styleList,
+      list => {
+        const children = getChildren();
+        children.forEach((child, index) => {
+          const { left, width } = list[index];
+          setProperty(child, 'left', `${left}px`);
+          setProperty(child, 'width', `${width}px`);
+        });
+      },
+      { deep: true, flush: 'post' }
+    );
+
+    return { container, styleList, start, active, axisIndex };
   },
 });
 </script>

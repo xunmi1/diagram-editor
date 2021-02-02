@@ -2,15 +2,24 @@
   <ConfigProvider>
     <div class="editor editor-layout">
       <div class="editor-layout-menubar">
-        <Menubar class="editor-menubar" />
+        <KeepAlive>
+          <Menubar v-if="editorOptions.menubar" class="editor-menubar" />
+        </KeepAlive>
       </div>
-      <div class="editor-layout-toolbar">
-        <Toolbar class="editor-toolbar" />
+
+      <div :style="toolbarStyle" class="editor-layout-toolbar">
+        <KeepAlive>
+          <Toolbar v-if="editorOptions.toolbar" class="editor-toolbar" />
+        </KeepAlive>
       </div>
-      <Split class="editor-content">
-        <SplitPanel key="explorer" class="editor-layout-explorer">
-          <Explorer class="editor-explorer" />
-        </SplitPanel>
+
+      <Split :style="contentStyle" class="editor-content">
+        <KeepAlive>
+          <SplitPanel v-if="editorOptions.explorer" key="explorer" class="editor-layout-explorer">
+            <Explorer class="editor-explorer" />
+          </SplitPanel>
+        </KeepAlive>
+
         <SplitPanel key="editor" class="editor-layout-graph" flexible>
           <section class="editor-container">
             <div class="editor-instance">
@@ -18,23 +27,30 @@
             </div>
           </section>
         </SplitPanel>
-        <SplitPanel key="controller" class="editor-layout-controller">
-          <Controller class="editor-controller" />
-        </SplitPanel>
+
+        <KeepAlive>
+          <SplitPanel v-if="editorOptions.controller" key="controller" class="editor-layout-controller">
+            <Controller class="editor-controller" />
+          </SplitPanel>
+        </KeepAlive>
       </Split>
+
       <div class="editor-layout-statusbar">
-        <Statusbar class="editor-statusbar" />
+        <KeepAlive>
+          <Statusbar v-if="editorOptions.statusbar" class="editor-statusbar" />
+        </KeepAlive>
       </div>
-      <ContextMenu />
+
+      <KeepAlive>
+        <ContextMenu v-if="editorOptions.contextMenu" />
+      </KeepAlive>
     </div>
   </ConfigProvider>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, reactive, computed, UnwrapRef } from 'vue';
 import { useGraph, useEditor, useGlobalGraph } from '@/use';
-import { merge } from '@/utils';
-import { defaultOptions } from '@/defaultOptions';
 import { ConfigProvider, Split, SplitPanel } from '@/shared';
 import Menubar from '@/components/menubar/Menubar.vue';
 import Toolbar from '@/components/toolbar/Toolbar.vue';
@@ -42,6 +58,25 @@ import Statusbar from '@/components/statusbar/Statusbar.vue';
 import Explorer from '@/components/Explorer.vue';
 import Controller from '@/components/Controller.vue';
 import ContextMenu from '@/components/ContextMenu.vue';
+import { EditorOptions } from '@/interfaces';
+
+const useStyle = (editorOptions: UnwrapRef<EditorOptions>) => {
+  const contentStyle = computed(() => {
+    const style = { top: '0px', bottom: '0px' };
+    const { menubar, toolbar, statusbar } = editorOptions;
+    if (menubar) style.top = `var(--menubar-height)`;
+    if (toolbar) style.top = `var(--toolbar-height)`;
+    if (menubar && toolbar) style.top = `calc(var(--menubar-height) + var(--toolbar-height))`;
+    if (statusbar) style.bottom = `var(--statusbar-height)`;
+    return style;
+  });
+
+  const toolbarStyle = computed(() => {
+    return { top: editorOptions.menubar ? `var(--menubar-height)` : '0px' };
+  });
+
+  return { contentStyle, toolbarStyle };
+};
 
 export default defineComponent({
   name: 'App',
@@ -60,9 +95,26 @@ export default defineComponent({
   setup(props) {
     useEditor(props.editor);
     const container = ref<HTMLElement>();
-    const graph = useGraph(container, merge(defaultOptions, props.options));
+    const { graph: graphOptions, ...options } = props.options;
+    const editorOptions = reactive<Omit<EditorOptions, 'graph'>>(options);
+    const graph = useGraph(container, graphOptions);
+    const { contentStyle, toolbarStyle } = useStyle(editorOptions);
     useGlobalGraph(graph);
-    return { container, graph };
+
+    setTimeout(() => {
+      editorOptions.explorer = true;
+      editorOptions.controller = true;
+      setTimeout(() => {
+        editorOptions.explorer = false;
+        editorOptions.controller = false;
+        setTimeout(() => {
+          editorOptions.explorer = true;
+          editorOptions.controller = true;
+        }, 2000);
+      }, 2000);
+    }, 2000);
+
+    return { container, graph, editorOptions, toolbarStyle, contentStyle };
   },
 });
 </script>
@@ -74,8 +126,6 @@ export default defineComponent({
 
   .editor-content {
     position: absolute;
-    top: calc(var(--menubar-height) + var(--toolbar-height));
-    bottom: var(--statusbar-height);
     width: 100%;
   }
 
@@ -88,7 +138,6 @@ export default defineComponent({
 
   &-toolbar {
     position: absolute;
-    top: var(--menubar-height);
     width: 100%;
     height: var(--toolbar-height);
   }

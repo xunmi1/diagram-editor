@@ -1,11 +1,11 @@
 <template>
-  <div class="editor-split-panel" ref="container" :style="{}">
+  <div class="editor-split-panel" ref="container">
     <slot />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, unref, onMounted } from 'vue';
+import { defineComponent, ref, unref, onMounted, onActivated, onDeactivated } from 'vue';
 import { useInject } from '@/use';
 import { INJECT_KEY } from './contants';
 
@@ -27,12 +27,20 @@ export default defineComponent({
       meta.set(el, props);
     });
 
+    onActivated(() => {
+      meta.set(unref(container)!, props);
+    });
+
+    onDeactivated(() => {
+      meta.delete(unref(container)!);
+    });
+
     return { container };
   },
 });
 </script>
 
-<style scoped>
+<style>
 .editor-split-panel {
   position: absolute;
   height: 100%;

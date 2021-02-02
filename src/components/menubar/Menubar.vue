@@ -3,7 +3,7 @@
     <div class="editor-menubar-content">
       <div class="editor-menubar-inner">
         <template v-for="[key, menu] in menubarList" :key="key">
-          <MenuItem :menu="menu" :menu-key="key" @click="executeCommand" />
+          <MenuItem v-if="menu.visible" :menu="menu" :menu-key="key" @click="executeCommand" />
         </template>
       </div>
     </div>
@@ -21,6 +21,7 @@ type MenubarList = Map<string, MenubarItem>;
 
 const useMenubarList = () => {
   const { menubar } = useEditor();
+  // 使用 shallowRef 会导致 key 不变、value 变化时，无法触发更新
   const menubarList = ref<MenubarList>(new Map([...menubar]));
   const disposable = menubar.onDidLoad(
     lazyTask(() => {

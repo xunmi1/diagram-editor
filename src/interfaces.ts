@@ -1,6 +1,6 @@
 import type { Graph } from '@antv/x6';
 import type DiagramEditor from '@/main';
-import { Disposable } from '@/utils';
+import { Disposable, Observer } from '@/utils';
 
 export type { DiagramEditor };
 
@@ -34,4 +34,15 @@ export interface Lifecycle {
   onDidMount(callback: LifecycleCallback): Disposable;
   onWillUnmount(callback: LifecycleCallback): Disposable;
   onDidUnmount(callback: LifecycleCallback): Disposable;
+}
+
+export interface Menu<T extends Menu = Menu<any>> {
+  text: string;
+  checked: boolean;
+  disabled: boolean;
+  visible: boolean;
+  children?: Map<string, T>;
+
+  onDidAppendChild(callback: Observer<{ key: string; child: T }>): Disposable;
+  onDidChangeState(callback: Observer<T>): Disposable;
 }

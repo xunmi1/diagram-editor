@@ -4,6 +4,7 @@ import GraphConfigPanel from './views/GraphConfigPanel';
 import { installMenubar } from './menubar';
 import { nodeCountPlugin, edgeCountPlugin } from './statusbar';
 import { historyPlugin } from './toolbar';
+import { contextMenuPlugin } from '@/plugins/contextMenu';
 
 export * from './statusbar';
 
@@ -25,4 +26,5 @@ export const builtInPlugin: Plugin = editor => {
   nodeCountPlugin(editor);
   edgeCountPlugin(editor);
   historyPlugin(editor);
+  contextMenuPlugin(editor);
 };

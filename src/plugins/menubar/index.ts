@@ -18,4 +18,5 @@ export const installMenubar = (editor: DiagramEditor) => {
     editor.menubar.load('44444', new MenubarItem({ text: '444444' }), 'xxxx');
   });
   editor.menubar.load('3333', new MenubarItem({ text: '3333' }), 'xxxx1');
+  editor.menubar.load('333q3', new MenubarItem({ text: '3333-qqq', command: 'xxxx' }), '3333');
 };

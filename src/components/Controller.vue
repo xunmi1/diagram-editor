@@ -1,7 +1,7 @@
 <template>
   <section class="editor-controller-wrapper">
     <h4 class="editor-widget-title editor-controller-header">属性配置</h4>
-    <ATabs v-if="tabList.length" class="editor-controller-tabs">
+    <ATabs class="editor-controller-tabs">
       <template v-for="[key, panel] in tabList" :key="key">
         <ATabPane :tab="panel.title">
           <Suspense>
@@ -23,21 +23,12 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  computed,
-  shallowReactive,
-  shallowRef,
-  unref,
-  onBeforeUnmount,
-  getCurrentInstance,
-} from 'vue';
+import { defineComponent, watch, shallowReactive, shallowRef, onBeforeUnmount, getCurrentInstance } from 'vue';
 import type { Cell } from '@antv/x6';
 import { useEditor } from '@/use';
 import { ControllerItem } from '@/controller';
 import { EventType } from '@/constants';
 import Container from './Container';
-import { DiagramEditor } from '@/interfaces';
 
 type PanelList = Map<string, ControllerItem>;
 
@@ -72,7 +63,8 @@ const useLifecycle = () => {
   return { willMount, didMount, willUnmount, didUnmount };
 };
 
-const useActiveCell = (editor: DiagramEditor) => {
+const useActiveCell = () => {
+  const editor = useEditor();
   const activeCell = shallowRef<Cell>();
   const disposable = editor.onDidChangeActiveCell(() => {
     activeCell.value = editor.activeCell;
@@ -91,10 +83,14 @@ export default defineComponent({
       item.created?.(editor);
       onBeforeUnmount(() => item.destroy?.(editor), instance);
     });
-    const activeCell = useActiveCell(editor);
+    const activeCell = useActiveCell();
     const lifecycle = useLifecycle();
-    // 基于不同激活条件，确定配置面板
-    const tabList = computed(() => [...panelList].filter(([_, v]) => v.activate(unref(activeCell))));
+
+    const getActiveList = (): [string, ControllerItem][] =>
+      [...panelList].filter(([_, v]) => v.activate?.(editor) ?? true);
+    const tabList = shallowRef<[string, ControllerItem][]>([]);
+    watch(activeCell, () => (tabList.value = getActiveList()), { immediate: true });
+
     return { tabList, ...lifecycle };
   },
 });

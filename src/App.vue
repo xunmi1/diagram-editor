@@ -25,6 +25,7 @@
       <div class="editor-layout-statusbar">
         <Statusbar class="editor-statusbar" />
       </div>
+      <ContextMenu />
     </div>
   </ConfigProvider>
 </template>
@@ -40,6 +41,7 @@ import Toolbar from '@/components/toolbar/Toolbar.vue';
 import Statusbar from '@/components/statusbar/Statusbar.vue';
 import Explorer from '@/components/Explorer.vue';
 import Controller from '@/components/Controller.vue';
+import ContextMenu from '@/components/ContextMenu.vue';
 
 export default defineComponent({
   name: 'App',
@@ -52,6 +54,7 @@ export default defineComponent({
     Explorer,
     Controller,
     Statusbar,
+    ContextMenu,
   },
   props: ['options', 'editor'],
   setup(props) {

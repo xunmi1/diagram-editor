@@ -28,5 +28,5 @@ export abstract class ControllerItem extends Subject implements Lifecycle {
 
   abstract unmount(rootContainer: Element): void;
 
-  abstract activate(cell: DiagramEditor['activeCell']): boolean;
+  abstract activate(editor: DiagramEditor): boolean;
 }

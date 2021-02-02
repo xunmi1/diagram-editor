@@ -4,16 +4,12 @@
       tabindex="-1"
       class="editor-menubar-item"
       :class="{ 'editor-menubar-item-hover': visible }"
-      @click="!hasChild && clickMenu({ key: menuKey })"
+      @click="!hasChild && clickMenu(menuKey)"
     >
       <span>{{ menu.text }}</span>
     </div>
     <template v-if="hasChild" #overlay>
-      <AMenu @click="clickMenu" class="editor-menubar-dropdown">
-        <template v-for="[key, child] in menu.children" :key="key">
-          <MenuSubItem :item="child" />
-        </template>
-      </AMenu>
+      <Menu :list="menu.children" @click="clickMenu" />
     </template>
   </ADropdown>
 </template>
@@ -21,13 +17,12 @@
 <script lang="ts">
 import { computed, defineComponent, ref, toRefs, unref } from 'vue';
 import { MenubarItem } from '@/menubar';
-import MenuSubItem from './MenuSubItem.vue';
-import { useMenuItem } from './use';
+import { Menu, useMenuItem } from '@/shared';
 
 export default defineComponent({
   name: 'MenuItem',
   components: {
-    MenuSubItem,
+    Menu,
   },
   props: {
     menu: {
@@ -43,7 +38,7 @@ export default defineComponent({
 
     const visible = ref(false);
     const hasChild = computed(() => !!unref(menu).children?.size);
-    const clickMenu = ({ key }: { key: string }) => {
+    const clickMenu = (key: string) => {
       changeVisible(false);
       emit('click', key);
     };
@@ -59,33 +54,16 @@ export default defineComponent({
 <style lang="less">
 @menubar-item-width: 240px;
 
-.editor-menubar {
-  &-item {
-    display: flex;
-    padding: 0 var(--padding-sm);
-    line-height: 1;
-    align-items: center;
-    cursor: pointer;
+.editor-menubar-item {
+  display: flex;
+  padding: 0 var(--padding-sm);
+  line-height: 1;
+  align-items: center;
+  cursor: pointer;
 
-    &:hover,
-    &-hover {
-      background: var(--hover-bg);
-    }
-  }
-
-  &-dropdown {
-    min-width: @menubar-item-width;
-  }
-}
-
-.editor {
-  .editor-dropdown-menu {
-    padding: 4px 0;
-    background-color: var(--widget-color);
-
-    &-submenu {
-      min-width: @menubar-item-width;
-    }
+  &:hover,
+  &-hover {
+    background: var(--hover-bg);
   }
 }
 </style>

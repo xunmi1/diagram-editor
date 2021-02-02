@@ -1,27 +1,27 @@
 import { CommandId, Observer, Subject, lazyTask } from '@/utils';
-import { Menu } from '@/interfaces';
+import { DiagramEditor, Menu } from '@/interfaces';
 
-export interface MenubarItemOptions {
+export interface ContextMenuItemOptions {
   text: string;
   command?: CommandId;
   checked?: boolean;
-  disabled?: boolean;
   visible?: boolean;
+  disabled?: boolean;
 }
 
 const EVENT_TYPE_UPDATE = Symbol('UPDATE');
 const EVENT_TYPE_CHILD_APPEND = Symbol('CHILD_APPEND');
 
-export class MenubarItem extends Subject implements Menu<MenubarItem> {
+export class ContextMenuItem extends Subject implements Menu<ContextMenuItem> {
   public readonly command?: CommandId;
-  public children?: Map<string, MenubarItem>;
+  public children?: Map<string, ContextMenuItem>;
 
   private _text: string;
   private _checked: boolean;
   private _disabled: boolean;
   private _visible: boolean;
 
-  constructor(options: MenubarItemOptions) {
+  constructor(options: ContextMenuItemOptions) {
     super();
     this._text = options.text;
     this.command = options.command;
@@ -68,17 +68,19 @@ export class MenubarItem extends Subject implements Menu<MenubarItem> {
     this._emitUpdate();
   }
 
-  appendChild(key: string, child: MenubarItem) {
+  activate?(editor: DiagramEditor): boolean;
+
+  appendChild(key: string, child: ContextMenuItem) {
     if (!this.children) this.children = new Map();
     this.children.set(key, child);
     this.emit(EVENT_TYPE_CHILD_APPEND, { key, child });
   }
 
-  onDidAppendChild(callback: Observer<{ key: string; child: MenubarItem }>) {
+  onDidAppendChild(callback: Observer<{ key: string; child: ContextMenuItem }>) {
     return this.on(EVENT_TYPE_CHILD_APPEND, callback);
   }
 
-  onDidChangeState(callback: Observer<MenubarItem>) {
+  onDidChangeState(callback: Observer<ContextMenuItem>) {
     return this.on(EVENT_TYPE_UPDATE, callback);
   }
 

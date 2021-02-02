@@ -8,26 +8,32 @@ import { EditorOptions, Plugin } from '@/interfaces';
 import { ExplorerItem, Explorer, ExplorerNodeItem, DragEvent, LayoutOptions } from '@/explorer';
 import { ControllerItem, Controller } from '@/controller';
 import { Menubar, MenubarItem, MenubarItemOptions } from '@/menubar';
+import { ContextMenu, ContextMenuItem, ContextMenuItemOptions } from '@/contextMenu';
 import { Toolbar, ToolbarItem, ToolbarItemOptions } from '@/toolbar';
 import { Statusbar, StatusbarItem, StatusbarItemOptions } from '@/statusbar';
 import { Subject, Observer, CommandsRegistry, warn } from '@/utils';
 import { EventType } from '@/constants';
 
-export { ExplorerItem, ExplorerNodeItem, ControllerItem, MenubarItem, ToolbarItem, StatusbarItem };
+export { ExplorerItem, ExplorerNodeItem, ControllerItem, MenubarItem, ContextMenuItem, ToolbarItem, StatusbarItem };
 export * from '@/plugins';
 
-export type { DragEvent, LayoutOptions, MenubarItemOptions, ToolbarItemOptions, StatusbarItemOptions };
+export type {
+  DragEvent,
+  LayoutOptions,
+  MenubarItemOptions,
+  ContextMenuItemOptions,
+  ToolbarItemOptions,
+  StatusbarItemOptions,
+};
 export type { Observer, Disposable } from '@/utils';
 export * from '@/interfaces';
-
-const CELL_TRIGGER_TYPE = 'cell:click';
-const CELL_CANCEL_TYPE = 'blank:click';
 
 class DiagramEditor extends Subject {
   public readonly explorer: Explorer;
   public readonly controller: Controller;
   public readonly commands: CommandsRegistry;
   public readonly menubar: Menubar;
+  public readonly contextMenu: ContextMenu;
   public readonly toolbar: Toolbar;
   public readonly statusbar: Statusbar;
 
@@ -37,6 +43,7 @@ class DiagramEditor extends Subject {
 
   private _graph?: Graph;
   private _activeCell?: Cell;
+  private _mouseCell?: Cell;
   private _app?: VueApp;
 
   constructor(options?: EditorOptions) {
@@ -45,6 +52,7 @@ class DiagramEditor extends Subject {
     this.controller = new Controller();
     this.commands = new CommandsRegistry();
     this.menubar = new Menubar();
+    this.contextMenu = new ContextMenu();
     this.toolbar = new Toolbar();
     this.statusbar = new Statusbar();
 
@@ -62,6 +70,10 @@ class DiagramEditor extends Subject {
     return this._activeCell;
   }
 
+  get mouseCell() {
+    return this._mouseCell;
+  }
+
   mount(rootContainer: string | Element) {
     this._rootContainer = rootContainer;
     const vm = this._app?.mount(rootContainer) as ComponentPublicInstance<{}, {}, { graph: Graph }>;
@@ -71,6 +83,7 @@ class DiagramEditor extends Subject {
         if (vm.graph) {
           this._graph = vm.graph as Graph;
           this._bindActiveCell();
+          this._bindMouseCell();
           this.emit(EventType.EDITOR_DID_MOUNT, vm.graph);
           resolve(vm.graph);
         }
@@ -95,6 +108,10 @@ class DiagramEditor extends Subject {
     return this.on(EventType.EDITOR_DID_CHANGE_ACTIVE_CELL, callback);
   }
 
+  onDidChangeMouseCell(callback: Observer<Cell | undefined>) {
+    return this.on(EventType.EDITOR_DID_CHANGE_MOUSE_CELL, callback);
+  }
+
   use(plugin: Plugin) {
     const installed = this._installedPlugins;
     if (installed.has(plugin)) {
@@ -109,11 +126,23 @@ class DiagramEditor extends Subject {
   private _bindActiveCell() {
     const graph = this._graph as Graph;
     const handler = ({ cell }: { cell?: Cell }) => {
+      if (cell?.id === this._activeCell?.id) return;
       this._activeCell = cell;
       this.emit(EventType.EDITOR_DID_CHANGE_ACTIVE_CELL, this._activeCell);
     };
-    graph.on(CELL_TRIGGER_TYPE, handler);
-    graph.on(CELL_CANCEL_TYPE, handler);
+    graph.on('cell:click', handler);
+    graph.on('blank:click', handler);
+  }
+
+  private _bindMouseCell() {
+    const graph = this._graph as Graph;
+    const handler = (cell?: Cell) => {
+      if (cell?.id === this._mouseCell?.id) return;
+      this._mouseCell = cell;
+      this.emit(EventType.EDITOR_DID_CHANGE_MOUSE_CELL, this._mouseCell);
+    };
+    graph.on('cell:mouseenter', ({ cell }) => handler(cell));
+    graph.on('cell:mouseleave', () => handler());
   }
 }
 

@@ -28,7 +28,7 @@ import { useEditor, useGlobalGraph } from '@/use';
 import { Addon, Cell } from '@antv/x6';
 import type { ExplorerItem } from '@/explorer';
 import Container from './Container';
-import { Node } from '@antv/x6/lib/model/node';
+import type { Node } from '@antv/x6/lib/model/node';
 import { EventType } from '@/constants';
 
 const useDnd = () => {

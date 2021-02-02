@@ -5,6 +5,10 @@ export const warn = (msg: string, ...args: any[]) => {
   console.warn(`[Editor warn]: ${msg}`, ...args);
 };
 
+export const error = (msg: string, ...args: any[]) => {
+  console.error(`[Editor error]: ${msg}`, ...args);
+};
+
 export const delay = (timeout: number) => new Promise(resolve => setTimeout(resolve, timeout));
 
 export const lazyTask = <T extends (...args: any[]) => any>(func: T) => {

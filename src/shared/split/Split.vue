@@ -82,6 +82,10 @@ export default defineComponent({
       type: Number,
       default: 120,
     },
+    sashSize: {
+      type: Number,
+      default: 6,
+    },
   },
   setup(props) {
     const container = shallowRef<HTMLElement>();
@@ -135,7 +139,7 @@ export default defineComponent({
       // 当前在移动的轴的索引
       const axis = axisIndex.value;
       const [prev, next] = [list[axis - 1], list[axis]];
-      const threshold = props.threshold;
+      const { threshold, sashSize } = props;
 
       let x = offsetX;
       // 如果向右移动且右侧面板宽度低于阈值， 或者向右移动且右侧面板宽度低于阈值
@@ -146,13 +150,13 @@ export default defineComponent({
       }
       // 向左移动，左侧已经低于阈值, 则隐藏左侧面板
       if (x < 0 && prev.width < threshold) {
-        const boundary = axis === 1 ? 4 : 8;
-        x = -(prev.width - boundary);
+        const sash = axis === 1 ? sashSize / 2 : sashSize;
+        x = -(prev.width - sash);
       }
       // 向右移动，右侧已经低于阈值，则隐藏右侧面板
       if (x > 0 && next.width < threshold) {
-        const boundary = axis === list.length - 1 ? 4 : 8;
-        x = next.width - boundary;
+        const sash = axis === list.length - 1 ? sashSize / 2 : sashSize;
+        x = next.width - sash;
       }
 
       prev.width += x;

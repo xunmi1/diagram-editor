@@ -12,45 +12,42 @@ interface ScrollerOptions {
   pannable: boolean;
 }
 
-const setGridVisible = (editor: DiagramEditor, visible: boolean) => {
-  if (visible) editor.graph?.showGrid();
-  else editor.graph?.hideGrid();
-};
-
-const setScrollerEnable = (editor: DiagramEditor, enable: boolean) => {
-  if (enable) editor.graph?.unlockScroller();
-  else editor.graph?.lockScroller();
-};
-
 export const registerCommands = (editor: DiagramEditor, state: State) => {
   const setGrid = (options: GridOptions) => {
+    const graph = editor.graph;
+    if (!graph) return;
     const { size, visible } = options;
     if (size != null) {
+      graph.setGridSize(Math.max(0, size));
+      if (graph.isSnaplineEnabled()) graph.setSnaplineTolerance(size);
       state.gridSize = size;
-      editor.graph?.setGridSize(Math.max(0, size));
     }
     if (visible != null) {
+      if (visible) graph.showGrid();
+      else graph.hideGrid();
       state.gridVisible = visible;
-      setGridVisible(editor, visible);
     }
   };
 
   const setBackground = (options: Background.Options) => {
-    const { color } = options;
-    if (color) state.backgroundColor = color;
+    const graph = editor.graph;
+    if (!graph) return;
+    if (options.color) state.backgroundColor = options.color;
     editor.graph?.drawBackground(options);
   };
 
   const setScroller = (options: ScrollerOptions) => {
+    const graph = editor.graph;
+    if (!graph) return;
     const { enabled, pannable } = options;
-
     if (enabled != null) {
+      if (enabled) graph.unlockScroller();
+      else graph.lockScroller();
       state.scrollerEnable = enabled;
-      setScrollerEnable(editor, enabled);
     }
     if (pannable != null) {
+      graph.togglePanning(pannable);
       state.scrollerPannable = pannable;
-      editor.graph?.togglePanning(pannable);
     }
   };
 

@@ -32,7 +32,7 @@ export abstract class ExplorerItem extends Subject implements Lifecycle {
     return this.on(EventType.EXPLORER_DID_UNMOUNT, callback);
   }
 
-  abstract mount(rootContainer: Element): void;
+  abstract mount(rootContainer: HTMLElement, editor: DiagramEditor): void;
 
-  abstract unmount(rootContainer: Element): void;
+  abstract unmount(rootContainer: HTMLElement, editor: DiagramEditor): void;
 }

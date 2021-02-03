@@ -1,21 +1,21 @@
 <template>
   <ConfigProvider>
     <div class="editor editor-layout">
-      <div v-show="editorOptions.menubar" class="editor-layout-menubar">
+      <div v-show="layout.menubar" class="editor-layout-menubar">
         <KeepAlive>
-          <Menubar v-if="editorOptions.menubar" class="editor-menubar" />
+          <Menubar v-if="layout.menubar" class="editor-menubar" />
         </KeepAlive>
       </div>
 
-      <div v-show="editorOptions.toolbar" :style="toolbarStyle" class="editor-layout-toolbar">
+      <div v-show="layout.toolbar" :style="toolbarStyle" class="editor-layout-toolbar">
         <KeepAlive>
-          <Toolbar v-if="editorOptions.toolbar" class="editor-toolbar" />
+          <Toolbar v-if="layout.toolbar" class="editor-toolbar" />
         </KeepAlive>
       </div>
 
       <Split :style="contentStyle" class="editor-content">
         <KeepAlive>
-          <SplitPanel v-if="editorOptions.explorer" key="explorer" class="editor-layout-explorer">
+          <SplitPanel v-if="layout.explorer" key="explorer" class="editor-layout-explorer">
             <Explorer class="editor-explorer" />
           </SplitPanel>
         </KeepAlive>
@@ -29,36 +29,37 @@
         </SplitPanel>
 
         <KeepAlive>
-          <SplitPanel v-if="editorOptions.controller" key="controller" class="editor-layout-controller">
+          <SplitPanel v-if="layout.controller" key="controller" class="editor-layout-controller">
             <Controller class="editor-controller" />
           </SplitPanel>
         </KeepAlive>
       </Split>
 
-      <div v-show="editorOptions.statusbar" class="editor-layout-statusbar">
+      <div v-show="layout.statusbar" class="editor-layout-statusbar">
         <KeepAlive>
-          <Statusbar v-if="editorOptions.statusbar" class="editor-statusbar" />
+          <Statusbar v-if="layout.statusbar" class="editor-statusbar" />
         </KeepAlive>
       </div>
 
       <KeepAlive>
-        <ContextMenu v-if="editorOptions.contextMenu" />
+        <ContextMenu v-if="layout.contextMenu" />
       </KeepAlive>
     </div>
   </ConfigProvider>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, Ref } from 'vue';
+import { defineComponent, ref, computed, shallowRef, onBeforeUnmount, Ref } from 'vue';
 import { useGraph, useEditor, useGlobalGraph } from '@/use';
 import { ConfigProvider, Split, SplitPanel } from '@/shared';
+import { lazyTask } from '@/utils';
 import Menubar from '@/components/menubar/Menubar.vue';
 import Toolbar from '@/components/toolbar/Toolbar.vue';
 import Statusbar from '@/components/statusbar/Statusbar.vue';
 import Explorer from '@/components/Explorer.vue';
 import Controller from '@/components/Controller.vue';
 import ContextMenu from '@/components/ContextMenu.vue';
-import { EditorOptions } from '@/interfaces';
+import { EditorOptions, DiagramEditor } from '@/interfaces';
 
 const useStyle = (options: Ref<EditorOptions>) => {
   const contentStyle = computed(() => {
@@ -78,6 +79,14 @@ const useStyle = (options: Ref<EditorOptions>) => {
   return { contentStyle, toolbarStyle };
 };
 
+const useLayout = (editor: DiagramEditor) => {
+  const { graph, ...options }: EditorOptions = editor.options;
+  const layout = shallowRef(options);
+  const disposable = editor.onDidUpdate(lazyTask((options: Omit<EditorOptions, 'graph'>) => (layout.value = options)));
+  onBeforeUnmount(() => disposable.dispose());
+  return layout;
+};
+
 export default defineComponent({
   name: 'App',
   components: {
@@ -91,17 +100,19 @@ export default defineComponent({
     Statusbar,
     ContextMenu,
   },
-  props: ['options', 'editor'],
+  props: ['editor'],
   setup(props) {
-    useEditor(props.editor);
+    const editor: DiagramEditor = props.editor;
+    useEditor(editor);
+
     const container = ref<HTMLElement>();
-    const { graph: graphOptions, ...options } = props.options;
-    const editorOptions = ref<Omit<EditorOptions, 'graph'>>(options);
-    const graph = useGraph(container, graphOptions);
-    const { contentStyle, toolbarStyle } = useStyle(editorOptions);
+    const graph = useGraph(container, editor.options.graph);
     useGlobalGraph(graph);
 
-    return { container, graph, editorOptions, toolbarStyle, contentStyle };
+    const layout = useLayout(editor);
+    const { contentStyle, toolbarStyle } = useStyle(layout);
+
+    return { container, graph, layout, toolbarStyle, contentStyle };
   },
 });
 </script>

@@ -1,6 +1,5 @@
 <template>
-  <section class="editor-controller-wrapper">
-    <h4 class="editor-widget-title editor-controller-header">属性配置</h4>
+  <section class="editor-controller-wrapper editor-flex-col">
     <ATabs class="editor-controller-tabs">
       <template v-for="[key, panel] in tabList" :key="key">
         <ATabPane :tab="panel.title">
@@ -106,6 +105,10 @@ export default defineComponent({
   }
   &-header {
     border-bottom: 1px solid var(--border-color);
+  }
+
+  &-tabs {
+    flex: auto;
   }
 }
 </style>

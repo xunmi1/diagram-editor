@@ -33,7 +33,7 @@
 
 @collapse-header-padding-extra: 40px;
 @collapse-content-padding: 0;
-@collapse-header-padding: 10px @padding-sm;
+@collapse-header-padding: @padding-xs @padding-sm;
 @collapse-panel-border-radius: 0;
 @collapse-content-bg: var(--widget-color);
 
@@ -63,30 +63,26 @@
   --padding-sm: @padding-sm;
   --padding-xs: @padding-xs;
 
-  --menubar-height: 36px;
+  --menubar-height: 32px;
   --toolbar-height: 32px;
   --statusbar-height: 24px;
   --explorer-width: 320px;
   --controller-width: 360px;
-  --sash-size: 8px;
+  --sash-size: 6px;
   --scrollbar-size: 12px;
 }
 
 .editor {
-  &-widget-title {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--heading-color);
-    padding: var(--padding-sm);
-    margin: 0;
-  }
-
   &-widget-skeleton {
-    padding: var(--padding-md);
     padding-bottom: 0;
   }
 
   &-pointer {
     cursor: pointer;
+  }
+
+  &-flex-col {
+    display: flex;
+    flex-direction: column;
   }
 }

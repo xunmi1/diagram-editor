@@ -1,7 +1,6 @@
 <template>
-  <section class="editor-explorer-wrapper">
-    <h4 class="editor-widget-title editor-explorer-header">资源管理器</h4>
-    <ACollapse v-model:active-key="activeKey" class="editor-explorer-collapse">
+  <section class="editor-explorer-wrapper editor-flex-col">
+    <ACollapse v-model:active-key="activeKey" class="editor-explorer-collapse editor-flex-col">
       <template v-for="[key, panel] in panelList" :key="key">
         <ACollapsePanel :panel-key="key" :header="panel.title">
           <Suspense>
@@ -13,7 +12,7 @@
               @did-unmount="didUnmount"
             />
             <template #fallback>
-              <ASkeleton active :paragraph="{ rows: 4 }" :title="false" class="editor-widget-skeleton" />
+              <ASkeleton active :paragraph="{ rows: 6 }" :title="false" class="editor-widget-skeleton" />
             </template>
           </Suspense>
         </ACollapsePanel>
@@ -120,6 +119,7 @@ export default defineComponent({
     border-bottom: 1px solid var(--border-color);
   }
   &-collapse {
+    flex: auto;
     border-right: none !important;
     border-top: none !important;
   }

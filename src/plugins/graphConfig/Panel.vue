@@ -32,6 +32,7 @@
 import { defineComponent, watchEffect, getCurrentInstance } from 'vue';
 import { ConfigProvider, ColorPicker, createPopupContainer } from '@/shared';
 import type { RootProps } from './index';
+import type { CommandsRegistry } from '@/utils';
 
 export default defineComponent({
   name: 'Panel',
@@ -40,10 +41,10 @@ export default defineComponent({
     ColorPicker,
   },
   props: ['editor', 'state'],
-  setup(props: RootProps) {
-    const state = props.state;
-    const editor = props.editor;
-    const execute = (...args) => editor.commands.execute(...args);
+  setup(props) {
+    const state = props.state as RootProps['state'];
+    const editor = props.editor as RootProps['editor'];
+    const execute: CommandsRegistry['execute'] = (...args) => editor.commands.execute(...args);
 
     watchEffect(() => execute('editor.setGrid', { visible: state.gridVisible }));
     watchEffect(() => execute('editor.setGrid', { size: state.gridSize }));

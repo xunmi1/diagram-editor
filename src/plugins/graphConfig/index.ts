@@ -2,7 +2,7 @@ import { createApp, reactive, App } from 'vue';
 import antd from '@/antd';
 import { ControllerItem } from '@/controller';
 import Panel from './Panel.vue';
-import { DiagramEditor } from '@/interfaces';
+import { DiagramEditor, Plugin } from '@/interfaces';
 import { registerCommands } from './commands';
 
 export interface State {
@@ -32,39 +32,42 @@ const initState = (editor: DiagramEditor, state: State) => {
   });
 };
 
-export default class GraphConfigPanel extends ControllerItem {
+export default class GraphConfig extends ControllerItem {
   title = '画布属性';
 
-  private app: App;
-  private state: State;
-  private editor: DiagramEditor;
+  private app?: App;
+  public readonly state: State;
 
-  created(editor: DiagramEditor) {
-    this.editor = editor;
-    const state = reactive<State>({
+  constructor() {
+    super();
+    this.state = reactive<State>({
       gridVisible: true,
       gridSize: 10,
       backgroundColor: 'transparent',
       scrollerEnable: true,
       scrollerPannable: false,
     });
-    initState(editor, state);
-    registerCommands(editor, state);
-
-    this.state = state;
   }
 
-  mount(container: Element) {
-    const rootProps: RootProps = { editor: this.editor, state: this.state };
+  mount(container: HTMLElement, editor: DiagramEditor) {
+    initState(editor, this.state);
+    const rootProps: RootProps = { editor, state: this.state };
     this.app = createApp(Panel, rootProps).use(antd);
     this.app.mount(container);
   }
 
-  unmount(container: Element) {
-    this.app.unmount(container);
+  unmount(container: HTMLElement) {
+    this.app?.unmount(container);
+    this.app = undefined;
   }
 
   activate(editor: DiagramEditor): boolean {
     return !editor.activeCell;
   }
 }
+
+export const graphConfigPlugin: Plugin = editor => {
+  const graphConfig = new GraphConfig();
+  registerCommands(editor, graphConfig.state);
+  editor.controller.load('graph-config', graphConfig);
+};

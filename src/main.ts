@@ -27,7 +27,7 @@ export type {
   ToolbarItemOptions,
   StatusbarItemOptions,
 };
-export type { Observer, Disposable } from '@/utils';
+
 export * from '@/interfaces';
 
 class DiagramEditor extends Subject {
@@ -39,9 +39,9 @@ class DiagramEditor extends Subject {
   public readonly toolbar: Toolbar;
   public readonly statusbar: Statusbar;
 
-  private readonly _options: EditorOptions;
+  private _options: EditorOptions;
   private readonly _installedPlugins: Set<Plugin>;
-  private _rootContainer?: string | Element;
+  private _rootContainer?: string | HTMLElement;
 
   private _graph?: Graph;
   private _activeCell?: Cell;
@@ -61,11 +61,20 @@ class DiagramEditor extends Subject {
     this._options = merge(defaultOptions, options);
     this._installedPlugins = new Set();
 
-    this._app = createApp(App, { options: this._options, editor: this }).use(antd);
+    this._app = createApp(App, { editor: this }).use(antd);
   }
 
   get options() {
     return { ...this._options };
+  }
+
+  /**
+   * 更新配置
+   * @description options 属于 object, 为便于使用而合并选项，不合适定义为 setter.
+   */
+  update(options: Omit<EditorOptions, 'graph'>) {
+    this._options = merge(this._options, options);
+    this.emit(EventType.EDITOR_DID_CHANGE_OPTIONS, this.options);
   }
 
   get graph() {
@@ -80,7 +89,7 @@ class DiagramEditor extends Subject {
     return this._mouseCell;
   }
 
-  mount(rootContainer: string | Element) {
+  mount(rootContainer: string | HTMLElement) {
     this._rootContainer = rootContainer;
     const vm = this._app?.mount(rootContainer) as ComponentPublicInstance<{}, {}, { graph: Graph }>;
 
@@ -118,6 +127,12 @@ class DiagramEditor extends Subject {
     return this.once(EventType.EDITOR_DID_MOUNT, callback);
   }
 
+  onDidUpdate(callback: Observer<Omit<EditorOptions, 'graph'>>) {
+    return this.on<EditorOptions>(EventType.EDITOR_DID_CHANGE_OPTIONS, ({ graph, ...options }) => {
+      callback(options);
+    });
+  }
+
   onDidChangeActiveCell(callback: Observer<Cell | undefined>) {
     return this.on(EventType.EDITOR_DID_CHANGE_ACTIVE_CELL, callback);
   }
@@ -126,6 +141,7 @@ class DiagramEditor extends Subject {
     return this.on(EventType.EDITOR_DID_CHANGE_MOUSE_CELL, callback);
   }
 
+  // Plugin API
   use(plugin: Plugin) {
     const installed = this._installedPlugins;
     if (installed.has(plugin)) {

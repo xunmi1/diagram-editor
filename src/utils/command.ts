@@ -1,4 +1,4 @@
-import { DisposableDelegate, Disposable } from '@/utils';
+import { warn, DisposableDelegate, Disposable } from '@/utils';
 
 export interface Command<T = any> {
   (params: T): void | Promise<void>;
@@ -13,10 +13,12 @@ export class CommandsRegistry {
     this.commands = new Map();
   }
 
-  async execute(commandId: CommandId, params?: unknown): Promise<void> {
+  async execute<T = unknown>(commandId: CommandId, params?: T): Promise<void> {
     const list = this.commands.get(commandId);
     if (list) {
       await Promise.all(list.map(command => command(params)));
+    } else {
+      warn(`The command '${commandId.toString()}' does not exist.`);
     }
   }
 

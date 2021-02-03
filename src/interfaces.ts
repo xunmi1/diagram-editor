@@ -1,6 +1,7 @@
 import type { Graph } from '@antv/x6';
 import type DiagramEditor from '@/main';
 import { Disposable, Observer } from '@/utils';
+export type { Observer, Disposable, Command, CommandId, CommandsRegistry } from '@/utils';
 
 export type { DiagramEditor };
 
@@ -34,8 +35,8 @@ export interface Lifecycle {
   created?(editor: DiagramEditor): void;
   destroy?(editor: DiagramEditor): void;
 
-  mount(rootContainer: Element): void | Promise<void>;
-  unmount(rootContainer: Element): void | Promise<void>;
+  mount(rootContainer: HTMLElement, editor: DiagramEditor): void | Promise<void>;
+  unmount(rootContainer: HTMLElement, editor: DiagramEditor): void | Promise<void>;
 
   onWillMount(callback: LifecycleCallback): Disposable;
   onDidMount(callback: LifecycleCallback): Disposable;

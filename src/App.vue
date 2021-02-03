@@ -1,13 +1,13 @@
 <template>
   <ConfigProvider>
     <div class="editor editor-layout">
-      <div class="editor-layout-menubar">
+      <div v-show="editorOptions.menubar" class="editor-layout-menubar">
         <KeepAlive>
           <Menubar v-if="editorOptions.menubar" class="editor-menubar" />
         </KeepAlive>
       </div>
 
-      <div :style="toolbarStyle" class="editor-layout-toolbar">
+      <div v-show="editorOptions.toolbar" :style="toolbarStyle" class="editor-layout-toolbar">
         <KeepAlive>
           <Toolbar v-if="editorOptions.toolbar" class="editor-toolbar" />
         </KeepAlive>
@@ -35,7 +35,7 @@
         </KeepAlive>
       </Split>
 
-      <div class="editor-layout-statusbar">
+      <div v-show="editorOptions.statusbar" class="editor-layout-statusbar">
         <KeepAlive>
           <Statusbar v-if="editorOptions.statusbar" class="editor-statusbar" />
         </KeepAlive>
@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, computed, UnwrapRef } from 'vue';
+import { defineComponent, ref, computed, Ref } from 'vue';
 import { useGraph, useEditor, useGlobalGraph } from '@/use';
 import { ConfigProvider, Split, SplitPanel } from '@/shared';
 import Menubar from '@/components/menubar/Menubar.vue';
@@ -60,10 +60,10 @@ import Controller from '@/components/Controller.vue';
 import ContextMenu from '@/components/ContextMenu.vue';
 import { EditorOptions } from '@/interfaces';
 
-const useStyle = (editorOptions: UnwrapRef<EditorOptions>) => {
+const useStyle = (options: Ref<EditorOptions>) => {
   const contentStyle = computed(() => {
-    const style = { top: '0px', bottom: '0px' };
-    const { menubar, toolbar, statusbar } = editorOptions;
+    const style = { top: '0', bottom: '0' };
+    const { menubar, toolbar, statusbar } = options.value;
     if (menubar) style.top = `var(--menubar-height)`;
     if (toolbar) style.top = `var(--toolbar-height)`;
     if (menubar && toolbar) style.top = `calc(var(--menubar-height) + var(--toolbar-height))`;
@@ -72,7 +72,7 @@ const useStyle = (editorOptions: UnwrapRef<EditorOptions>) => {
   });
 
   const toolbarStyle = computed(() => {
-    return { top: editorOptions.menubar ? `var(--menubar-height)` : '0px' };
+    return { top: options.value.menubar ? `var(--menubar-height)` : '0' };
   });
 
   return { contentStyle, toolbarStyle };
@@ -96,23 +96,10 @@ export default defineComponent({
     useEditor(props.editor);
     const container = ref<HTMLElement>();
     const { graph: graphOptions, ...options } = props.options;
-    const editorOptions = reactive<Omit<EditorOptions, 'graph'>>(options);
+    const editorOptions = ref<Omit<EditorOptions, 'graph'>>(options);
     const graph = useGraph(container, graphOptions);
     const { contentStyle, toolbarStyle } = useStyle(editorOptions);
     useGlobalGraph(graph);
-
-    setTimeout(() => {
-      editorOptions.explorer = true;
-      editorOptions.controller = true;
-      setTimeout(() => {
-        editorOptions.explorer = false;
-        editorOptions.controller = false;
-        setTimeout(() => {
-          editorOptions.explorer = true;
-          editorOptions.controller = true;
-        }, 2000);
-      }, 2000);
-    }, 2000);
 
     return { container, graph, editorOptions, toolbarStyle, contentStyle };
   },

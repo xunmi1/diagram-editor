@@ -1,18 +1,19 @@
 import { onBeforeUnmount, shallowRef, triggerRef, toRaw, computed, Ref } from 'vue';
 import { MenuItem } from '@/menu';
+import { lazyTask } from '@/utils';
 import { GROUP_TAG } from '@/constants';
 import { Disposable } from '@/interfaces';
 
-export const useMenuItem = (menu: MenuItem) => {
-  const disposableList: Disposable[] = [];
+export const useMenuItem = (menu: MenuItem<any>) => {
+  const disposables: Disposable[] = [];
 
   /**
    * `visible` 属性涉及到分组的计算,
-   * 子菜单的 `visible` 变化无法触发父级组件的菜单列表的依赖变化, 需要手动监听，触发父级组件的依赖变化
+   * 子菜单的 `visible` 变化无法触发父级组件的菜单列表的依赖变化, 需要手动监听子级，触发父级组件的依赖变化
    */
-  const triggerChild = (child: MenuItem) => {
+  const trackChild = (child: MenuItem) => {
     const disposable = child.onDidChangeVisible(() => triggerRef(menuItem));
-    disposableList.push(disposable);
+    disposables.push(disposable);
   };
 
   /**
@@ -20,24 +21,22 @@ export const useMenuItem = (menu: MenuItem) => {
    * 通过绑定 onDidAppendChild，手动触发
    */
   const menuItem = shallowRef(toRaw(menu));
-  menuItem.value.children?.forEach(triggerChild);
+  menuItem.value.children?.forEach(trackChild);
 
-  const disposeAppend = menu.onDidAppendChild(({ child }) => {
-    triggerRef(menuItem);
-    triggerChild(child);
-  });
+  const disposeAppend = menu.onDidAppendChild(lazyTask(() => triggerRef(menuItem)));
+  const disposeTrack = menu.onDidAppendChild(({ child }) => trackChild(child));
   const disposeState = menu.onDidChangeState(() => triggerRef(menuItem));
 
-  disposableList.push(disposeAppend, disposeState);
+  disposables.push(disposeAppend, disposeState, disposeTrack);
 
   onBeforeUnmount(() => {
-    disposableList.forEach(disposable => disposable.dispose());
+    disposables.forEach(disposable => disposable.dispose());
   });
 
   return menuItem;
 };
 
-export const useDivider = (groups: Ref<string[]>, list: Ref<Map<string, MenuItem> | undefined>) => {
+export const useDivider = (groups: Ref<string[]>, list: Ref<Map<string, MenuItem<any>> | undefined>) => {
   const visibleList = computed(() => {
     const children = list.value;
     return groups.value.filter(key => key !== GROUP_TAG && children?.get(key)?.visible);

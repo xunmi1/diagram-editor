@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, toRefs, shallowRef, PropType } from 'vue';
+import { computed, defineComponent, toRefs, PropType } from 'vue';
 import type { MenuItem } from '@/menu';
 import SubMenu from './SubMenu.vue';
 import { useDivider } from './use';
@@ -31,8 +31,7 @@ export default defineComponent({
   },
   emits: ['click'],
   setup(props, { emit }) {
-    const { groups } = toRefs(props);
-    const children = shallowRef(props.list);
+    const { groups, list: children } = toRefs(props);
 
     const show = computed(() => {
       if (!children.value?.size) return false;
@@ -40,7 +39,6 @@ export default defineComponent({
     });
 
     const clickMenu = ({ key }: { key: string }) => {
-      console.log(key);
       emit('click', key);
     };
 

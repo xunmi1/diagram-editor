@@ -9,7 +9,7 @@ export class Menu<T extends MenuItem<T>> extends Subject {
   protected readonly list: Map<string, T>;
   private _groups: string[];
 
-  constructor() {
+  protected constructor() {
     super();
     this.list = new Map();
     this._groups = [];
@@ -37,7 +37,7 @@ export class Menu<T extends MenuItem<T>> extends Subject {
 
     const menu = this.get(parentKey);
     if (!menu) {
-      warn('The parent menu does not exist and failed to load submenu.');
+      warn(`The parent menu '${parentKey}' does not exist and failed to load submenu '${key}'.`);
       return;
     }
     // 如果当前菜单列表中已存在 key, 同时目标父级菜单下没有该 key,

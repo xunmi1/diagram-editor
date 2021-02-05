@@ -17,9 +17,8 @@ export const registerCommands = (editor: DiagramEditor, state: State) => {
     const graph = editor.graph;
     if (!graph) return;
     const { size, visible } = options;
-    if (size != null) {
-      graph.setGridSize(Math.max(0, size));
-      if (graph.isSnaplineEnabled()) graph.setSnaplineTolerance(size);
+    if (size != null && size >= 0) {
+      graph.setGridSize(size);
       state.gridSize = size;
     }
     if (visible != null) {

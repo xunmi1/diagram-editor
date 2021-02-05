@@ -1,4 +1,8 @@
 import { Menu } from '@/menu';
-import { ContextMenuItem } from './ContextMenuItem';
+import type { ContextMenuItem } from './ContextMenuItem';
 
-export class ContextMenu extends Menu<ContextMenuItem> {}
+export class ContextMenu extends Menu<ContextMenuItem> {
+  constructor() {
+    super();
+  }
+}

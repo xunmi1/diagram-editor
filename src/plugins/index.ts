@@ -1,9 +1,9 @@
 import { Plugin } from '@/interfaces';
 import { graphConfigPlugin } from './graphConfig';
-import { TopMenuPlugin } from './topMenu';
+import { topMenuPlugin } from './topMenu';
 import { nodeCountPlugin, edgeCountPlugin } from './statusbar';
 import { historyPlugin } from './history';
-import { ActionsPlugin } from './actions';
+import { actionsPlugin } from './actions';
 import { contextMenuPlugin } from '@/plugins/contextMenu';
 
 export * from './statusbar';
@@ -13,9 +13,9 @@ export * from './history';
 export const builtInPlugin: Plugin = editor => {
   graphConfigPlugin(editor);
 
-  TopMenuPlugin(editor);
+  topMenuPlugin(editor);
   historyPlugin(editor);
-  ActionsPlugin(editor);
+  actionsPlugin(editor);
 
   contextMenuPlugin(editor);
 

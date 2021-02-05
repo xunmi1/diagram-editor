@@ -1,4 +1,8 @@
 import { Menu } from '@/menu';
-import { MenubarItem } from './MenubarItem';
+import type { MenubarItem } from './MenubarItem';
 
-export class Menubar extends Menu<MenubarItem> {}
+export class Menubar extends Menu<MenubarItem> {
+  constructor() {
+    super();
+  }
+}

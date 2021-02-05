@@ -2,23 +2,23 @@
   <ADropdown v-model:visible="visible" :trigger="['contextmenu']" :align="{ offset: [6, 6] }">
     <span tabindex="-1" :style="position" class="editor-context-menu-trigger"></span>
     <template #overlay>
-      <Menu :list="menuList" @click="executeCommand" @contextmenu.prevent />
+      <Menu :list="menuList" :groups="groups" @click="executeCommand" @contextmenu.prevent />
     </template>
   </ADropdown>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, reactive, computed, onBeforeUnmount } from 'vue';
+import { defineComponent, ref, watch, reactive, computed, onBeforeUnmount, shallowRef } from 'vue';
 import { useEditor, useGlobalGraph } from '@/use';
 import { Menu } from '@/shared';
 import { lazyTask } from '@/utils';
-import { ContextMenuItem } from '@/contextMenu';
+import type { ContextMenu, ContextMenuItem } from '@/contextMenu';
 
 type MenuList = Map<string, ContextMenuItem>;
 
 const useMenuList = () => {
   const { contextMenu } = useEditor();
-  // 使用 shallowRef 会导致 key 不变、value 变化时，无法触发更新
+  // 使用 shallowRef 会无法触发顶级菜单 `visible` 变化
   const menuList = ref<MenuList>(new Map([...contextMenu]));
   const disposable = contextMenu.onDidLoad(
     lazyTask(() => {
@@ -31,14 +31,36 @@ const useMenuList = () => {
   return menuList;
 };
 
+const useGroups = (contextMenu: ContextMenu) => {
+  const groups = shallowRef(contextMenu.groups);
+  const disposable = contextMenu.onDidChangeGroups(() => {
+    groups.value = contextMenu.groups;
+  });
+  onBeforeUnmount(() => disposable.dispose());
+
+  return groups;
+};
+
+const findActive = () => {
+  const editor = useEditor();
+
+  const filter = (list: MenuList) => {
+    list.forEach(item => {
+      const active = item.activate?.(editor) ?? true;
+      if (item.visible !== active) item.visible = active;
+      if (active && item.children?.size) filter(item.children);
+    });
+  };
+
+  return filter;
+};
+
 export default defineComponent({
   name: 'ContextMenu',
   components: {
     Menu,
   },
   setup() {
-    const menuList = useMenuList();
-
     const visible = ref(false);
     const pos = reactive({ x: 0, y: 0 });
     const position = computed(() => ({ top: `${pos.y}px`, left: `${pos.x}px` }));
@@ -57,8 +79,9 @@ export default defineComponent({
       graph.on('blank:contextmenu', open);
     });
 
-    const editor = useEditor();
-    const { contextMenu, commands } = editor;
+    const { contextMenu, commands } = useEditor();
+
+    const groups = useGroups(contextMenu);
 
     const executeCommand = async (key: string) => {
       const item = contextMenu.get(key);
@@ -67,20 +90,18 @@ export default defineComponent({
     };
 
     // 过滤未激活的菜单
-    const filter = (list: MenuList) => {
-      list.forEach(item => {
-        const active = item.activate?.(editor) ?? true;
-        if (item.visible !== active) item.visible = active;
-        if (active && item.children?.size) filter(item.children);
-      });
-    };
+    const filter = findActive();
+    const menuList = useMenuList();
+    watch(menuList, () => {
+      console.log(menuList);
+    });
 
-    watch([visible, menuList], bool => {
+    watch([visible, menuList], ([bool]) => {
       if (!bool) return;
       filter(menuList.value);
     });
 
-    return { menuList, executeCommand, visible, position };
+    return { menuList, groups, executeCommand, visible, position };
   },
 });
 </script>

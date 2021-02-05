@@ -122,6 +122,7 @@ class DiagramEditor extends Subject {
     this._graph?.dispose();
     this._app?.unmount(rootContainer);
     this._app = undefined;
+    this._rootContainer = undefined;
   }
 
   onDidMount(callback: Observer<Graph>) {

@@ -12,24 +12,34 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeUnmount, shallowRef } from 'vue';
+import { defineComponent, onBeforeUnmount, shallowRef, triggerRef } from 'vue';
 import { useEditor } from '@/use';
 import { lazyTask } from '@/utils';
+import { Disposable } from '@/interfaces';
 import type { Menubar, MenubarItem } from '@/menubar';
 import MenuItem from './MenuItem.vue';
 import { useDivider } from '@/shared';
 
-type MenubarList = Map<string, MenubarItem>;
-
 const useMenubarList = () => {
+  const disposables: Disposable[] = [];
+
   const { menubar } = useEditor();
-  const menubarList = shallowRef<MenubarList>(new Map([...menubar]));
-  const disposable = menubar.onDidLoad(
+  const menubarList = shallowRef(new Map([...menubar]));
+  const trackChild = (child: MenubarItem) => {
+    const disposable = child.onDidChangeVisible(() => triggerRef(menubarList));
+    disposables.push(disposable);
+  };
+  menubarList.value.forEach(trackChild);
+
+  const disposeLoad = menubar.onDidLoad(
     lazyTask(() => {
       menubarList.value = new Map([...menubar]);
     })
   );
-  onBeforeUnmount(() => disposable.dispose());
+  const disposeTrack = menubar.onDidLoad(({ item }) => trackChild(item));
+
+  disposables.push(disposeLoad, disposeTrack);
+  onBeforeUnmount(() => disposables.forEach(disposable => disposable.dispose()));
 
   return menubarList;
 };

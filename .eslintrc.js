@@ -31,6 +31,7 @@ module.exports = {
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/member-ordering': 'warn',
 
     'vue/no-mutating-props': 'off',

@@ -15,7 +15,7 @@ export const ActionCommandId = {
   PASTE: Symbol('paste'),
 };
 
-export const ActionsPlugin: Plugin = editor => {
+export const actionsPlugin: Plugin = editor => {
   const cutAction = () => {
     const graph = editor.graph;
     if (!graph) return;
@@ -87,6 +87,9 @@ export const ActionsPlugin: Plugin = editor => {
     setTimeout(() => {
       menubar.groups = ['meta', '|', 'file', 'edit', '|', '|'];
       menubar.get('meta')!.text = 'xxxx';
+      setTimeout(() => {
+        menubar.get('meta')!.visible = false;
+      }, 1000);
     }, 2000);
   }, 2000);
 

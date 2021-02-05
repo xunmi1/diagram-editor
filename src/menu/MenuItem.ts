@@ -26,7 +26,7 @@ export class MenuItem<T extends MenuItem<T> = MenuItem<never>> extends Subject {
   private _visible: boolean;
   private _groups: string[];
 
-  constructor(options: MenuItemOptions) {
+  protected constructor(options: MenuItemOptions) {
     super();
     this._text = options.text;
     this.command = options.command;

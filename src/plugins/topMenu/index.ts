@@ -17,7 +17,7 @@ const topMenuActions = [
   { key: TopMenuKey.HELP, text: '帮助' },
 ];
 
-export const TopMenuPlugin: Plugin = editor => {
+export const topMenuPlugin: Plugin = editor => {
   const menubar = editor.menubar;
   topMenuActions.forEach(action => {
     menubar.load(action.key, new MenubarItem({ text: action.text }));

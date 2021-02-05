@@ -1,7 +1,7 @@
 import { DiagramEditor } from '@/interfaces';
 import { MenuItem, MenuItemOptions } from '@/menu';
 
-export type ContextMenuItemOptions = MenuItemOptions;
+export interface ContextMenuItemOptions extends MenuItemOptions {}
 
 export class ContextMenuItem extends MenuItem<ContextMenuItem> {
   constructor(options: ContextMenuItemOptions) {

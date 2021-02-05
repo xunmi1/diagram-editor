@@ -1,6 +1,8 @@
 {
   "name": "diagram-editor",
   "version": "0.1.0",
+  "description": "Diagram editor",
+  "private": true,
   "files": [
     "dist"
   ],
@@ -14,8 +16,12 @@
     "format": "prettier \"**/*\" --ignore-unknown --write --ignore-path \"./.gitignore\"",
     "lint": "eslint \"{src,test}/**/*.{ts,tsx,vue}\" --fix"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xunmi1/diagram-editor.git"
+  },
   "author": "xunmi <xunmi1@outlook.com>",
-  "license": "MIT",
+  "license": "AGPL-3.0 License",
   "dependencies": {
     "@antv/x6": "^1.12.28",
     "@icon-park/svg": "^1.2.4",

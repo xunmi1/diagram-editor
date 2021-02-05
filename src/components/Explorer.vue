@@ -115,13 +115,19 @@ export default defineComponent({
     background: var(--widget-color);
     overflow: auto;
   }
-  &-header {
-    border-bottom: 1px solid var(--border-color);
-  }
+
   &-collapse {
     flex: auto;
     border-right: none !important;
     border-top: none !important;
+
+    .editor-collapse-header {
+      position: sticky !important;
+      z-index: 1000;
+      top: 0;
+      background-color: var(--widget-color);
+      box-shadow: 0 1px 4px var(--border-color);
+    }
   }
 }
 </style>

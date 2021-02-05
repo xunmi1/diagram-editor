@@ -68,6 +68,8 @@ export default class GraphConfig extends ControllerItem {
 
 export const graphConfigPlugin: Plugin = editor => {
   const graphConfig = new GraphConfig();
+
   registerCommands(editor, graphConfig.state);
   editor.controller.load('graph-config', graphConfig);
+  editor.controller.load('graph-config1', graphConfig);
 };

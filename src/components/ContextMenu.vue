@@ -92,9 +92,6 @@ export default defineComponent({
     // 过滤未激活的菜单
     const filter = findActive();
     const menuList = useMenuList();
-    watch(menuList, () => {
-      console.log(menuList);
-    });
 
     watch([visible, menuList], ([bool]) => {
       if (!bool) return;

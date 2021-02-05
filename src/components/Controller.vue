@@ -103,12 +103,18 @@ export default defineComponent({
     height: 100%;
     overflow: auto;
   }
-  &-header {
-    border-bottom: 1px solid var(--border-color);
-  }
 
-  &-tabs {
+  & > &-tabs {
     flex: auto;
+    overflow-y: auto;
+
+    .editor-tabs-top-bar {
+      position: sticky;
+      z-index: 1000;
+      top: 0;
+      background-color: var(--widget-color);
+      box-shadow: 0 1px 4px var(--border-color);
+    }
   }
 }
 </style>

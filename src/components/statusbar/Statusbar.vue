@@ -67,7 +67,7 @@ export default defineComponent({
 
   &-inner {
     display: flex;
-    align-items: stretch;
+    align-items: center;
     // 向左优先级更高
     flex-direction: row-reverse;
     margin-left: auto;

@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, shallowRef, onBeforeUnmount, Ref } from 'vue';
+import { defineComponent, ref, computed, shallowRef, onBeforeUnmount, Ref, PropType } from 'vue';
 import { useGraph, useEditor, useGlobalGraph } from '@/use';
 import { ConfigProvider, Split, SplitPanel } from '@/shared';
 import { lazyTask } from '@/utils';
@@ -80,6 +80,7 @@ const useStyle = (options: Ref<EditorOptions>) => {
 };
 
 const useLayout = (editor: DiagramEditor) => {
+  // eslint-disable-next-line
   const { graph, ...options }: EditorOptions = editor.options;
   const layout = shallowRef(options);
   const disposable = editor.onDidUpdate(lazyTask((options: Omit<EditorOptions, 'graph'>) => (layout.value = options)));
@@ -100,9 +101,14 @@ export default defineComponent({
     Statusbar,
     ContextMenu,
   },
-  props: ['editor'],
+  props: {
+    editor: {
+      type: Object as PropType<DiagramEditor>,
+      required: true,
+    },
+  },
   setup(props) {
-    const editor: DiagramEditor = props.editor;
+    const editor = props.editor;
     useEditor(editor);
 
     const container = ref<HTMLElement>();

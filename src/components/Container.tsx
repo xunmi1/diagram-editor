@@ -1,4 +1,13 @@
-import { defineComponent, shallowRef, unref, onBeforeMount, onMounted, onBeforeUnmount, onUnmounted } from 'vue';
+import {
+  defineComponent,
+  shallowRef,
+  unref,
+  onBeforeMount,
+  onMounted,
+  onBeforeUnmount,
+  onUnmounted,
+  PropType,
+} from 'vue';
 import { useGlobalGraph, useEditor } from '@/use';
 import { Lifecycle } from '@/interfaces';
 
@@ -10,7 +19,12 @@ const asyncGlobalGraph = () => {
 
 export default defineComponent({
   name: 'Container',
-  props: ['view'],
+  props: {
+    view: {
+      type: Object as PropType<Lifecycle>,
+      required: true,
+    },
+  },
   emits: ['will-mount', 'did-mount', 'will-unmount', 'did-unmount'],
   async setup(props, { emit }) {
     const editor = useEditor();

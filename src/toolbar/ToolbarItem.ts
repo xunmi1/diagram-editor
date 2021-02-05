@@ -64,7 +64,7 @@ export class ToolbarItem extends Subject {
     this._emitUpdate();
   }
 
-  onDidChangeState(callback: Observer<ToolbarItem>) {
+  onDidChangeState(callback: Observer<void>) {
     return this.on(EVENT_TYPE_UPDATE, callback);
   }
 
@@ -73,6 +73,6 @@ export class ToolbarItem extends Subject {
   }
 
   private _emitUpdate() {
-    this.emit(EVENT_TYPE_UPDATE, this);
+    this.emit(EVENT_TYPE_UPDATE);
   }
 }

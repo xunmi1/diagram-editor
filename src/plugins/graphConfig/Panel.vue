@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watchEffect, getCurrentInstance } from 'vue';
+import { defineComponent, watchEffect, getCurrentInstance, PropType } from 'vue';
 import { ConfigProvider, ColorPicker, createPopupContainer } from '@/shared';
 import type { RootProps } from './index';
 import type { CommandsRegistry } from '@/utils';
@@ -40,10 +40,18 @@ export default defineComponent({
     ConfigProvider,
     ColorPicker,
   },
-  props: ['editor', 'state'],
+  props: {
+    editor: {
+      type: Object as PropType<RootProps['editor']>,
+      required: true,
+    },
+    state: {
+      type: Object as PropType<RootProps['state']>,
+      required: true,
+    },
+  },
   setup(props) {
-    const state = props.state as RootProps['state'];
-    const editor = props.editor as RootProps['editor'];
+    const { state, editor } = props;
     const execute: CommandsRegistry['execute'] = (...args) => editor.commands.execute(...args);
 
     watchEffect(() => execute('editor.setGrid', { visible: state.gridVisible }));
@@ -54,7 +62,7 @@ export default defineComponent({
 
     const instance = getCurrentInstance();
     const getPopupContainer = createPopupContainer(instance);
-    return { state, getPopupContainer };
+    return { getPopupContainer };
   },
 });
 </script>

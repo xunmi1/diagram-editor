@@ -74,7 +74,9 @@ class DiagramEditor extends Subject {
    */
   update(options: Omit<EditorOptions, 'graph'>) {
     this._options = merge(this._options, options);
-    this.emit(EventType.EDITOR_DID_CHANGE_OPTIONS, this.options);
+    // eslint-disable-next-line
+    const { graph, ...rest } = this._options;
+    this.emit(EventType.EDITOR_DID_CHANGE_OPTIONS, rest);
   }
 
   get graph() {
@@ -128,9 +130,7 @@ class DiagramEditor extends Subject {
   }
 
   onDidUpdate(callback: Observer<Omit<EditorOptions, 'graph'>>) {
-    return this.on<EditorOptions>(EventType.EDITOR_DID_CHANGE_OPTIONS, ({ graph, ...options }) => {
-      callback(options);
-    });
+    return this.on<EditorOptions>(EventType.EDITOR_DID_CHANGE_OPTIONS, callback);
   }
 
   onDidChangeActiveCell(callback: Observer<Cell | undefined>) {

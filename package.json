@@ -12,7 +12,7 @@
     "dev:force": "vite --force",
     "build": "rimraf dist && vite build",
     "format": "prettier \"**/*\" --ignore-unknown --write --ignore-path \"./.gitignore\"",
-    "lint": "eslint \"{src,test}/**/*.ts\" --fix"
+    "lint": "eslint \"{src,test}/**/*.{ts,tsx,vue}\" --fix"
   },
   "author": "xunmi <xunmi1@outlook.com>",
   "license": "MIT",

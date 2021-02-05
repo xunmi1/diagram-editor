@@ -35,8 +35,8 @@ const initState = (editor: DiagramEditor, state: State) => {
 export default class GraphConfig extends ControllerItem {
   title = '画布属性';
 
-  private app?: App;
   public readonly state: State;
+  private app?: App;
 
   constructor() {
     super();

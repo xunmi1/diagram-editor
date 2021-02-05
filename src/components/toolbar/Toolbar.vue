@@ -66,8 +66,9 @@ export default defineComponent({
   }
 
   &-inner {
+    font-size: 16px;
     display: flex;
-    align-items: stretch;
+    align-items: center;
     margin-right: auto;
     height: 100%;
     padding: 0 var(--padding-sm);

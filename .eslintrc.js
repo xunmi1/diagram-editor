@@ -1,7 +1,8 @@
 module.exports = {
   root: true,
-  parser: '@typescript-eslint/parser',
+  parser: 'vue-eslint-parser',
   parserOptions: {
+    parser: '@typescript-eslint/parser',
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint'],
@@ -31,5 +32,8 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/member-ordering': 'warn',
+
+    'vue/no-mutating-props': 'off',
+    'vue/no-setup-props-destructure': 'off',
   },
 };

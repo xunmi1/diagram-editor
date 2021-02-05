@@ -7,6 +7,7 @@ import {
   Dropdown,
   Menu,
   Skeleton,
+  Divider,
   Form,
   Input,
   Select,
@@ -21,7 +22,7 @@ import './scrollbar.less';
 const antd: Plugin = app => {
   app.use(ConfigProvider);
   // data display
-  app.use(Collapse).use(Tabs).use(Tooltip).use(Skeleton).use(Dropdown).use(Menu);
+  app.use(Collapse).use(Tabs).use(Tooltip).use(Skeleton).use(Dropdown).use(Menu).use(Divider);
   // form
   app.use(Form).use(Input).use(InputNumber).use(Slider).use(Switch).use(Select);
 };

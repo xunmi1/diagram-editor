@@ -2,8 +2,9 @@
   <section class="editor-menubar-wrapper">
     <div class="editor-menubar-content">
       <div class="editor-menubar-inner">
-        <template v-for="[key, menu] in menubarList" :key="key">
-          <MenuItem v-if="menu.visible" :menu="menu" :menu-key="key" @click="executeCommand" />
+        <template v-for="key in visibleList" :key="key">
+          <MenuItem :item="menubarList.get(key)" :item-key="key" @click="executeCommand" />
+          <ADivider v-if="has(key)" type="vertical" />
         </template>
       </div>
     </div>
@@ -11,27 +12,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeUnmount, ref } from 'vue';
+import { defineComponent, onBeforeUnmount, shallowRef } from 'vue';
 import { useEditor } from '@/use';
 import { lazyTask } from '@/utils';
-import type { MenubarItem } from '@/menubar';
+import type { Menubar, MenubarItem } from '@/menubar';
 import MenuItem from './MenuItem.vue';
+import { useDivider } from '@/shared';
 
 type MenubarList = Map<string, MenubarItem>;
 
 const useMenubarList = () => {
   const { menubar } = useEditor();
-  // 使用 shallowRef 会导致 key 不变、value 变化时，无法触发更新
-  const menubarList = ref<MenubarList>(new Map([...menubar]));
+  const menubarList = shallowRef<MenubarList>(new Map([...menubar]));
   const disposable = menubar.onDidLoad(
     lazyTask(() => {
       menubarList.value = new Map([...menubar]);
     })
   );
-
   onBeforeUnmount(() => disposable.dispose());
 
   return menubarList;
+};
+
+const useGroups = (menubar: Menubar) => {
+  const groups = shallowRef(menubar.groups);
+  const disposable = menubar.onDidChangeGroups(() => {
+    groups.value = menubar.groups;
+  });
+  onBeforeUnmount(() => disposable.dispose());
+
+  return groups;
 };
 
 export default defineComponent({
@@ -42,13 +52,15 @@ export default defineComponent({
   setup() {
     const menubarList = useMenubarList();
     const { menubar, commands } = useEditor();
+    const groups = useGroups(menubar);
+    const { has, visibleList } = useDivider(groups, menubarList);
 
     const executeCommand = async (key: string) => {
       const item = menubar.get(key);
       if (item?.command) await commands.execute(item.command, item);
     };
 
-    return { menubarList, executeCommand };
+    return { menubarList, has, visibleList, executeCommand };
   },
 });
 </script>
@@ -70,7 +82,7 @@ export default defineComponent({
 
   &-inner {
     display: flex;
-    align-items: stretch;
+    align-items: center;
     margin-right: auto;
     height: 100%;
     padding: 0 var(--padding-sm);

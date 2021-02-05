@@ -84,8 +84,8 @@ export default defineComponent({
     });
     const activeCell = useActiveCell();
     const lifecycle = useLifecycle();
-
     const getActiveList = (): [string, ControllerItem][] =>
+      // eslint-disable-next-line
       [...panelList].filter(([_, v]) => v.activate?.(editor) ?? true);
     const tabList = shallowRef<[string, ControllerItem][]>([]);
     watch(activeCell, () => (tabList.value = getActiveList()), { immediate: true });

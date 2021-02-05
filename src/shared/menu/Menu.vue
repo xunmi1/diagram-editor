@@ -1,15 +1,18 @@
 <template>
-  <AMenu v-show="has" @click="clickMenu" class="editor-widget-menu">
-    <template v-for="[key, child] in list" :key="key">
-      <SubMenu v-if="child.visible" :item="child" :key="key" />
+  <AMenu v-show="show" @click="clickMenu" class="editor-widget-menu">
+    <template v-for="key in visibleList" :key="key">
+      <!-- use `v-if` to avoid vue compiler error about `key` -->
+      <SubMenu v-if="true" :key="key" :item="getChild(key)" />
+      <AMenuDivider v-if="has(key)" :key="key" />
     </template>
   </AMenu>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, unref } from 'vue';
-import { Menu } from '@/interfaces';
+import { computed, defineComponent, toRefs, shallowRef, PropType } from 'vue';
+import type { MenuItem } from '@/menu';
 import SubMenu from './SubMenu.vue';
+import { useDivider } from './use';
 
 export default defineComponent({
   name: 'Menu',
@@ -18,21 +21,32 @@ export default defineComponent({
   },
   props: {
     list: {
-      type: Map,
+      type: Map as PropType<Map<string, MenuItem>>,
+      required: true,
+    },
+    groups: {
+      type: Array as PropType<string[]>,
       required: true,
     },
   },
   emits: ['click'],
   setup(props, { emit }) {
-    const has = computed(() => {
-      const target = unref(props.list as Map<string, Menu>);
-      if (!target?.size) return false;
-      return [...target.values()].some(v => v.visible);
+    const { groups } = toRefs(props);
+    const children = shallowRef(props.list);
+
+    const show = computed(() => {
+      if (!children.value?.size) return false;
+      return [...children.value.values()].some(v => v.visible);
     });
-    const clickMenu = ({ key }: { key: string | symbol }) => {
+
+    const clickMenu = ({ key }: { key: string }) => {
+      console.log(key);
       emit('click', key);
     };
-    return { clickMenu, has };
+
+    const getChild = (key: string): MenuItem | undefined => children.value.get(key);
+    const { has, visibleList } = useDivider(groups, children);
+    return { clickMenu, show, getChild, has, visibleList };
   },
 });
 </script>
@@ -60,6 +74,11 @@ export default defineComponent({
       position: absolute;
       left: 10px;
       display: flex;
+    }
+
+    &-extra {
+      margin-left: auto;
+      filter: opacity(0.75);
     }
   }
 }

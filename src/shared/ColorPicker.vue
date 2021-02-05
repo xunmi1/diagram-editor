@@ -35,7 +35,12 @@ export default defineComponent({
   components: {
     VColorPicker,
   },
-  props: ['value'],
+  props: {
+    value: {
+      type: String,
+      required: true,
+    },
+  },
   emits: ['update:value'],
   setup(props, { emit }) {
     const { value: color } = toRefs(props);

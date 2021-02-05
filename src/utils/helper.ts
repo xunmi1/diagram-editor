@@ -26,5 +26,5 @@ export const lazyTask = <T extends (...args: any[]) => any>(func: T) => {
   };
 };
 
-const extraSVGAttrs: IIconProps = { size: '1.14em', fill: 'currentColor', strokeWidth: 4 };
+const extraSVGAttrs: IIconProps = { size: '1em', fill: 'currentColor', strokeWidth: 4 };
 export const stringifySVG = (icon: Icon) => icon(extraSVGAttrs);

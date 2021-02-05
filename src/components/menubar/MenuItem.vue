@@ -4,19 +4,19 @@
       tabindex="-1"
       class="editor-menubar-item"
       :class="{ 'editor-menubar-item-hover': visible }"
-      @click="!hasChild && clickMenu(menuKey)"
+      @click="!hasChild && clickMenu(itemKey)"
     >
       <span>{{ menu.text }}</span>
     </div>
     <template v-if="hasChild" #overlay>
-      <Menu :list="menu.children" @click="clickMenu" />
+      <Menu :list="menu.children" :groups="groups" @click="clickMenu" />
     </template>
   </ADropdown>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, toRefs, unref } from 'vue';
-import { MenubarItem } from '@/menubar';
+import { computed, defineComponent, PropType, ref, shallowRef, unref } from 'vue';
+import type { MenubarItem } from '@/menubar';
 import { Menu, useMenuItem } from '@/shared';
 
 export default defineComponent({
@@ -25,16 +25,23 @@ export default defineComponent({
     Menu,
   },
   props: {
-    menu: {
-      type: MenubarItem,
+    item: {
+      type: Object as PropType<MenubarItem>,
       required: true,
     },
-    menuKey: String,
+    itemKey: {
+      type: String,
+      required: true,
+    },
   },
   emits: ['click'],
   setup(props, { emit }) {
-    const { menuKey } = toRefs(props);
-    const menu = useMenuItem(props.menu);
+    const menu = useMenuItem(props.item);
+    const groups = shallowRef(menu.value.groups);
+
+    unref(menu).onDidChangeGroups(() => {
+      groups.value = menu.value.groups;
+    });
 
     const visible = ref(false);
     const hasChild = computed(() => !!unref(menu).children?.size);
@@ -46,7 +53,7 @@ export default defineComponent({
     const changeVisible = (bool: boolean) => {
       visible.value = bool;
     };
-    return { menu, menuKey, clickMenu, changeVisible, hasChild, visible };
+    return { menu, clickMenu, changeVisible, hasChild, visible, groups };
   },
 });
 </script>
@@ -58,6 +65,7 @@ export default defineComponent({
   display: flex;
   padding: 0 var(--padding-sm);
   line-height: 1;
+  height: 100%;
   align-items: center;
   cursor: pointer;
 

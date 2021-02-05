@@ -1,3 +1,4 @@
+// 内部事件，不向外提供
 export const EventType = {
   EDITOR_DID_MOUNT: Symbol('DID_MOUNT'),
   EDITOR_DID_CHANGE_ACTIVE_CELL: Symbol('DID_CHANGE_ACTIVE_CELL'),
@@ -14,3 +15,6 @@ export const EventType = {
   EXPLORER_WILL_UNMOUNT: Symbol('WILL_UNMOUNT'),
   EXPLORER_DID_UNMOUNT: Symbol('DID_UNMOUNT'),
 };
+
+// 分组标识
+export const GROUP_TAG = '|';

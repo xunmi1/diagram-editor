@@ -1,15 +1,15 @@
 <template>
-  <ATooltip :title="item.tooltip" :align="{ offset: [0, 2] }" :mouse-enter-delay="0.6">
+  <ATooltip :title="toolItem.tooltip" :align="{ offset: [0, 2] }" :mouse-enter-delay="0.6">
     <div
       tabindex="-1"
       class="editor-toolbar-item editor-pointer"
       :class="{
-        'editor-toolbar-item-checked': item.checked,
-        'editor-toolbar-item-disabled': item.disabled,
+        'editor-toolbar-item-checked': toolItem.checked,
+        'editor-toolbar-item-disabled': toolItem.disabled,
       }"
       @click="trigger"
     >
-      <span v-html="item.icon" class="editor-toolbar-item-icon"></span>
+      <span v-html="toolItem.icon" class="editor-toolbar-item-icon"></span>
     </div>
   </ATooltip>
 </template>
@@ -29,13 +29,13 @@ export default defineComponent({
   },
   emits: ['click'],
   setup(props, { emit }) {
-    const item = useToolItem(props.item);
+    const toolItem = useToolItem(props.item);
     const trigger = () => {
-      if (item.value.disabled) return;
+      if (toolItem.value.disabled) return;
       emit('click', props.item);
     };
 
-    return { item, trigger };
+    return { toolItem, trigger };
   },
 });
 </script>
@@ -45,6 +45,7 @@ export default defineComponent({
   display: flex;
   padding: 0 var(--padding-sm);
   align-items: center;
+  height: 100%;
   line-height: 1;
 
   &-checked:not(&-disabled),

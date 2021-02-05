@@ -1,14 +1,14 @@
 <template>
-  <ATooltip :title="item.tooltip" :align="{ offset: [0, 2] }" :mouse-enter-delay="0.6">
+  <ATooltip :title="statusItem.tooltip" :align="{ offset: [0, 2] }" :mouse-enter-delay="0.6">
     <div
-      v-show="item.visible"
+      v-show="statusItem.visible"
       tabindex="-1"
       class="editor-statusbar-item"
-      :class="{ 'editor-pointer': !!item.command }"
+      :class="{ 'editor-pointer': !!statusItem.command }"
       @click="trigger"
     >
-      <span v-show="item.icon" v-html="item.icon" class="editor-statusbar-item-icon"></span>
-      <span>{{ item.text }}</span>
+      <span v-show="statusItem.icon" v-html="statusItem.icon" class="editor-statusbar-item-icon"></span>
+      <span>{{ statusItem.text }}</span>
     </div>
   </ATooltip>
 </template>
@@ -28,10 +28,10 @@ export default defineComponent({
   },
   emits: ['click'],
   setup(props, { emit }) {
-    const item = useStatusItem(props.item);
+    const statusItem = useStatusItem(props.item);
     const trigger = () => emit('click', props.item);
 
-    return { item, trigger };
+    return { statusItem, trigger };
   },
 });
 </script>
@@ -42,6 +42,7 @@ export default defineComponent({
   padding: 0 var(--padding-xs);
   align-items: center;
   line-height: 1;
+  height: 100%;
 
   &:hover {
     background: var(--hover-bg);

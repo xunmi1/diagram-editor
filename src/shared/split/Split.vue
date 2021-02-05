@@ -24,6 +24,7 @@ import { throttle, lazyTask, addEvent, removeEvent, setProperty } from '@/utils'
 import { useInject } from '@/use';
 import { INJECT_KEY } from './contants';
 
+type ResizeObserverCallback = ConstructorParameters<typeof ResizeObserver>[0];
 const useResizeObserver = (handler: ResizeObserverCallback, container: Ref<HTMLElement | undefined>) => {
   const observer = shallowRef(new ResizeObserver(handler));
   onMounted(() => {
@@ -105,7 +106,7 @@ export default defineComponent({
       return Math.floor((rect.width - childWidth) / weights);
     };
     // 计算出新的布局样式
-    const getResizeRect = (rectList: DOMRect[], makeup: number = 0) => {
+    const getResizeRect = (rectList: DOMRect[], makeup = 0) => {
       const children = getChildren();
       return rectList.reduce<{ left: number; width: number }[]>((total, rect, index) => {
         const flexible = childrenMeta.get(children[index])?.flexible;

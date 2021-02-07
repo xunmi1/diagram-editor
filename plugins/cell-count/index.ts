@@ -1,14 +1,12 @@
-import { Plugin } from '@/interfaces';
-import { StatusbarItem } from '@/statusbar';
+import { Plugin, StatusbarItem } from '@diagram-editor/diagram-editor';
 
-export const StatusbarKey = {
-  NODE_COUNT: 'statusbar-cell-count',
-  EDGE_COUNT: 'statusbar-edge-count',
-};
+export interface PluginOptions {
+  key: string;
+}
 
-export const nodeCountPlugin: Plugin = editor => {
+export const nodeCountPlugin = (options: PluginOptions): Plugin => editor => {
   const item = new StatusbarItem();
-  editor.statusbar.load(StatusbarKey.NODE_COUNT, item);
+  editor.statusbar.load(options.key, item);
   const change = () => {
     const count = editor.graph?.getNodes().length;
     item.text = `节点: ${count}`;
@@ -21,9 +19,9 @@ export const nodeCountPlugin: Plugin = editor => {
   });
 };
 
-export const edgeCountPlugin: Plugin = editor => {
+export const edgeCountPlugin = (options: PluginOptions): Plugin => editor => {
   const item = new StatusbarItem();
-  editor.statusbar.load(StatusbarKey.EDGE_COUNT, item);
+  editor.statusbar.load(options.key, item);
   const change = () => {
     const count = editor.graph?.getEdges().length;
     item.text = `边: ${count}`;

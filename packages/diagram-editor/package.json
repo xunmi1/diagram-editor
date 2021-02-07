@@ -1,21 +1,18 @@
 {
-  "name": "diagram-editor",
+  "name": "@diagram-editor/diagram-editor",
   "version": "0.1.0",
   "description": "Diagram editor",
-  "private": true,
   "files": [
     "dist",
     "types"
   ],
   "main": "./dist/diagram-editor.umd.js",
-  "module": "./dist/mdiagram-editor.es.js",
-  "exports": "./dist/diagram-editor.es.js",
+  "module": "./dist/diagram-editor.es.js",
   "types": "types/index.d.ts",
   "scripts": {
-    "dev": "cd $INIT_CWD && vite",
+    "dev": "vite",
     "dev:force": "vite --force",
-    "build": "rimraf dist && vite build",
-    "build:dts": "rimraf types && tsc -d --emitDeclarationOnly --declarationDir types"
+    "build": "rimraf dist && vite build"
   },
   "repository": {
     "type": "git",
@@ -26,5 +23,8 @@
   "license": "AGPL-3.0",
   "peerDependencies": {
     "@antv/x6": "^1.12"
+  },
+  "devDependencies": {
+    "rollup-plugin-visualizer": "^4.2.0"
   }
 }

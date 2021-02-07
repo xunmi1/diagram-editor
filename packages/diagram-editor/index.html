@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>diagram-editor</title>
+    <link rel="stylesheet" href="./dist/style.css" />
+  </head>
+  <body>
+    <div id="app" style="height: 100vh"></div>
+    <script type="module">
+      import DiagramEditor, { builtInPlugin, ExplorerNodeItem } from './src/index';
+      import { nodeCountPlugin } from '../../plugins/cell-count/dist/plugin-cell-count.es.js'
+      const node = {
+        width: 80,
+        height: 42,
+        attrs: {
+          body: {
+            stroke: '#5F95FF',
+            strokeWidth: 1,
+            fill: 'rgba(95,149,255,0.05)',
+          },
+          fo: {
+            refWidth: '100%',
+            refHeight: '100%',
+          },
+          text: {
+            fontSize: 12,
+            fill: 'rgba(0,0,0,0.85)',
+          },
+        },
+        ports: {
+          groups: {
+            top: {
+              position: 'top',
+              attrs: {
+                circle: {
+                  r: 3,
+                  magnet: true,
+                  stroke: '#5F95FF',
+                  strokeWidth: 1,
+                  fill: '#fff',
+                },
+              },
+            },
+            right: {
+              position: 'right',
+              attrs: {
+                circle: {
+                  r: 3,
+                  magnet: true,
+                  stroke: '#5F95FF',
+                  strokeWidth: 1,
+                  fill: '#fff',
+                },
+              },
+            },
+            bottom: {
+              position: 'bottom',
+              attrs: {
+                circle: {
+                  r: 3,
+                  magnet: true,
+                  stroke: '#5F95FF',
+                  strokeWidth: 1,
+                  fill: '#fff',
+                },
+              },
+            },
+            left: {
+              position: 'left',
+              attrs: {
+                circle: {
+                  r: 3,
+                  magnet: true,
+                  stroke: '#5F95FF',
+                  strokeWidth: 1,
+                  fill: '#fff',
+                },
+              },
+            },
+          },
+          items: [
+            {
+              group: 'top',
+            },
+            {
+              group: 'right',
+            },
+            {
+              group: 'bottom',
+            },
+            {
+              group: 'left',
+            },
+          ],
+        },
+      }
+
+      class A extends ExplorerNodeItem {
+        title = '测试';
+      }
+
+      const a = new A();
+      a.load(node);
+
+      const editor = new DiagramEditor();
+      editor.explorer.load('x', a);
+      editor.use(nodeCountPlugin({ key: 'xxxx' })).mount('#app');
+    </script>
+  </body>
+</html>

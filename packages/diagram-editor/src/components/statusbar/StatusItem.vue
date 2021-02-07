@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import { StatusbarItem } from '@/statusbar';
 import { useStatusItem } from './use';
 
@@ -22,7 +22,7 @@ export default defineComponent({
   name: 'StatusItem',
   props: {
     item: {
-      type: StatusbarItem,
+      type: Object as PropType<StatusbarItem>,
       required: true,
     },
   },

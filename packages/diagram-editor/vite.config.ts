@@ -11,10 +11,12 @@ export default defineConfig({
   plugins: [vue(), jsx()],
   build: {
     lib: {
-      entry: resolve('./src/index.ts'),
+      entry: './src/index.ts',
       name: 'diagram-editor',
     },
+    brotliSize: false,
     rollupOptions: {
+      external: ['moment'],
       output: {
         exports: 'named',
       },

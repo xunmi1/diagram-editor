@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import { ToolbarItem } from '@/toolbar';
 import { useToolItem } from './use';
 
@@ -23,7 +23,7 @@ export default defineComponent({
   name: 'ToolItem',
   props: {
     item: {
-      type: ToolbarItem,
+      type: Object as PropType<ToolbarItem>,
       required: true,
     },
   },

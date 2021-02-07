@@ -4,6 +4,7 @@ dist
 dist-ssr
 *.local
 *.html
+!index.html
 
 # local env files
 .env.local

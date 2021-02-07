@@ -9,10 +9,12 @@
   "main": "./dist/diagram-editor.umd.js",
   "module": "./dist/mdiagram-editor.es.js",
   "exports": "./dist/diagram-editor.es.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "dev": "vite",
     "dev:force": "vite --force",
     "build": "rimraf dist && vite build",
+    "build:dts": "rimraf types && tsc -d --emitDeclarationOnly --declarationDir types",
     "format": "prettier \"**/*\" --ignore-unknown --write --ignore-path \"./.gitignore\"",
     "lint": "eslint \"{src,test}/**/*.{ts,tsx,vue}\" --fix"
   },

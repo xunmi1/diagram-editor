@@ -1,4 +1,4 @@
-import { ToolbarItem, MenubarItem } from '@/main';
+import { ToolbarItem, MenubarItem } from '@/index';
 import { Plugin } from '@/interfaces';
 import { Undo, Redo } from '@icon-park/svg';
 import { stringifySVG } from '@/utils';

@@ -5,30 +5,18 @@ import App from '@/App.vue';
 import antd from '@/antd';
 import { useOnceWatch } from '@/use';
 import { EditorOptions, Plugin } from '@/interfaces';
-import { ExplorerItem, Explorer, ExplorerNodeItem, DragEvent, LayoutOptions } from '@/explorer';
-import { ControllerItem, Controller } from '@/controller';
-import { Menubar, MenubarItem, MenubarItemOptions } from '@/menubar';
-import { ContextMenu, ContextMenuItem, ContextMenuItemOptions } from '@/contextMenu';
-import { Toolbar, ToolbarItem, ToolbarItemOptions } from '@/toolbar';
-import { Statusbar, StatusbarItem, StatusbarItemOptions } from '@/statusbar';
+
+import { Explorer } from '@/explorer';
+import { Controller } from '@/controller';
+import { Menubar } from '@/menubar';
+import { ContextMenu } from '@/contextMenu';
+import { Toolbar } from '@/toolbar';
+import { Statusbar } from '@/statusbar';
+
 import { Subject, Observer, CommandsRegistry, warn, merge } from '@/utils';
 import { EventType } from '@/constants';
 import { defaultOptions } from '@/defaultOptions';
 import { bindActiveEvent, bindMouseEvent } from '@/events';
-
-export { ExplorerItem, ExplorerNodeItem, ControllerItem, MenubarItem, ContextMenuItem, ToolbarItem, StatusbarItem };
-export * from '@/plugins';
-
-export type {
-  DragEvent,
-  LayoutOptions,
-  MenubarItemOptions,
-  ContextMenuItemOptions,
-  ToolbarItemOptions,
-  StatusbarItemOptions,
-};
-
-export * from '@/interfaces';
 
 class DiagramEditor extends Subject {
   public readonly explorer: Explorer;
@@ -64,7 +52,7 @@ class DiagramEditor extends Subject {
     this._app = createApp(App, { editor: this }).use(antd);
   }
 
-  get options() {
+  get options(): EditorOptions {
     return { ...this._options };
   }
 

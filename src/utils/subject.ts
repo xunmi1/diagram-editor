@@ -1,5 +1,5 @@
 import mitt, { Emitter, EventType } from 'mitt';
-import { DisposableDelegate, Disposable } from '@/utils';
+import { DisposableDelegate, Disposable } from './disposable';
 
 export type Observer<T> = (event: T) => void;
 

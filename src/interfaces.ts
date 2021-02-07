@@ -1,11 +1,12 @@
-import type { Graph } from '@antv/x6';
-import type DiagramEditor from '@/main';
+import type { Options } from '@antv/x6/lib/graph/options';
+// Partial<import("@antv/x6/lib/graph/options").Options.Manual> | undefined
+import type DiagramEditor from '@/editor';
 import { Disposable } from '@/utils';
 export type { Observer, Disposable, Command, CommandId, CommandsRegistry } from '@/utils';
 
 export type { DiagramEditor };
 
-export type GraphOptions = ConstructorParameters<typeof Graph>[0];
+export type GraphOptions = Partial<Options.Manual> | undefined;
 
 export interface EditorOptions {
   graph?: GraphOptions;

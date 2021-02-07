@@ -1,4 +1,4 @@
-import { MenubarItem } from '@/main';
+import { MenubarItem } from '@/index';
 import { Plugin } from '@/interfaces';
 
 import { TopMenuKey } from '../topMenu';

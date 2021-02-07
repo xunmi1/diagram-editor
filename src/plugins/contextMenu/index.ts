@@ -1,5 +1,5 @@
 import { Plugin, DiagramEditor } from '@/interfaces';
-import { ContextMenuItem } from '@/main';
+import { ContextMenuItem } from '@/index';
 
 class C extends ContextMenuItem {
   activate(editor: DiagramEditor): boolean {

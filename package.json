@@ -5,6 +5,7 @@
     "plugins/*"
   ],
   "scripts": {
+    "bulid": "yarn workspaces run build",
     "format": "prettier \"**/*\" --ignore-unknown --write --ignore-path \"./.gitignore\"",
     "lint": "eslint \"{packages,plugins}/**/*.{ts,tsx,vue}\" --fix"
   },
@@ -18,12 +19,10 @@
     "@antv/x6": "^1.12.30",
     "@icon-park/svg": "^1.2.7",
     "ant-design-vue": "^2.0.0",
-    "lodash-es": "^4.17.20",
     "mitt": "^2.1.0",
     "vue": "^3.0.5"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.4",
     "@typescript-eslint/eslint-plugin": "^4.14.2",
     "@typescript-eslint/parser": "^4.14.2",
     "@vitejs/plugin-vue": "^1.1.4",

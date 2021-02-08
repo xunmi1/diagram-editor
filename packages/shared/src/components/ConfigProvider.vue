@@ -1,15 +1,13 @@
 <template>
-  <AConfigProvider :locale="locale" :get-popup-container="getContainer" prefix-cls="editor" v-bind="$attrs">
+  <AConfigProvider :locale="locale" :get-popup-container="getPopupContainer" prefix-cls="editor" v-bind="$attrs">
     <slot />
   </AConfigProvider>
 </template>
 
 <script lang="ts">
+import { defineComponent, getCurrentInstance } from 'vue';
 import { ConfigProvider as AConfigProvider } from 'ant-design-vue';
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
-import { getPopupContainer } from '../index';
-
-import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'ConfigProvider',
@@ -18,9 +16,14 @@ export default defineComponent({
   },
   setup() {
     const locale = Object.freeze(zhCN);
-    const getContainer = getPopupContainer();
+    const instance = getCurrentInstance();
+    const getPopupContainer = () => instance?.appContext.app._container;
 
-    return { locale, getContainer };
+    return { locale, getPopupContainer };
   },
 });
 </script>
+
+<style>
+@import 'ant-design-vue/es/config-provider/style/index.css';
+</style>

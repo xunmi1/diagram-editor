@@ -11,7 +11,6 @@
   "module": "./dist/shared.es.js",
   "types": "types/index.d.ts",
   "scripts": {
-    "dev": "vite",
     "build": "rimraf dist && vite build"
   },
   "repository": {
@@ -21,16 +20,13 @@
   },
   "author": "xunmi <xunmi1@outlook.com>",
   "license": "AGPL-3.0",
-  "dependencies": {
-    "ant-design-vue": "^2.0.0",
-    "lodash-es": "^4.17.20",
-    "resize-observer-polyfill": "^1.5.1",
-    "vue": "^3.0.5"
-  },
   "peerDependencies": {
     "ant-design-vue": "^2.0.0"
   },
   "devDependencies": {
-    "@icon-park/svg": "^1.2.6"
+    "@types/lodash-es": "^4.17.4",
+    "@icon-park/svg": "^1.2.6",
+    "resize-observer-polyfill": "^1.5.1",
+    "lodash-es": "^4.17.20"
   }
 }

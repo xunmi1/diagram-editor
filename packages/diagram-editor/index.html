@@ -4,13 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>diagram-editor</title>
-    <link rel="stylesheet" href="./dist/style.css" />
   </head>
   <body>
     <div id="app" style="height: 100vh"></div>
     <script type="module">
-      import { DiagramEditor, ExplorerNodeItem, builtInPlugin } from './dist/diagram-editor.es';
+      // import { DiagramEditor, ExplorerNodeItem, builtInPlugin } from './dist/diagram-editor.es';
+      // import './dist/style.css'
+      import { DiagramEditor, ExplorerNodeItem, builtInPlugin } from './src/index';
       import { nodeCountPlugin } from '../../plugins/cell-count/dist/plugin-cell-count.es.js';
+      import { graphConfigPlugin } from '../../plugins/graph-config/dist/plugin-graph-config.es.js';
+      import '../../plugins/graph-config/dist/style.css';
       const node = {
         width: 80,
         height: 42,
@@ -109,6 +112,7 @@
       editor
         .use(builtInPlugin)
         .use(nodeCountPlugin({ key: 'xxxx' }))
+        .use(graphConfigPlugin({ key: 'config' }))
         .mount('#app');
     </script>
   </body>

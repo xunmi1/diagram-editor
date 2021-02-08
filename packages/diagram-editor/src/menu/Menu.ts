@@ -1,4 +1,5 @@
-import { Observer, Subject, warn, error, lazyTask } from '@/utils';
+import { warn, error, lazyTask } from '@diagram-editor/shared';
+import { Observer, Subject } from '@/utils';
 import { MenuItem } from './MenuItem';
 import { getGroups } from './utils';
 

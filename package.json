@@ -15,17 +15,12 @@
   "author": "xunmi <xunmi1@outlook.com>",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@antv/x6": "^1.12.29",
-    "@icon-park/svg": "^1.2.6",
+    "@antv/x6": "^1.12.30",
+    "@icon-park/svg": "^1.2.7",
     "ant-design-vue": "^2.0.0",
     "lodash-es": "^4.17.20",
     "mitt": "^2.1.0",
-    "resize-observer-polyfill": "^1.5.1",
-    "vue": "^3.0.5",
-    "vue-color-kit": "^1.0.3"
-  },
-  "peerDependencies": {
-    "@antv/x6": "^1.12"
+    "vue": "^3.0.5"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.4",

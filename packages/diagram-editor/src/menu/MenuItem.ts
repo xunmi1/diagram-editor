@@ -1,4 +1,6 @@
-import { CommandId, Observer, Subject, lazyTask } from '@/utils';
+import { CommandId, Observer, Subject } from '@/utils';
+import { lazyTask } from '@diagram-editor/shared';
+
 import { getGroups } from './utils';
 
 export interface MenuItemOptions {

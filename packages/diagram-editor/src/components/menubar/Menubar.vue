@@ -14,11 +14,11 @@
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, shallowRef, triggerRef } from 'vue';
 import { useEditor } from '@/use';
-import { lazyTask } from '@/utils';
+import { lazyTask } from '@diagram-editor/shared';
 import { Disposable } from '@/interfaces';
 import type { Menubar, MenubarItem } from '@/menubar';
 import MenuItem from './MenuItem.vue';
-import { useDivider } from '@/shared';
+import { useDivider } from '../menu';
 
 const useMenubarList = () => {
   const disposables: Disposable[] = [];

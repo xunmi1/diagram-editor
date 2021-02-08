@@ -1,4 +1,3 @@
-// @ts-ignore
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -7,7 +6,6 @@ export default defineConfig({
       entry: './index.ts',
       name: 'plugin-cell-count',
     },
-    brotliSize: false,
     rollupOptions: {
       external: ['@diagram-editor/diagram-editor'],
       output: {

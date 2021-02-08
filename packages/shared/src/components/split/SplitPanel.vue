@@ -5,8 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, unref, onMounted, onActivated, onDeactivated } from 'vue';
-import { useInject } from '@/use';
+import { defineComponent, ref, unref, onMounted, onActivated, onDeactivated, inject } from 'vue';
 import { INJECT_KEY } from './contants';
 
 interface Props {
@@ -19,7 +18,7 @@ export default defineComponent({
     flexible: Boolean,
   },
   setup(props) {
-    const meta = useInject<Map<HTMLElement, Props>>(INJECT_KEY)!;
+    const meta = inject<Map<HTMLElement, Props>>(INJECT_KEY)!;
     const container = ref<HTMLElement>();
 
     onMounted(() => {

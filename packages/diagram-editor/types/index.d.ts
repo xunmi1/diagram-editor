@@ -14,5 +14,4 @@ export type {
   StatusbarItemOptions,
 };
 export * from './interfaces';
-import DiagramEditor from './editor';
-export default DiagramEditor;
+export { default as DiagramEditor } from './editor';

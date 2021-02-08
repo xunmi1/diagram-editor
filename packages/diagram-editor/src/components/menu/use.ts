@@ -1,6 +1,6 @@
 import { onBeforeUnmount, shallowRef, triggerRef, toRaw, computed, Ref } from 'vue';
 import { MenuItem } from '@/menu';
-import { lazyTask } from '@/utils';
+import { lazyTask } from '@diagram-editor/shared';
 import { GROUP_TAG } from '@/constants';
 import { Disposable } from '@/interfaces';
 

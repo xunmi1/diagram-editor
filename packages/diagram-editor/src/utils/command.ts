@@ -1,4 +1,5 @@
-import { warn, DisposableDelegate, Disposable } from '@/utils';
+import { DisposableDelegate, Disposable } from '@/utils';
+import { warn } from '@diagram-editor/shared';
 
 export interface Command<T = any> {
   (params: T): void | Promise<void>;

@@ -17,7 +17,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, ref, shallowRef, unref } from 'vue';
 import type { MenubarItem } from '@/menubar';
-import { Menu, useMenuItem } from '@/shared';
+import { Menu, useMenuItem } from '../menu';
 
 export default defineComponent({
   name: 'MenuItem',

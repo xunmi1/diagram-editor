@@ -10,8 +10,8 @@
 <script lang="ts">
 import { defineComponent, ref, watch, reactive, computed, onBeforeUnmount, shallowRef } from 'vue';
 import { useEditor, useGlobalGraph } from '@/use';
-import { Menu } from '@/shared';
-import { lazyTask } from '@/utils';
+import { Menu } from '../menu';
+import { lazyTask } from '@diagram-editor/shared';
 import type { ContextMenu, ContextMenuItem } from '@/contextMenu';
 
 type MenuList = Map<string, ContextMenuItem>;

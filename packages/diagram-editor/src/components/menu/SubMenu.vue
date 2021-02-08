@@ -17,7 +17,7 @@
 <script lang="ts">
 import { ref, computed, defineComponent, PropType } from 'vue';
 import { Check } from '@icon-park/svg';
-import { stringifySVG } from '@/utils';
+import { stringifySVG } from '@diagram-editor/shared';
 import { MenuItem } from '@/menu';
 import { useMenuItem, useDivider } from './use';
 

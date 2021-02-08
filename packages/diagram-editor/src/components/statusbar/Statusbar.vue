@@ -13,7 +13,7 @@
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, ref } from 'vue';
 import { useEditor } from '@/use';
-import { lazyTask } from '@/utils';
+import { lazyTask } from '@diagram-editor/shared';
 import type { StatusbarItem } from '@/statusbar';
 import StatusItem from './StatusItem.vue';
 

@@ -17,7 +17,7 @@ export const lazyTask = <T extends (...args: any[]) => any>(func: T) => {
 
   return function (this: unknown, ...args: Parameters<T>) {
     if (timer) clearTimeout(timer);
-    timer = setTimeout(() => {
+    timer = window.setTimeout(() => {
       timer = undefined;
       result = func.apply(this, args);
     }, 0);

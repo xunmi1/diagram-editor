@@ -18,10 +18,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, shallowRef, unref, watch, onMounted, onBeforeUnmount, Ref } from 'vue';
+import {
+  defineComponent,
+  reactive,
+  ref,
+  shallowRef,
+  unref,
+  watch,
+  onMounted,
+  onBeforeUnmount,
+  Ref,
+  provide,
+} from 'vue';
 import ResizeObserver from 'resize-observer-polyfill';
-import { throttle, lazyTask, addEvent, removeEvent, setProperty } from '@/utils';
-import { useInject } from '@/use';
+import { throttle, lazyTask, addEvent, removeEvent, setProperty } from '../../utils';
 import { INJECT_KEY } from './contants';
 
 type ResizeObserverCallback = ConstructorParameters<typeof ResizeObserver>[0];
@@ -39,20 +49,22 @@ const useResizeObserver = (handler: ResizeObserverCallback, container: Ref<HTMLE
   return observer;
 };
 
+type MoveFunc = (event: MouseEvent) => void;
+
 const useSplit = (callback: (offsetX: number, totalX: number) => void) => {
   const active = ref(false);
   let axisIndex = ref(0);
   let startOffsetX = 0;
   let offsetX = 0;
 
-  const handleMove = throttle((event: MouseEvent) => {
+  const handleMove = throttle<MoveFunc>(event => {
     const x = event.pageX - offsetX;
     if (x === 0) return;
     const totalX = event.pageX - startOffsetX;
     // 本次偏移量，累计偏移量，当前移动的轴的索引
     callback(x, totalX);
     offsetX = event.pageX;
-  }, 60);
+  }, 60) as MoveFunc;
 
   const handleUp = () => {
     active.value = false;
@@ -92,7 +104,7 @@ export default defineComponent({
     const container = shallowRef<HTMLElement>();
     const styleList = ref<{ left: number; width: number }[]>([]);
     const childrenMeta = reactive<Map<HTMLElement, { flexible: boolean; left: number; width: number }>>(new Map());
-    useInject(INJECT_KEY, childrenMeta);
+    provide<typeof childrenMeta>(INJECT_KEY, childrenMeta);
 
     const getChildren = (): HTMLElement[] => Array.prototype.slice.call(unref(container)?.children, 0);
 
@@ -130,7 +142,7 @@ export default defineComponent({
       styleList.value = getResizeRect(rectList, makeup);
     };
 
-    useResizeObserver(throttle(update, 200), container);
+    useResizeObserver(throttle(update, 200) as ResizeObserverCallback, container);
     // 监听面板元素变化，以触发布局的改变
     watch(childrenMeta, lazyTask(update), { flush: 'post' });
 

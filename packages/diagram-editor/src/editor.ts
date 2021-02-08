@@ -13,7 +13,8 @@ import { ContextMenu } from '@/contextMenu';
 import { Toolbar } from '@/toolbar';
 import { Statusbar } from '@/statusbar';
 
-import { Subject, Observer, CommandsRegistry, warn, merge } from '@/utils';
+import { Subject, Observer, CommandsRegistry } from '@/utils';
+import { warn, merge } from '@diagram-editor/shared';
 import { EventType } from '@/constants';
 import { defaultOptions } from '@/defaultOptions';
 import { bindActiveEvent, bindMouseEvent } from '@/events';

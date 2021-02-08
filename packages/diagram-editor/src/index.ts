@@ -19,5 +19,4 @@ export type {
 export * from '@/interfaces';
 export * from '@/plugins';
 
-import DiagramEditor from './editor';
-export default DiagramEditor;
+export { default as DiagramEditor } from './editor';

@@ -1,7 +1,7 @@
 import { ToolbarItem, MenubarItem } from '@/index';
 import { Plugin } from '@/interfaces';
 import { Undo, Redo } from '@icon-park/svg';
-import { stringifySVG } from '@/utils';
+import { stringifySVG } from '@diagram-editor/shared';
 
 import { TopMenuKey } from '../topMenu';
 

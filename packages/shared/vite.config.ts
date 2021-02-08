@@ -1,28 +1,25 @@
-// @ts-ignore
-import path from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import jsx from '@vitejs/plugin-vue-jsx';
-
-// @ts-ignore
-const resolve = dir => path.resolve(__dirname, dir);
 
 export default defineConfig({
   plugins: [vue(), jsx()],
   build: {
     lib: {
       entry: './src/index.ts',
-      name: 'diagram-editor',
+      name: 'shared',
     },
     brotliSize: false,
     rollupOptions: {
+      external: ['vue', 'moment'],
       output: {
         exports: 'named',
+        globals: {
+          vue: 'Vue',
+          moment: 'moment',
+        },
       },
     },
-  },
-  alias: {
-    '@': resolve('./src'),
   },
   css: {
     preprocessorOptions: {
@@ -33,6 +30,6 @@ export default defineConfig({
   },
 
   optimizeDeps: {
-    include: ['@antv/x6/es/layout/grid', '@diagram-editor/shared'],
+    include: ['ant-design-vue/es/locale/zh_CN'],
   },
 });

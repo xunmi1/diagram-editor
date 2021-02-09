@@ -1,14 +1,7 @@
-import { ToolbarItem, MenubarItem } from '@/index';
-import { Plugin } from '@/interfaces';
+import { ToolbarItem, MenubarItem, Plugin } from '@diagram-editor/diagram-editor';
 import { Undo, Redo } from '@icon-park/svg';
 import { stringifySVG } from '@diagram-editor/shared';
-
-import { TopMenuKey } from '../topMenu';
-
-export const enum HistoryKey {
-  UNDO = 'history-undo',
-  REDO = 'history-redo',
-}
+import { TopMenuKey, ActionKey } from './constants';
 
 export const HistoryCommandId = {
   UNDO: Symbol('undo'),
@@ -25,7 +18,7 @@ export const historyPlugin: Plugin = editor => {
 
   const historyMeta = [
     {
-      key: HistoryKey.UNDO,
+      key: ActionKey.UNDO,
       text: '撤销',
       command: HistoryCommandId.UNDO,
       icon: stringifySVG(Undo),
@@ -33,7 +26,7 @@ export const historyPlugin: Plugin = editor => {
       action: undoAction,
     },
     {
-      key: HistoryKey.REDO,
+      key: ActionKey.REDO,
       text: '恢复',
       command: HistoryCommandId.REDO,
       icon: stringifySVG(Redo),
@@ -43,12 +36,14 @@ export const historyPlugin: Plugin = editor => {
   ];
 
   const { menubar, toolbar, commands } = editor;
+  const parentKey = TopMenuKey.EDIT;
 
   historyMeta.forEach(meta => {
+    const menubarItem = new MenubarItem({ text: meta.text, command: meta.command, extra: meta.hotKey });
+    menubar.load(meta.key, menubarItem, parentKey);
+
     const toolbarItem = new ToolbarItem({ icon: meta.icon, command: meta.command, tooltip: meta.text });
     toolbar.load(meta.key, toolbarItem);
-    const menubarItem = new MenubarItem({ text: meta.text, command: meta.command, extra: meta.hotKey });
-    menubar.load(meta.key, menubarItem, TopMenuKey.EDIT);
 
     commands.register(meta.command, meta.action);
   });

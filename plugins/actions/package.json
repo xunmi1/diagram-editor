@@ -1,0 +1,30 @@
+{
+  "name": "@diagram-editor/plugin-actions",
+  "version": "0.1.0",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "main": "./dist/plugin-actions.cjs.js",
+  "module": "./dist/plugin-actions.es.js",
+  "types": "./types/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && vite build",
+    "build:dts": "rimraf types && tsc --declarationDir types"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xunmi1/diagram-editor.git",
+    "directory": "plugins/actions"
+  },
+  "author": "xunmi <xunmi1@outlook.com>",
+  "license": "AGPL-3.0",
+  "peerDependencies": {
+    "@diagram-editor/diagram-editor": "^0.1.0"
+  },
+  "devDependencies": {
+    "@diagram-editor/shared": "^0.1.0",
+    "ant-design-vue": "^2.0.0",
+    "vue-color-kit": "^1.0.3"
+  }
+}

@@ -10,10 +10,12 @@
     <script type="module">
       // import { DiagramEditor, ExplorerNodeItem, builtInPlugin } from './dist/diagram-editor.es';
       // import './dist/style.css'
-      import { DiagramEditor, ExplorerNodeItem, builtInPlugin } from './src/index';
+      import { DiagramEditor, ExplorerNodeItem } from './src/index';
       import { nodeCountPlugin } from '../../plugins/cell-count/dist/plugin-cell-count.es.js';
       import { graphConfigPlugin } from '../../plugins/graph-config/dist/plugin-graph-config.es.js';
+      import { actionsPlugin } from '../../plugins/actions/dist/plugin-actions.es.js';
       import '../../plugins/graph-config/dist/style.css';
+
       const node = {
         width: 80,
         height: 42,
@@ -50,7 +52,7 @@
       const editor = new DiagramEditor();
       editor.explorer.load('x', a);
       editor
-        .use(builtInPlugin)
+        .use(actionsPlugin())
         .use(nodeCountPlugin({ key: 'xxxx' }))
         .use(graphConfigPlugin({ key: 'config' }))
         .mount('#app');

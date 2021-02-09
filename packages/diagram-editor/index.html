@@ -18,93 +18,33 @@
         width: 80,
         height: 42,
         attrs: {
-          body: {
-            stroke: '#5F95FF',
-            strokeWidth: 1,
-            fill: 'rgba(95,149,255,0.05)',
-          },
-          fo: {
-            refWidth: '100%',
-            refHeight: '100%',
-          },
-          text: {
-            fontSize: 12,
-            fill: 'rgba(0,0,0,0.85)',
-          },
+          body: { stroke: '#5F95FF', strokeWidth: 1, fill: 'rgba(95,149,255,0.05)' },
+          text: { fontSize: 12, fill: 'rgba(0,0,0,0.85)' },
         },
         ports: {
           groups: {
             top: {
               position: 'top',
-              attrs: {
-                circle: {
-                  r: 3,
-                  magnet: true,
-                  stroke: '#5F95FF',
-                  strokeWidth: 1,
-                  fill: '#fff',
-                },
-              },
+              attrs: { circle: { r: 3, magnet: true, stroke: '#5F95FF', strokeWidth: 1, fill: '#fff' } },
             },
             right: {
               position: 'right',
-              attrs: {
-                circle: {
-                  r: 3,
-                  magnet: true,
-                  stroke: '#5F95FF',
-                  strokeWidth: 1,
-                  fill: '#fff',
-                },
-              },
+              attrs: { circle: { r: 3, magnet: true, stroke: '#5F95FF', strokeWidth: 1, fill: '#fff' } },
             },
             bottom: {
               position: 'bottom',
-              attrs: {
-                circle: {
-                  r: 3,
-                  magnet: true,
-                  stroke: '#5F95FF',
-                  strokeWidth: 1,
-                  fill: '#fff',
-                },
-              },
+              attrs: { circle: { r: 3, magnet: true, stroke: '#5F95FF', strokeWidth: 1, fill: '#fff' } },
             },
             left: {
               position: 'left',
-              attrs: {
-                circle: {
-                  r: 3,
-                  magnet: true,
-                  stroke: '#5F95FF',
-                  strokeWidth: 1,
-                  fill: '#fff',
-                },
-              },
+              attrs: { circle: { r: 3, magnet: true, stroke: '#5F95FF', strokeWidth: 1, fill: '#fff' } },
             },
           },
-          items: [
-            {
-              group: 'top',
-            },
-            {
-              group: 'right',
-            },
-            {
-              group: 'bottom',
-            },
-            {
-              group: 'left',
-            },
-          ],
+          items: [{ group: 'top' }, { group: 'right' }, { group: 'bottom' }, { group: 'left' }],
         },
       };
 
-      class A extends ExplorerNodeItem {
-        title = '测试';
-      }
-
-      const a = new A();
+      const a = new ExplorerNodeItem({ title: '测试' });
       a.load(node);
 
       const editor = new DiagramEditor();

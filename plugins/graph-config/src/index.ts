@@ -4,6 +4,9 @@ import { DiagramEditor, ControllerItem, Plugin } from '@diagram-editor/diagram-e
 import Panel from './Panel.vue';
 import { registerCommands } from './commands';
 
+export { CommandId } from './commands';
+export type { GridOptions, ScrollerOptions, BackgroundOptions } from './commands';
+
 export interface State {
   gridVisible: boolean;
   gridSize: number;

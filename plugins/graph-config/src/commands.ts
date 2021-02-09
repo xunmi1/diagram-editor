@@ -1,16 +1,24 @@
-import { BackgroundManager as Background } from '@antv/x6/es/graph/background';
+import { Background } from '@antv/x6/es/registry';
 import { DiagramEditor } from '@diagram-editor/diagram-editor';
 import type { State } from './index';
 
-interface GridOptions {
+export interface GridOptions {
   size?: number;
   visible?: boolean;
 }
 
-interface ScrollerOptions {
+export interface ScrollerOptions {
   enabled: boolean;
   pannable: boolean;
 }
+
+export interface BackgroundOptions extends Background.Options {}
+
+export const CommandId = {
+  SET_GRID: Symbol('editor.setGrid'),
+  SET_BACKGROUND: Symbol('editor.setBackground'),
+  SET_SCROLLER: Symbol('editor.setScroller'),
+};
 
 export const registerCommands = (editor: DiagramEditor, state: State) => {
   const setGrid = (options: GridOptions) => {
@@ -28,7 +36,7 @@ export const registerCommands = (editor: DiagramEditor, state: State) => {
     }
   };
 
-  const setBackground = (options: Background.Options) => {
+  const setBackground = (options: BackgroundOptions) => {
     const graph = editor.graph;
     if (!graph) return;
     if (options.color) state.backgroundColor = options.color;
@@ -50,7 +58,7 @@ export const registerCommands = (editor: DiagramEditor, state: State) => {
     }
   };
 
-  editor.commands.register('editor.setGrid', setGrid);
-  editor.commands.register('editor.setBackground', setBackground);
-  editor.commands.register('editor.setScroller', setScroller);
+  editor.commands.register(CommandId.SET_GRID, setGrid);
+  editor.commands.register(CommandId.SET_BACKGROUND, setBackground);
+  editor.commands.register(CommandId.SET_SCROLLER, setScroller);
 };

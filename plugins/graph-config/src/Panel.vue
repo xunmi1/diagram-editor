@@ -34,6 +34,7 @@ import { ConfigProvider } from '@diagram-editor/shared';
 import type { RootProps } from './index';
 import type { CommandsRegistry } from '@diagram-editor/diagram-editor';
 import ColorPicker from './ColorPicker.vue';
+import { CommandId } from './commands';
 
 export default defineComponent({
   name: 'Panel',
@@ -55,11 +56,11 @@ export default defineComponent({
     const { state, editor } = props;
     const execute: CommandsRegistry['execute'] = (...args) => editor.commands.execute(...args);
 
-    watchEffect(() => execute('editor.setGrid', { visible: state.gridVisible }));
-    watchEffect(() => execute('editor.setGrid', { size: state.gridSize }));
-    watchEffect(() => execute('editor.setBackground', { color: state.backgroundColor }));
-    watchEffect(() => execute('editor.setScroller', { enabled: state.scrollerEnable }));
-    watchEffect(() => execute('editor.setScroller', { pannable: state.scrollerPannable }));
+    watchEffect(() => execute(CommandId.SET_GRID, { visible: state.gridVisible }));
+    watchEffect(() => execute(CommandId.SET_GRID, { size: state.gridSize }));
+    watchEffect(() => execute(CommandId.SET_BACKGROUND, { color: state.backgroundColor }));
+    watchEffect(() => execute(CommandId.SET_SCROLLER, { enabled: state.scrollerEnable }));
+    watchEffect(() => execute(CommandId.SET_SCROLLER, { pannable: state.scrollerPannable }));
 
     const instance = getCurrentInstance();
     const getPopupContainer = () => instance?.appContext.app._container;

@@ -1,6 +1,6 @@
 import type { EditorOptions } from '@/interfaces';
 
-const DEFAULT_SIZE = 10;
+const DEFAULT_SIZE = 12;
 
 export const defaultOptions: EditorOptions = {
   explorer: true,
@@ -14,6 +14,7 @@ export const defaultOptions: EditorOptions = {
     grid: {
       size: DEFAULT_SIZE,
       visible: true,
+      type: 'mesh',
     },
     autoResize: true,
     snapline: {

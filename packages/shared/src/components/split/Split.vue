@@ -1,12 +1,12 @@
 <template>
   <div class="editor-split">
-    <div class="editor-split-sash-container">
+    <div :style="{ '--sash-size': `${sashSize}px` }" class="editor-split-sash-container">
       <template v-for="(style, index) in styleList" :key="index">
         <div
           v-if="index"
           class="editor-split-sash"
           :class="{ 'editor-split-sash-highlight': active && axisIndex === index }"
-          :style="{ left: `${style.left}px` }"
+          :style="{ '--left': `${style.left}px` }"
           @mousedown="start($event, index)"
         />
       </template>
@@ -219,9 +219,9 @@ export default defineComponent({
   &-sash {
     position: absolute;
     height: 100%;
+    left: calc(var(--left) - var(--sash-size) / 2);
     width: var(--sash-size);
-    transform: translateX(calc(0px - var(--sash-size) / 2));
-    z-index: 100;
+    z-index: 1050;
     touch-action: none;
     cursor: col-resize;
 

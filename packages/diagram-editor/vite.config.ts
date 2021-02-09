@@ -3,12 +3,13 @@ import path from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import jsx from '@vitejs/plugin-vue-jsx';
+import watchWorkspaces from './vitePluginWatch';
 
 // @ts-ignore
 const resolve = dir => path.resolve(__dirname, dir);
 
 export default defineConfig({
-  plugins: [vue(), jsx()],
+  plugins: [vue(), jsx(), watchWorkspaces('../../', ['@diagram-editor/shared'])],
   build: {
     lib: {
       entry: './src/index.ts',

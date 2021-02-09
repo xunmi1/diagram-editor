@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>diagram-editor</title>
   </head>
   <body>
@@ -13,7 +16,8 @@
       import { DiagramEditor, ExplorerNodeItem } from './src/index';
       import { nodeCountPlugin } from '../../plugins/cell-count/dist/plugin-cell-count.es.js';
       import { graphConfigPlugin } from '../../plugins/graph-config/dist/plugin-graph-config.es.js';
-      import { actionsPlugin } from '../../plugins/actions/dist/plugin-actions.es.js';
+      // import { actionsPlugin } from '../../plugins/actions/dist/plugin-actions.es.js';
+      import { actionsPlugin } from '@diagram-editor/plugin-actions';
       import '../../plugins/graph-config/dist/style.css';
 
       const node = {

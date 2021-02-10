@@ -5,19 +5,8 @@ import { throttle, lazyTask } from '@diagram-editor/shared';
 import { ExplorerItem, DragEvent } from './ExplorerItem';
 import { Observer } from '@/utils';
 
-interface DOMRectReadOnly {
-  readonly x: number;
-  readonly y: number;
-  readonly width: number;
-  readonly height: number;
-  readonly top: number;
-  readonly right: number;
-  readonly bottom: number;
-  readonly left: number;
-}
-
 export interface LayoutOptions {
-  columns: number;
+  columns?: number;
   columnWidth?: number | 'auto' | 'compact';
   rowHeight?: number | 'auto' | 'compact';
   dx?: number;
@@ -26,9 +15,9 @@ export interface LayoutOptions {
 }
 
 // 根据参数，拦截相同参数的函数调用
-const unique = <T, F extends (...params: any[]) => void>(func: F) => {
+const unique = <T extends (...params: any[]) => void>(func: T) => {
   let cacheParams: string;
-  return function (this: T, ...args: Parameters<F>) {
+  return function (this: unknown, ...args: Parameters<T>) {
     const str = JSON.stringify(args);
     if (cacheParams === str) return;
     cacheParams = str;
@@ -56,6 +45,7 @@ export class ExplorerNodeItem extends ExplorerItem {
   public graph: Graph | undefined;
 
   private _container?: HTMLElement;
+  private _containerRect?: DOMRectReadOnly;
   private readonly _layout: { cellWidth: number };
 
   constructor(options?: Partial<{ title: string; layout: { cellWidth?: number } }>) {
@@ -64,7 +54,7 @@ export class ExplorerNodeItem extends ExplorerItem {
     if (title) this.title = title;
     this._layout = { cellWidth: 100, ...options?.layout };
 
-    this.applyLayout = unique(lazyTask(this.applyLayout));
+    this.applyLayout = lazyTask(this.applyLayout);
 
     this._observeContainerSize();
     this._bindResetEvent();
@@ -91,10 +81,15 @@ export class ExplorerNodeItem extends ExplorerItem {
   load(...nodeList: (Node.Metadata | Node)[]) {
     const loadNode = () => {
       nodeList.forEach(node => this.graph?.addNode(<Node>node));
-      this.applyLayout();
+      const columns = this._calcColumns();
+      if (columns) this.applyLayout({ columns });
     };
-    const disposable = this.onDidMount(loadNode);
-    this.onWillUnmount(() => disposable.dispose());
+
+    if (this.graph) loadNode();
+    else {
+      const disposable = this.onDidMount(loadNode);
+      this.onWillUnmount(() => disposable.dispose());
+    }
   }
 
   /** 设置布局 */
@@ -103,7 +98,8 @@ export class ExplorerNodeItem extends ExplorerItem {
     if (graph) {
       // `resizeToFit` 必须是 `false`, 否则多次调用 `applyLayout` 时，会不断缩小节点
       const layout = { ...defaultLayoutOptions, ...options, resizeToFit: false };
-      if (layout.columns < 1 || layout.columns > graph.getCellCount()) return;
+      const columns = layout.columns ?? 0;
+      if (columns < 1 || columns > graph.getCellCount()) return;
       grid(graph.model as any, layout);
       this.fitToContent();
     }
@@ -145,13 +141,21 @@ export class ExplorerNodeItem extends ExplorerItem {
     });
     this.onWillUnmount(() => resizeObserver.disconnect());
   }
+
+  private _calcColumns() {
+    const { width, height } = this._containerRect ?? {};
+    if (width && height && this.graph) {
+      return Math.floor(width / this._layout.cellWidth);
+    }
+  }
+
   /** 根据尺寸变化，自动调整布局 */
   private _bindResetEvent() {
-    this.onDidResize(({ width, height }) => {
-      if (width && height && this.graph) {
-        const columns = Math.floor(width / this._layout.cellWidth);
-        this.applyLayout({ columns });
-      }
+    const _applyLayout = unique(this.applyLayout).bind(this);
+    this.onDidResize(rect => {
+      this._containerRect = rect;
+      const columns = this._calcColumns();
+      if (columns) _applyLayout({ columns });
     });
   }
 }

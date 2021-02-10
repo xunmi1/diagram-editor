@@ -2,17 +2,6 @@ import { ExplorerItem, DragEvent } from './ExplorerItem';
 import { Disposable, Observer } from '../interfaces';
 import { Graph, Node } from '@antv/x6';
 
-interface DOMRectReadOnly {
-  readonly x: number;
-  readonly y: number;
-  readonly width: number;
-  readonly height: number;
-  readonly top: number;
-  readonly right: number;
-  readonly bottom: number;
-  readonly left: number;
-}
-
 export declare interface LayoutOptions {
   columns: number;
   columnWidth?: number | 'auto' | 'compact';

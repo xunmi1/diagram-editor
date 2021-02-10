@@ -51,6 +51,11 @@
       const a = new ExplorerNodeItem({ title: '测试' });
       a.load(node,node,node,node,node);
 
+      setTimeout(() => {
+        console.log('xxxx')
+        a.load(node,node,node,node,node);
+      }, 3000)
+
       const editor = new DiagramEditor();
       editor.explorer.load('x', a);
       editor

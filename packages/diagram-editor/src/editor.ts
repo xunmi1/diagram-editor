@@ -13,7 +13,7 @@ import { ContextMenu } from '@/contextMenu';
 import { Toolbar } from '@/toolbar';
 import { Statusbar } from '@/statusbar';
 
-import { Subject, Observer, CommandsRegistry } from '@/utils';
+import { Subject, Observer, CommandsRegistry, DisposableDelegate } from '@/utils';
 import { warn, merge } from '@diagram-editor/shared';
 import { EventType } from '@/constants';
 import { defaultOptions } from '@/defaultOptions';
@@ -115,10 +115,14 @@ class DiagramEditor extends Subject {
   }
 
   onDidMount(callback: Observer<Graph>) {
-    if (this._graph) callback(this.graph as Graph);
+    // 特殊处理，如果已经挂载，会立即触发
+    if (this._graph) {
+      const timer = setTimeout(() => callback(this.graph as Graph));
+      return new DisposableDelegate(() => clearTimeout(timer));
+    }
     return this.once(EventType.EDITOR_DID_MOUNT, callback);
   }
-
+  // 配置项更新
   onDidUpdate(callback: Observer<Omit<EditorOptions, 'graph'>>) {
     return this.on<EditorOptions>(EventType.EDITOR_DID_CHANGE_OPTIONS, callback);
   }

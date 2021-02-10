@@ -1,0 +1,31 @@
+{
+  "name": "@diagram-editor/shared",
+  "private": true,
+  "version": "0.1.0",
+  "description": "shared",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "main": "./dist/shared.umd.js",
+  "module": "./dist/shared.es.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xunmi1/diagram-editor.git",
+    "directory": "packages/shared"
+  },
+  "author": "xunmi <xunmi1@outlook.com>",
+  "license": "AGPL-3.0",
+  "peerDependencies": {
+    "ant-design-vue": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.4",
+    "resize-observer-polyfill": "^1.5.1",
+    "lodash-es": "^4.17.20"
+  }
+}

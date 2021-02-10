@@ -1,22 +1,13 @@
 {
-  "name": "diagram-editor",
-  "version": "0.1.0",
-  "description": "Diagram editor",
   "private": true,
-  "files": [
-    "dist"
+  "workspaces": [
+    "packages/*",
+    "plugins/*"
   ],
-  "main": "./dist/diagram-editor.umd.js",
-  "module": "./dist/mdiagram-editor.es.js",
-  "exports": "./dist/diagram-editor.es.js",
-  "types": "types/index.d.ts",
   "scripts": {
-    "dev": "vite",
-    "dev:force": "vite --force",
-    "build": "rimraf dist && vite build",
-    "build:dts": "rimraf types && tsc -d --emitDeclarationOnly --declarationDir types",
+    "bulid": "yarn workspaces run build",
     "format": "prettier \"**/*\" --ignore-unknown --write --ignore-path \"./.gitignore\"",
-    "lint": "eslint \"{src,test}/**/*.{ts,tsx,vue}\" --fix"
+    "lint": "eslint \"{packages,plugins}/**/*.{ts,tsx,vue}\" --fix"
   },
   "repository": {
     "type": "git",
@@ -25,27 +16,21 @@
   "author": "xunmi <xunmi1@outlook.com>",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@antv/x6": "^1.12.29",
-    "@icon-park/svg": "^1.2.4",
-    "ant-design-vue": "^2.0.0-0",
-    "lodash-es": "^4.17.20",
+    "@antv/x6": "^1.12.30",
+    "@icon-park/svg": "^1.2.7",
+    "ant-design-vue": "^2.0.0",
     "mitt": "^2.1.0",
-    "resize-observer-polyfill": "^1.5.1",
-    "vue": "^3.0.5",
-    "vue-color-kit": "^1.0.3"
-  },
-  "peerDependencies": {
-    "@antv/x6": "^1.12"
+    "vue": "^3.0.5"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.4",
-    "@typescript-eslint/eslint-plugin": "^4.14.2",
-    "@typescript-eslint/parser": "^4.14.2",
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
     "@vitejs/plugin-vue": "^1.1.4",
-    "@vitejs/plugin-vue-jsx": "^1.0.2",
+    "@vitejs/plugin-vue-jsx": "^1.0.3",
     "@vue/compiler-sfc": "^3.0.5",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
+    "@vuedx/typescript-plugin-vue": "^0.6.3",
     "@xunmi/prettier-config": "^1.0.2",
     "eslint": "^7.19.0",
     "eslint-config-prettier": "^7.2.0",
@@ -55,8 +40,9 @@
     "less": "^4.1.1",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
+    "rollup": "^1.32.1",
     "typescript": "^4.1.3",
-    "vite": "^2.0.0-beta.64"
+    "vite": "^2.0.0-beta.66"
   },
   "husky": {
     "hooks": {

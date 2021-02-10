@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>diagram-editor</title>
+  </head>
+  <body>
+    <div id="app" style="height: 100vh"></div>
+    <script type="module">
+      // import { DiagramEditor, ExplorerNodeItem, builtInPlugin } from './dist/diagram-editor.es';
+      // import './dist/style.css'
+      import { DiagramEditor, ExplorerNodeItem } from './src/index';
+      import { nodeCountPlugin } from '@diagram-editor/plugin-cell-count';
+      import { graphConfigPlugin } from '@diagram-editor/plugin-graph-config';
+      import { actionsPlugin } from '@diagram-editor/plugin-actions';
+
+      const node = {
+        width: 80,
+        height: 42,
+        attrs: {
+          body: { stroke: '#5F95FF', strokeWidth: 1, fill: 'rgba(95,149,255,0.05)' },
+          text: { fontSize: 12, fill: 'rgba(0,0,0,0.85)' },
+        },
+        ports: {
+          groups: {
+            top: {
+              position: 'top',
+              attrs: { circle: { r: 3, magnet: true, stroke: '#5F95FF', strokeWidth: 1, fill: '#fff' } },
+            },
+            right: {
+              position: 'right',
+              attrs: { circle: { r: 3, magnet: true, stroke: '#5F95FF', strokeWidth: 1, fill: '#fff' } },
+            },
+            bottom: {
+              position: 'bottom',
+              attrs: { circle: { r: 3, magnet: true, stroke: '#5F95FF', strokeWidth: 1, fill: '#fff' } },
+            },
+            left: {
+              position: 'left',
+              attrs: { circle: { r: 3, magnet: true, stroke: '#5F95FF', strokeWidth: 1, fill: '#fff' } },
+            },
+          },
+          items: [{ group: 'top' }, { group: 'right' }, { group: 'bottom' }, { group: 'left' }],
+        },
+      };
+
+      const a = new ExplorerNodeItem({ title: '测试' });
+      a.load(node,node,node,node,node);
+
+      const editor = new DiagramEditor();
+      editor.explorer.load('x', a);
+      editor
+        .use(actionsPlugin())
+        .use(nodeCountPlugin({ key: 'xxxx' }))
+        .use(graphConfigPlugin({ key: 'config' }))
+        .mount('#app');
+    </script>
+  </body>
+</html>

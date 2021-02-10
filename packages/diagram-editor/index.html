@@ -14,11 +14,9 @@
       // import { DiagramEditor, ExplorerNodeItem, builtInPlugin } from './dist/diagram-editor.es';
       // import './dist/style.css'
       import { DiagramEditor, ExplorerNodeItem } from './src/index';
-      import { nodeCountPlugin } from '../../plugins/cell-count/dist/plugin-cell-count.es.js';
-      import { graphConfigPlugin } from '../../plugins/graph-config/dist/plugin-graph-config.es.js';
-      // import { actionsPlugin } from '../../plugins/actions/dist/plugin-actions.es.js';
+      import { nodeCountPlugin } from '@diagram-editor/plugin-cell-count';
+      import { graphConfigPlugin } from '@diagram-editor/plugin-graph-config';
       import { actionsPlugin } from '@diagram-editor/plugin-actions';
-      import '../../plugins/graph-config/dist/style.css';
 
       const node = {
         width: 80,
@@ -51,7 +49,7 @@
       };
 
       const a = new ExplorerNodeItem({ title: '测试' });
-      a.load(node);
+      a.load(node,node,node,node,node);
 
       const editor = new DiagramEditor();
       editor.explorer.load('x', a);

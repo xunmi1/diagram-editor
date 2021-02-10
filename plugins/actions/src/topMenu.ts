@@ -4,7 +4,7 @@ import { TopMenuKey } from './constants';
 const menuList = [
   { key: TopMenuKey.FILE, text: '文件' },
   { key: TopMenuKey.EDIT, text: '编辑' },
-  { key: TopMenuKey.VIEW, text: '查看' },
+  { key: TopMenuKey.VIEW, text: '视图' },
   { key: TopMenuKey.TOOL, text: '工具' },
   { key: TopMenuKey.HELP, text: '帮助' },
 ];

@@ -15,13 +15,14 @@ const getPackages = (rootPath: string): [string, string][] => {
     return workspace;
   });
 
-  const findEntry = (folderPath: string) => {
+  const findEntry = (folderPath: string): [string, string] | void => {
     const resolve = (...paths: string[]): string => path.resolve(folderPath, ...paths);
     // eslint-disable-next-line
     const name: string = require(resolve('package.json')).name;
-    const rootPath = resolve('index.ts');
+    // 首先寻找根位置的 `index.ts`, 其次是 `src/index.ts`
+    const rootPath = resolve('./index.ts');
     if (fs.existsSync(rootPath)) return [name, rootPath];
-    const srcPath = resolve('src/index.ts');
+    const srcPath = resolve('./src/index.ts');
     if (fs.existsSync(srcPath)) return [name, srcPath];
   };
   return folders
@@ -30,6 +31,12 @@ const getPackages = (rootPath: string): [string, string][] => {
     .filter(Boolean);
 };
 
+/**
+ * 观察其他工作空间的代码变化
+ * 通过自动添加别名实现
+ * @param rootPath 项目根路径
+ * @param exclude 排除项
+ */
 const watchWorkspaces = (rootPath: string, exclude: string[] = []) => {
   const packages = getPackages(rootPath);
 
@@ -51,7 +58,7 @@ const watchWorkspaces = (rootPath: string, exclude: string[] = []) => {
         },
       };
 
-      console.info('\x1B[36m%s\x1B[0m', `Additional alias: ${addition.map(([name]) => name)}`);
+      console.info(`Additional alias: \x1B[36m${addition.map(([name]) => name)}\x1B[0m`);
 
       return modifiedConfig;
     },

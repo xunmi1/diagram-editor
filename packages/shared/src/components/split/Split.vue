@@ -36,14 +36,16 @@ import { INJECT_KEY } from './contants';
 
 type ResizeObserverCallback = ConstructorParameters<typeof ResizeObserver>[0];
 const useResizeObserver = (handler: ResizeObserverCallback, container: Ref<HTMLElement | undefined>) => {
-  const observer = shallowRef(new ResizeObserver(handler));
+  const observer = shallowRef<ResizeObserver | undefined>();
   onMounted(() => {
+    observer.value = new ResizeObserver(handler);
     const el = unref(container)!;
-    observer.value.observe(el);
+    observer.value!.observe(el);
   });
 
   onBeforeUnmount(() => {
-    observer.value?.unobserve(container.value!);
+    observer.value?.disconnect();
+    observer.value = undefined;
   });
 
   return observer;

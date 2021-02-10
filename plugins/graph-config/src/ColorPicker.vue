@@ -70,7 +70,7 @@ export default defineComponent({
         min-width: 218px;
 
         > .color-show {
-          max-height: 16px;
+          display: none;
         }
       }
     }

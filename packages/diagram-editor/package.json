@@ -8,6 +8,12 @@
   ],
   "main": "./dist/diagram-editor.umd.js",
   "module": "./dist/diagram-editor.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/diagram-editor.es.js",
+      "require": "./dist/diagram-editor.umd.js"
+    }
+  },
   "types": "types/index.d.ts",
   "scripts": {
     "dev": "vite",

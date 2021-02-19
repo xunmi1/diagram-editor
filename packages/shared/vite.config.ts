@@ -8,6 +8,7 @@ export default defineConfig({
     lib: {
       entry: './src/index.ts',
       name: 'shared',
+      formats: ['es', 'cjs'],
     },
     brotliSize: false,
     rollupOptions: {

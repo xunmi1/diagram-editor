@@ -9,7 +9,7 @@
   "module": "./dist/plugin-cell-count.es.js",
   "types": "./types/index.d.ts",
   "scripts": {
-    "build": "rimraf dist && vite build && yarn build:dts",
+    "build": "vite build",
     "build:dts": "rimraf types && tsc --declarationDir types"
   },
   "repository": {

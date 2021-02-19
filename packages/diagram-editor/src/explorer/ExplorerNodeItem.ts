@@ -1,18 +1,11 @@
 import { Graph, Node } from '@antv/x6';
-import { grid } from '@antv/x6/es/layout/grid';
+import { grid, LayoutOptions } from './grid';
 import ResizeObserver from 'resize-observer-polyfill';
 import { throttle, lazyTask } from '@diagram-editor/shared';
 import { ExplorerItem, DragEvent } from './ExplorerItem';
 import { Observer } from '@/utils';
 
-export interface LayoutOptions {
-  columns?: number;
-  columnWidth?: number | 'auto' | 'compact';
-  rowHeight?: number | 'auto' | 'compact';
-  dx?: number;
-  dy?: number;
-  center?: boolean;
-}
+export type { LayoutOptions };
 
 // 根据参数，拦截相同参数的函数调用
 const unique = <T extends (...params: any[]) => void>(func: T) => {

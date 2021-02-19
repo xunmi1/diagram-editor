@@ -7,11 +7,11 @@
     "dist",
     "types"
   ],
-  "main": "./dist/shared.umd.js",
+  "main": "./dist/shared.cjs.js",
   "module": "./dist/shared.es.js",
   "types": "types/index.d.ts",
   "scripts": {
-    "build": "rimraf dist && vite build"
+    "build": "vite build"
   },
   "repository": {
     "type": "git",

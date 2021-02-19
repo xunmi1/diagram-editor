@@ -1,7 +1,7 @@
 // @ts-nocheck
 import path from 'path';
 import fs from 'fs';
-import type { UserConfig } from 'vite';
+import type { Plugin } from 'vite';
 
 const getPackages = (rootPath: string): [string, string][] => {
   // eslint-disable-next-line
@@ -37,24 +37,24 @@ const getPackages = (rootPath: string): [string, string][] => {
  * @param rootPath 项目根路径
  * @param exclude 排除项
  */
-const watchWorkspaces = (rootPath: string, exclude: string[] = []) => {
+const watchWorkspaces = (rootPath: string, exclude: string[] = []): Plugin => {
   const packages = getPackages(rootPath);
 
   return {
     name: 'vite-plugin-watch-workspaces',
 
-    config: (userConfig: UserConfig) => {
-      const alias = Object.values(userConfig.alias);
-
+    config: (userConfig, env) => {
+      if (env.command !== 'serve') return;
+      const userAlias = Object.values(userConfig.resolve.alias);
+      const optimizeDeps = userConfig.optimizeDeps ?? {};
+      const excludeList = [...exclude, ...(optimizeDeps.include ?? []), ...(optimizeDeps.exclude ?? [])];
       const addition = packages.filter(
-        ([name, fullPath]) => !exclude.includes(name) && !alias.find(path => fullPath.includes(path))
+        ([name, fullPath]) => !excludeList.includes(name) && !userAlias.find(path => fullPath.includes(path))
       );
 
       const modifiedConfig = {
-        ...userConfig,
-        alias: {
-          ...Object.fromEntries(addition),
-          ...userConfig.alias,
+        resolve: {
+          alias: Object.fromEntries(addition),
         },
       };
 

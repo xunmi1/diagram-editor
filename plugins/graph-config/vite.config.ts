@@ -10,7 +10,7 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: ['@diagram-editor/diagram-editor'],
+      external: ['@diagram-editor/diagram-editor', 'moment'],
       output: {
         exports: 'named',
       },

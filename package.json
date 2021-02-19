@@ -5,7 +5,7 @@
     "plugins/*"
   ],
   "scripts": {
-    "bulid": "yarn workspaces run build",
+    "build": "yarn workspace @diagram-editor/shared run build && yarn workspaces run build",
     "format": "prettier \"**/*\" --ignore-unknown --write --ignore-path \"./.gitignore\"",
     "lint": "eslint \"{packages,plugins}/**/*.{ts,tsx,vue}\" --fix"
   },

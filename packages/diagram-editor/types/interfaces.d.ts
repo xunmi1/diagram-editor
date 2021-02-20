@@ -1,6 +1,6 @@
 import type { Options } from '@antv/x6/lib/graph/options';
 import type DiagramEditor from './editor';
-import { Disposable } from './utils';
+import type { Disposable } from './utils';
 export type { Observer, Disposable, Command, CommandId, CommandsRegistry } from './utils';
 export type { DiagramEditor };
 export declare type GraphOptions = Partial<Options.Manual> | undefined;

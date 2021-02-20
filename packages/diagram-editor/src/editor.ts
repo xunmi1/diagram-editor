@@ -1,23 +1,23 @@
-import { createApp, App as VueApp } from 'vue';
-import type { ComponentPublicInstance } from '@vue/runtime-core';
+import { createApp, App as VueApp, ComponentPublicInstance } from 'vue';
 import type { Graph, Cell } from '@antv/x6';
-import App from '@/App.vue';
-import antd from '@/antd';
-import { useOnceWatch } from '@/use';
-import { EditorOptions, Plugin } from '@/interfaces';
-
-import { Explorer } from '@/explorer';
-import { Controller } from '@/controller';
-import { Menubar } from '@/menubar';
-import { ContextMenu } from '@/contextMenu';
-import { Toolbar } from '@/toolbar';
-import { Statusbar } from '@/statusbar';
-
-import { Subject, Observer, CommandsRegistry, DisposableDelegate } from '@/utils';
 import { warn, merge } from '@diagram-editor/shared';
-import { EventType } from '@/constants';
-import { defaultOptions } from '@/defaultOptions';
-import { bindActiveEvent, bindMouseEvent } from '@/events';
+
+import App from './App.vue';
+import antd from './antd';
+import { useOnceWatch } from './use';
+import { EditorOptions, Plugin } from './interfaces';
+
+import { Explorer } from './explorer';
+import { Controller } from './controller';
+import { Menubar } from './menubar';
+import { ContextMenu } from './contextMenu';
+import { Toolbar } from './toolbar';
+import { Statusbar } from './statusbar';
+
+import { Subject, Observer, CommandsRegistry, DisposableDelegate } from './utils';
+import { EventType } from './constants';
+import { defaultOptions } from './defaultOptions';
+import { bindActiveEvent, bindMouseEvent } from './events';
 
 class DiagramEditor extends Subject {
   public readonly explorer: Explorer;
@@ -57,17 +57,6 @@ class DiagramEditor extends Subject {
     return { ...this._options };
   }
 
-  /**
-   * 更新配置
-   * @description options 属于 object, 为便于使用而合并选项，不合适定义为 setter.
-   */
-  update(options: Omit<EditorOptions, 'graph'>) {
-    this._options = merge(this._options, options);
-    // eslint-disable-next-line
-    const { graph, ...rest } = this._options;
-    this.emit(EventType.EDITOR_DID_CHANGE_OPTIONS, rest);
-  }
-
   get graph() {
     return this._graph;
   }
@@ -98,7 +87,7 @@ class DiagramEditor extends Subject {
             this.emit(EventType.EDITOR_DID_CHANGE_MOUSE_CELL, this._mouseCell);
           });
 
-          this.emit(EventType.EDITOR_DID_MOUNT, vm.graph);
+          this.emit(EventType.EDITOR_DID_MOUNT, this._graph);
           resolve(vm.graph);
         }
 
@@ -108,10 +97,26 @@ class DiagramEditor extends Subject {
   }
 
   unmount(rootContainer = this._rootContainer) {
-    this._graph?.dispose();
+    this.dispose();
     this._app?.unmount(rootContainer);
     this._app = undefined;
     this._rootContainer = undefined;
+  }
+
+  dispose() {
+    super.dispose();
+    this._graph?.dispose();
+  }
+
+  /**
+   * 更新配置
+   * @description options 属于 object, 为便于使用而合并选项，不合适定义为 setter.
+   */
+  update(options: Omit<EditorOptions, 'graph'>) {
+    this._options = merge(this._options, options);
+    // eslint-disable-next-line
+    const { graph, ...rest } = this._options;
+    this.emit(EventType.EDITOR_DID_CHANGE_OPTIONS, rest);
   }
 
   onDidMount(callback: Observer<Graph>) {

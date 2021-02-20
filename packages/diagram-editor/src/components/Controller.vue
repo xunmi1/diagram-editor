@@ -80,7 +80,10 @@ export default defineComponent({
     const instance = getCurrentInstance();
     const panelList = usePanelList(item => {
       item.created?.(editor);
-      onBeforeUnmount(() => item.destroy?.(editor), instance);
+      onBeforeUnmount(() => {
+        item.destroy?.(editor);
+        item.dispose();
+      }, instance);
     });
     const activeCell = useActiveCell();
     const lifecycle = useLifecycle();

@@ -90,10 +90,10 @@ export default defineComponent({
 
     const panelList = usePanelList(item => {
       item.created?.(editor);
-      const disposable = item.onWillDrag?.(drag);
+      item.onWillDrag?.(drag);
       onBeforeUnmount(() => {
         item.destroy?.(editor);
-        disposable?.dispose();
+        item.dispose();
       });
     });
 

@@ -6,11 +6,17 @@ export type Observer<T> = (event: T) => void;
 /**
  * Observer pattern & [Dispose pattern](https://wikipedia.org/wiki/Dispose_pattern)
  */
-export class Subject {
+export class Subject extends Disposable {
   private readonly _emitter: Emitter;
 
   constructor() {
+    super();
     this._emitter = mitt();
+  }
+
+  dispose() {
+    this._emitter.all.clear();
+    super.dispose();
   }
 
   on<T = unknown>(type: EventType, handler: Observer<T>): Disposable {

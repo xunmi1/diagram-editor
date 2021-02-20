@@ -1,5 +1,5 @@
 <template>
-  <AConfigProvider :locale="locale" :get-popup-container="getPopupContainer" prefix-cls="editor" v-bind="$attrs">
+  <AConfigProvider :locale="locale" :get-popup-container="getPopupContainer" :prefix-cls="prefixClass" v-bind="$attrs">
     <slot />
   </AConfigProvider>
 </template>
@@ -16,10 +16,11 @@ export default defineComponent({
   },
   setup() {
     const locale = Object.freeze(zhCN);
+    const prefixClass = 'editor';
     const instance = getCurrentInstance();
-    const getPopupContainer = () => instance?.appContext.app._container;
+    const getPopupContainer = () => (instance?.appContext.app._container as HTMLElement).firstElementChild;
 
-    return { locale, getPopupContainer };
+    return { locale, prefixClass, getPopupContainer };
   },
 });
 </script>

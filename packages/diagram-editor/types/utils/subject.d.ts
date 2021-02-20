@@ -4,8 +4,9 @@ export declare type Observer<T> = (event: T) => void;
 /**
  * Observer pattern & [Dispose pattern](https://wikipedia.org/wiki/Dispose_pattern)
  */
-export declare class Subject {
+export declare class Subject extends Disposable {
   constructor();
+  dispose(): void;
   on<T = unknown>(type: EventType, handler: Observer<T>): Disposable;
   once<T = unknown>(type: EventType, handler: Observer<T>): Disposable;
   off<T = unknown>(type: EventType, handler: Observer<T>): void;

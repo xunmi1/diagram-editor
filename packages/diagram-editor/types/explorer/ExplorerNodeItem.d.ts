@@ -1,15 +1,9 @@
 import { ExplorerItem, DragEvent } from './ExplorerItem';
 import { Disposable, Observer } from '../interfaces';
 import { Graph, Node } from '@antv/x6';
+import { LayoutOptions } from './grid';
 
-export declare interface LayoutOptions {
-  columns: number;
-  columnWidth?: number | 'auto' | 'compact';
-  rowHeight?: number | 'auto' | 'compact';
-  dx?: number;
-  dy?: number;
-  center?: boolean;
-}
+export type { LayoutOptions };
 
 export declare class ExplorerNodeItem extends ExplorerItem {
   readonly title: string;

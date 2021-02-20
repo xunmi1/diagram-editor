@@ -29,6 +29,7 @@ declare class DiagramEditor extends Subject {
   get mouseCell(): Cell<Cell.Properties> | undefined;
   mount(rootContainer: string | HTMLElement): Promise<Graph>;
   unmount(rootContainer?: string | HTMLElement | undefined): void;
+  dispose(): void;
   onDidMount(callback: Observer<Graph>): Disposable;
   onDidUpdate(callback: Observer<Omit<EditorOptions, 'graph'>>): Disposable;
   onDidChangeActiveCell(callback: Observer<Cell | undefined>): Disposable;

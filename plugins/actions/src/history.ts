@@ -42,7 +42,8 @@ export const historyPlugin: Plugin = editor => {
     const menubarItem = new MenubarItem({ text: meta.text, command: meta.command, extra: meta.hotKey });
     menubar.load(meta.key, menubarItem, parentKey);
 
-    const toolbarItem = new ToolbarItem({ icon: meta.icon, command: meta.command, tooltip: meta.text });
+    const tooltip = `${meta.text} (${meta.hotKey})`;
+    const toolbarItem = new ToolbarItem({ icon: meta.icon, command: meta.command, tooltip });
     toolbar.load(meta.key, toolbarItem);
 
     commands.register(meta.command, meta.action);

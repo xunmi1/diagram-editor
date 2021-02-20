@@ -14,17 +14,9 @@ export const actionsPlugin = (): Plugin => editor => {
   sortMenubar(editor.menubar);
 };
 
+const groups = ['|', ActionKey.UNDO, ActionKey.REDO, '|', ActionKey.CUT, ActionKey.COPY, ActionKey.PASTE, '|'];
+
 const sortMenubar = (menubar: DiagramEditor['menubar']) => {
   const editMenuItem = menubar.get(TopMenuKey.EDIT);
-  editMenuItem!.groups = [
-    ...menubar.groups,
-    '|',
-    ActionKey.UNDO,
-    ActionKey.REDO,
-    '|',
-    ActionKey.CUT,
-    ActionKey.COPY,
-    ActionKey.PASTE,
-    '|',
-  ];
+  editMenuItem!.groups = [...menubar.groups, ...groups];
 };

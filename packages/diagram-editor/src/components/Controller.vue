@@ -24,9 +24,9 @@
 <script lang="ts">
 import { defineComponent, watch, shallowReactive, shallowRef, onBeforeUnmount, getCurrentInstance } from 'vue';
 import type { Cell } from '@antv/x6';
-import { useEditor } from '@/use';
-import { ControllerItem } from '@/controller';
-import { EventType } from '@/constants';
+import { useEditor } from '../use';
+import { ControllerItem } from '../controller';
+import { EventType } from '../constants';
 import Container from './Container';
 
 type PanelList = Map<string, ControllerItem>;

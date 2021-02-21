@@ -51,7 +51,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, shallowRef, onBeforeUnmount, Ref, PropType } from 'vue';
 import { ConfigProvider, Split, SplitPanel, lazyTask } from '@diagram-editor/shared';
-import { useGraph, useEditor, useGlobalGraph } from '@/use';
+import { useGraph, useEditor, useGlobalGraph } from './use';
 import Menubar from './components/menubar/Menubar.vue';
 import Toolbar from './components/toolbar/Toolbar.vue';
 import Statusbar from './components/statusbar/Statusbar.vue';

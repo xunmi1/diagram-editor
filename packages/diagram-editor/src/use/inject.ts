@@ -1,8 +1,8 @@
 import { inject, provide, isRef, unref, InjectionKey, Ref } from 'vue';
 import { Graph } from '@antv/x6';
 import { isFunction } from '@diagram-editor/shared';
-import { useOnceWatch } from '@/use';
-import { DiagramEditor } from '@/interfaces';
+import { useOnceWatch } from '../use';
+import { DiagramEditor } from '../interfaces';
 
 export const useInject = <T>(key: InjectionKey<T> | string, value?: T) => {
   if (value) provide(key, value);

@@ -18,7 +18,7 @@
 import { ref, computed, defineComponent, PropType } from 'vue';
 import { Check } from '@icon-park/svg';
 import { stringifySVG } from '@diagram-editor/shared';
-import { MenuItem } from '@/menu';
+import { MenuItem } from '../../menu';
 import { useMenuItem, useDivider } from './use';
 
 const checkSVG = stringifySVG(Check);

@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { ToolbarItem } from '@/toolbar';
+import { ToolbarItem } from '../../toolbar';
 import { useToolItem } from './use';
 
 export default defineComponent({

@@ -49,11 +49,11 @@
       };
 
       const a = new ExplorerNodeItem({ title: '测试' });
-      a.load(node,node,node,node,node);
+      a.load(node, node, node, node, node);
 
       setTimeout(() => {
-        a.load(node,node,node,node,node);
-      }, 3000)
+        a.load(node, node, node, node, node);
+      }, 3000);
 
       const editor = new DiagramEditor();
       editor.explorer.load('x', a);

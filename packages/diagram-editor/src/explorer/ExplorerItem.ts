@@ -1,7 +1,7 @@
-import { Subject, Disposable, Observer } from '@/utils';
+import { Subject, Disposable, Observer } from '../utils';
 import type { Cell } from '@antv/x6';
-import { DiagramEditor, Lifecycle, LifecycleCallback } from '@/interfaces';
-import { EventType } from '@/constants';
+import { DiagramEditor, Lifecycle, LifecycleCallback } from '../interfaces';
+import { EventType } from '../constants';
 
 export type DragEvent = Observer<{
   cell: Cell;

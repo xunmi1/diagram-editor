@@ -45,7 +45,7 @@ const watchWorkspaces = (rootPath: string, exclude: string[] = []): Plugin => {
 
     config: (userConfig, env) => {
       if (env.command !== 'serve') return;
-      const userAlias = Object.values(userConfig.resolve.alias);
+      const userAlias = Object.values(userConfig.resolve?.alias ?? {});
       const optimizeDeps = userConfig.optimizeDeps ?? {};
       const excludeList = [...exclude, ...(optimizeDeps.include ?? []), ...(optimizeDeps.exclude ?? [])];
       const addition = packages.filter(

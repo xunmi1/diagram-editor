@@ -1,8 +1,8 @@
 import { onBeforeUnmount, shallowRef, triggerRef, toRaw, computed, Ref } from 'vue';
-import { MenuItem } from '@/menu';
 import { lazyTask } from '@diagram-editor/shared';
-import { GROUP_TAG } from '@/constants';
-import { Disposable } from '@/interfaces';
+import { MenuItem } from '../../menu';
+import { GROUP_TAG } from '../../constants';
+import { Disposable } from '../../interfaces';
 
 export const useMenuItem = (menu: MenuItem<any>) => {
   const disposables: Disposable[] = [];

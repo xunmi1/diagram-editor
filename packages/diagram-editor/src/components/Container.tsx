@@ -8,8 +8,8 @@ import {
   onUnmounted,
   PropType,
 } from 'vue';
-import { useGlobalGraph, useEditor } from '@/use';
-import { Lifecycle } from '@/interfaces';
+import { useGlobalGraph, useEditor } from '../use';
+import { Lifecycle } from '../interfaces';
 
 const asyncGlobalGraph = () => {
   return new Promise(resolve => {

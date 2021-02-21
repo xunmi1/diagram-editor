@@ -23,12 +23,12 @@
 
 <script lang="ts">
 import { defineComponent, shallowReactive, shallowRef, ref, unref, onBeforeUnmount } from 'vue';
-import { useEditor, useGlobalGraph } from '@/use';
+import { useEditor, useGlobalGraph } from '../use';
 import { Addon, Cell } from '@antv/x6';
-import type { ExplorerItem } from '@/explorer';
+import type { ExplorerItem } from '../explorer';
 import Container from './Container';
 import type { Node } from '@antv/x6/lib/model/node';
-import { EventType } from '@/constants';
+import { EventType } from '../constants';
 
 const useDnd = () => {
   const dndRef = shallowRef<Addon.Dnd>();

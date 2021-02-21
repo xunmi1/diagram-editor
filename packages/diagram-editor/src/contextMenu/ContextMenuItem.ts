@@ -1,5 +1,5 @@
-import { DiagramEditor } from '@/interfaces';
-import { MenuItem, MenuItemOptions } from '@/menu';
+import { DiagramEditor } from '../interfaces';
+import { MenuItem, MenuItemOptions } from '../menu';
 
 export interface ContextMenuItemOptions extends MenuItemOptions {}
 

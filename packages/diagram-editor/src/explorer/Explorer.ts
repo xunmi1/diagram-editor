@@ -1,4 +1,4 @@
-import { Subject, Observer } from '@/utils';
+import { Subject, Observer } from '../utils';
 import type { ExplorerItem } from './ExplorerItem';
 
 const EVENT_TYPE_LOAD = Symbol('EXPLORER_ITEM_LOAD');

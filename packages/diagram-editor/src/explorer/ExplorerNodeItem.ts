@@ -3,7 +3,7 @@ import { grid, LayoutOptions } from './grid';
 import ResizeObserver from 'resize-observer-polyfill';
 import { throttle, lazyTask } from '@diagram-editor/shared';
 import { ExplorerItem, DragEvent } from './ExplorerItem';
-import { Observer } from '@/utils';
+import { Observer } from '../utils';
 
 export type { LayoutOptions };
 

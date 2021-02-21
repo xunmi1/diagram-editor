@@ -9,7 +9,8 @@
   "module": "./dist/plugin-graph-config.es.js",
   "types": "./types/index.d.ts",
   "scripts": {
-    "build": "vite build"
+    "build": "vite build && yarn run build:dts",
+    "build:dts": "rimraf types && tsc -p tsconfig.d.json"
   },
   "repository": {
     "type": "git",

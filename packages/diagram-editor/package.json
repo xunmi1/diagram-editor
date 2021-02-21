@@ -18,7 +18,8 @@
   "scripts": {
     "dev": "vite",
     "dev:force": "vite --force",
-    "build": "rimraf dist && vite build"
+    "build": "vite build && yarn run build:dts",
+    "build:dts": "rimraf types && tsc -p tsconfig.d.json"
   },
   "repository": {
     "type": "git",

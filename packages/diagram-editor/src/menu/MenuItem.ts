@@ -1,4 +1,4 @@
-import { CommandId, Observer, Subject } from '@/utils';
+import { CommandId, Observer, Subject } from '../utils';
 import { lazyTask } from '@diagram-editor/shared';
 
 import { getGroups } from './utils';

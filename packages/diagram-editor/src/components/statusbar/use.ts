@@ -1,5 +1,5 @@
 import { onBeforeUnmount, shallowRef } from 'vue';
-import type { StatusbarItem } from '@/statusbar';
+import type { StatusbarItem } from '../../statusbar';
 
 export const useStatusItem = (item: StatusbarItem) => {
   const statusItem = shallowRef(item);

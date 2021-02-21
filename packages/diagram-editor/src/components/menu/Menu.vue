@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, toRefs, PropType } from 'vue';
-import type { MenuItem } from '@/menu';
+import type { MenuItem } from '../../menu';
 import SubMenu from './SubMenu.vue';
 import { useDivider } from './use';
 

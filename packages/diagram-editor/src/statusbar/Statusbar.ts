@@ -1,4 +1,4 @@
-import { Observer, Subject } from '@/utils';
+import { Observer, Subject } from '../utils';
 import { StatusbarItem } from './StatusbarItem';
 
 const EVENT_TYPE_LOAD = Symbol('STATUSBAR_ITEM_LOAD');

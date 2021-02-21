@@ -1,4 +1,4 @@
-import type { EditorOptions } from '@/interfaces';
+import type { EditorOptions } from './interfaces';
 
 const DEFAULT_SIZE = 12;
 

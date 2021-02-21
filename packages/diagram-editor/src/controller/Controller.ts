@@ -1,4 +1,4 @@
-import { Observer, Subject } from '@/utils';
+import { Observer, Subject } from '../utils';
 import type { ControllerItem } from './ControllerItem';
 
 const EVENT_TYPE_LOAD = Symbol('CONTROLLER_ITEM_LOAD');

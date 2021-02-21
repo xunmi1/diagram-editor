@@ -1,4 +1,4 @@
-import { MenuItem, MenuItemOptions } from '@/menu';
+import { MenuItem, MenuItemOptions } from '../menu';
 
 export interface MenubarItemOptions extends MenuItemOptions {}
 

@@ -34,7 +34,7 @@ const initState = (editor: DiagramEditor, state: State) => {
   });
 };
 
-export default class GraphConfig extends ControllerItem {
+class GraphConfig extends ControllerItem {
   public readonly title: string;
 
   public readonly state: State;

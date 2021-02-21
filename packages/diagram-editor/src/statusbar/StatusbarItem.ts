@@ -1,5 +1,5 @@
 import { lazyTask } from '@diagram-editor/shared';
-import { CommandId, Observer, Subject } from '@/utils';
+import { CommandId, Observer, Subject } from '../utils';
 
 export interface StatusbarItemOptions {
   command?: CommandId;

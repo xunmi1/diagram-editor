@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { StatusbarItem } from '@/statusbar';
+import type { StatusbarItem } from '../statusbar';
 import { useStatusItem } from './use';
 
 export default defineComponent({

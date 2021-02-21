@@ -13,10 +13,10 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, shallowRef, triggerRef } from 'vue';
-import { useEditor } from '@/use';
 import { lazyTask } from '@diagram-editor/shared';
-import { Disposable } from '@/interfaces';
-import type { Menubar, MenubarItem } from '@/menubar';
+import { useEditor } from '../../use';
+import { Disposable } from '../../interfaces';
+import type { Menubar, MenubarItem } from '../../menubar';
 import MenuItem from './MenuItem.vue';
 import { useDivider } from '../menu';
 

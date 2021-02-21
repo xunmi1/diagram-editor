@@ -1,6 +1,6 @@
-import { Subject } from '@/utils';
-import { EventType } from '@/constants';
-import { DiagramEditor, Lifecycle, LifecycleCallback } from '@/interfaces';
+import { Subject } from '../utils';
+import { EventType } from '../constants';
+import { DiagramEditor, Lifecycle, LifecycleCallback } from '../interfaces';
 
 export abstract class ControllerItem extends Subject implements Lifecycle {
   readonly title: string;

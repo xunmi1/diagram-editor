@@ -1,4 +1,4 @@
-import { Observer, Subject } from '@/utils';
+import { Observer, Subject } from '../utils';
 import { ToolbarItem } from './ToolbarItem';
 
 const EVENT_TYPE_LOAD = Symbol('TOOLBAR_ITEM_LOAD');

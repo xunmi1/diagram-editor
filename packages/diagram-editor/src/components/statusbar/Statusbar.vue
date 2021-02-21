@@ -12,9 +12,9 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, ref } from 'vue';
-import { useEditor } from '@/use';
+import { useEditor } from '../../use';
 import { lazyTask } from '@diagram-editor/shared';
-import type { StatusbarItem } from '@/statusbar';
+import type { StatusbarItem } from '../../statusbar';
 import StatusItem from './StatusItem.vue';
 
 type MenubarList = Map<string, StatusbarItem>;

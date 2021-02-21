@@ -1,13 +1,9 @@
-// @ts-ignore
-import path from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import jsx from '@vitejs/plugin-vue-jsx';
 import watchWorkspaces from './vitePluginWatch';
 // @ts-ignore
 // import visualizer from 'rollup-plugin-visualizer';
-
-const resolve = (dir: string): string => path.resolve(__dirname, dir);
 
 export default defineConfig({
   plugins: [vue(), jsx(), watchWorkspaces('../../')],
@@ -26,11 +22,6 @@ export default defineConfig({
           moment: 'moment',
         },
       },
-    },
-  },
-  resolve: {
-    alias: {
-      '@': resolve('./src'),
     },
   },
   css: {

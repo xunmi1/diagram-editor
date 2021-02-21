@@ -13,8 +13,8 @@
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, ref } from 'vue';
 import { lazyTask } from '@diagram-editor/shared';
-import { useEditor } from '@/use';
-import type { ToolbarItem } from '@/toolbar';
+import { useEditor } from '../../use';
+import type { ToolbarItem } from '../../toolbar';
 import ToolItem from './ToolItem.vue';
 
 type ToolbarList = Map<string, ToolbarItem>;

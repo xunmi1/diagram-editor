@@ -1,5 +1,5 @@
 import { onBeforeUnmount, shallowRef } from 'vue';
-import type { ToolbarItem } from '@/toolbar';
+import type { ToolbarItem } from '../../toolbar';
 
 export const useToolItem = (item: ToolbarItem) => {
   const toolItem = shallowRef(item);

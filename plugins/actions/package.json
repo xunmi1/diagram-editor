@@ -9,8 +9,8 @@
   "module": "./dist/plugin-actions.es.js",
   "types": "./types/index.d.ts",
   "scripts": {
-    "build": "vite build",
-    "build:dts": "rimraf types && tsc --declarationDir types"
+    "build": "vite build && yarn run build:dts",
+    "build:dts": "rimraf types && tsc -p tsconfig.d.json"
   },
   "repository": {
     "type": "git",

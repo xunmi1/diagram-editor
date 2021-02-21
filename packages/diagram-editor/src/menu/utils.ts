@@ -1,4 +1,4 @@
-import { GROUP_TAG } from '@/constants';
+import { GROUP_TAG } from '../constants';
 
 export const getGroups = (groups: string[]) => {
   const temp = groups.reduce<string[]>((pre, key) => {

@@ -1,5 +1,5 @@
-import { Cell, Graph } from '@antv/x6';
-import { Observer } from '@/utils';
+import type { Cell, Graph } from '@antv/x6';
+import type { Observer } from './utils';
 
 export const bindMouseEvent = (graph: Graph, callback: Observer<Cell | undefined>) => {
   let mouseCell: Cell | undefined;

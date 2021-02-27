@@ -30,7 +30,6 @@ class DiagramEditor extends Subject {
 
   private _options: EditorOptions;
   private readonly _installedPlugins: Set<Plugin>;
-  private _rootContainer?: string | HTMLElement;
 
   private _graph?: Graph;
   private _activeCell?: Cell;
@@ -70,7 +69,6 @@ class DiagramEditor extends Subject {
   }
 
   mount(rootContainer: string | HTMLElement) {
-    this._rootContainer = rootContainer;
     const vm = this._app?.mount(rootContainer) as ComponentPublicInstance<{}, {}, { graph: Graph }>;
 
     return new Promise<Graph>(resolve => {
@@ -96,11 +94,10 @@ class DiagramEditor extends Subject {
     });
   }
 
-  unmount(rootContainer = this._rootContainer) {
+  unmount() {
     this.dispose();
-    this._app?.unmount(rootContainer);
+    this._app?.unmount();
     this._app = undefined;
-    this._rootContainer = undefined;
   }
 
   dispose() {

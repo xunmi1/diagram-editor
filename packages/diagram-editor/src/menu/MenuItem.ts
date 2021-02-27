@@ -17,7 +17,7 @@ const EVENT_TYPE_CHILD_APPEND = Symbol('CHILD_APPEND');
 const EVENT_TYPE_VISIBLE = Symbol('VISIBLE');
 const EVENT_TYPE_CHANGE_GROUPS = Symbol('CHANGE_GROUPS');
 
-export class MenuItem<T extends MenuItem<T> = MenuItem<never>> extends Subject {
+export class MenuItem<T extends MenuItem<T> = MenuItem<any>> extends Subject {
   public readonly command?: CommandId;
   public children?: Map<string, T>;
 

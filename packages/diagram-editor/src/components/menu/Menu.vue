@@ -42,7 +42,7 @@ export default defineComponent({
       emit('click', key);
     };
 
-    const getChild = (key: string): MenuItem | undefined => children.value.get(key);
+    const getChild = (key: string) => children.value.get(key) as MenuItem;
     const { has, visibleList } = useDivider(groups, children);
     return { clickMenu, show, getChild, has, visibleList };
   },

@@ -59,8 +59,8 @@ class GraphConfig extends ControllerItem {
     this.app.mount(container);
   }
 
-  unmount(container: HTMLElement) {
-    this.app?.unmount(container);
+  unmount() {
+    this.app?.unmount();
     this.app = undefined;
   }
 

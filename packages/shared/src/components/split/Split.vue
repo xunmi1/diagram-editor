@@ -33,12 +33,11 @@ import {
 import ResizeObserver from 'resize-observer-polyfill';
 import { throttle, lazyTask, addEvent, removeEvent, setProperty } from '../../utils';
 import { INJECT_KEY } from './contants';
-
 type ResizeObserverCallback = ConstructorParameters<typeof ResizeObserver>[0];
-const useResizeObserver = (handler: ResizeObserverCallback, container: Ref<HTMLElement | undefined>) => {
+const useResizeObserver = (callback: ResizeObserverCallback, container: Ref<HTMLElement | undefined>) => {
   const observer = shallowRef<ResizeObserver | undefined>();
   onMounted(() => {
-    observer.value = new ResizeObserver(handler);
+    observer.value = new ResizeObserver(callback);
     const el = unref(container)!;
     observer.value!.observe(el);
   });
@@ -144,7 +143,7 @@ export default defineComponent({
       styleList.value = getResizeRect(rectList, makeup);
     };
 
-    useResizeObserver(throttle(update, 200) as ResizeObserverCallback, container);
+    useResizeObserver(throttle(update, 200), container);
     // 监听面板元素变化，以触发布局的改变
     watch(childrenMeta, lazyTask(update), { flush: 'post' });
 

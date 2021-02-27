@@ -37,7 +37,7 @@ export interface Lifecycle {
   destroy?(editor: DiagramEditor): void;
 
   mount(rootContainer: HTMLElement, editor: DiagramEditor): void | Promise<void>;
-  unmount(rootContainer: HTMLElement, editor: DiagramEditor): void | Promise<void>;
+  unmount(): void | Promise<void>;
 
   onWillMount(callback: LifecycleCallback): Disposable;
   onDidMount(callback: LifecycleCallback): Disposable;

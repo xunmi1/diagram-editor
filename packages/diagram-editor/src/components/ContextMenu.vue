@@ -1,6 +1,6 @@
 <template>
   <ADropdown v-model:visible="visible" :trigger="['contextmenu']" :align="{ offset: [6, 6] }">
-    <span tabindex="-1" :style="position" class="editor-context-menu-trigger"></span>
+    <span :tabindex="-1" :style="position" class="editor-context-menu-trigger"></span>
     <template #overlay>
       <Menu :list="menuList" :groups="groups" @click="executeCommand" @contextmenu.prevent />
     </template>

@@ -26,7 +26,7 @@ export abstract class ControllerItem extends Subject implements Lifecycle {
 
   abstract mount(rootContainer: HTMLElement, editor: DiagramEditor): void;
 
-  abstract unmount(rootContainer: HTMLElement, editor: DiagramEditor): void;
+  abstract unmount(): void;
 
   abstract activate(editor: DiagramEditor): boolean;
 }

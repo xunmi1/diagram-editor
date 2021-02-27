@@ -40,7 +40,7 @@ export default defineComponent({
 
     onBeforeUnmount(async () => {
       emit('will-unmount', view);
-      await view.unmount(unref(domRef)!, editor);
+      await view.unmount();
       domRef.value = undefined;
     });
 

@@ -6,7 +6,7 @@
       </template>
     </AInput>
     <template #overlay>
-      <div class="editor-color-picker-panel" tabindex="-1">
+      <div :tabindex="-1" class="editor-color-picker-panel">
         <VColorPicker :color="color" :theme="theme" @change-color="changeColor" />
       </div>
     </template>

@@ -39,6 +39,7 @@ export const defaultOptions: EditorOptions = {
       multiple: true,
       rubberband: true,
       movable: true,
+      following: false,
       showNodeSelectionBox: true,
       showEdgeSelectionBox: true,
     },

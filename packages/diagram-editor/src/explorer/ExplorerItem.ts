@@ -34,5 +34,5 @@ export abstract class ExplorerItem extends Subject implements Lifecycle {
 
   abstract mount(rootContainer: HTMLElement, editor: DiagramEditor): void;
 
-  abstract unmount(rootContainer: HTMLElement, editor: DiagramEditor): void;
+  abstract unmount(): void;
 }

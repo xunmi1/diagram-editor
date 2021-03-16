@@ -4,7 +4,7 @@ import { MenuItem } from '../../menu';
 import { GROUP_TAG } from '../../constants';
 import { Disposable } from '../../interfaces';
 
-export const useMenuItem = (menu: MenuItem<any>) => {
+export const useMenuItem = (menu: MenuItem) => {
   const disposables: Disposable[] = [];
 
   /**
@@ -36,7 +36,7 @@ export const useMenuItem = (menu: MenuItem<any>) => {
   return menuItem;
 };
 
-export const useDivider = (groups: Ref<string[]>, list: Ref<Map<string, MenuItem<any>> | undefined>) => {
+export const useDivider = (groups: Ref<string[]>, list: Ref<Map<string, MenuItem> | undefined>) => {
   const visibleList = computed(() => {
     const children = list.value;
     return groups.value.filter(key => key !== GROUP_TAG && children?.get(key)?.visible);

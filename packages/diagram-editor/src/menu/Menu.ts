@@ -6,7 +6,7 @@ import { getGroups } from './utils';
 const EVENT_TYPE_LOAD = Symbol('MENU_ITEM_LOAD');
 const EVENT_TYPE_CHANGE_GROUPS = Symbol('CHANGE_GROUPS');
 
-export class Menu<T extends MenuItem<T>> extends Subject {
+export class Menu<T extends MenuItem> extends Subject {
   protected readonly list: Map<string, T>;
   private _groups: string[];
 

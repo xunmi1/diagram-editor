@@ -4,31 +4,39 @@ import fs from 'fs';
 import type { Plugin } from 'vite';
 
 const getPackages = (rootPath: string): [string, string][] => {
-  // eslint-disable-next-line
-  const rootPkg = require(path.resolve(__dirname, rootPath, 'package.json'));
-  const folders: string[] = rootPkg.workspaces.flatMap(workspace => {
-    if (workspace.includes('/*')) {
-      const folderWithWorkspaces = workspace.replace('/*', '');
-      const workspacesFolders = fs.readdirSync(path.resolve(__dirname, rootPath, folderWithWorkspaces));
-      return workspacesFolders.map(folderName => path.join(folderWithWorkspaces, folderName));
-    }
-    return workspace;
-  });
-
-  const findEntry = (folderPath: string): [string, string] | void => {
-    const resolve = (...paths: string[]): string => path.resolve(folderPath, ...paths);
+  try {
     // eslint-disable-next-line
-    const name: string = require(resolve('package.json')).name;
-    // 首先寻找根位置的 `index.ts`, 其次是 `src/index.ts`
-    const rootPath = resolve('./index.ts');
-    if (fs.existsSync(rootPath)) return [name, rootPath];
-    const srcPath = resolve('./src/index.ts');
-    if (fs.existsSync(srcPath)) return [name, srcPath];
-  };
-  return folders
-    .map(folder => path.resolve(process.cwd(), rootPath, folder))
-    .map(findEntry)
-    .filter(Boolean);
+    const rootPkg = require(path.resolve(__dirname, rootPath, 'package.json'));
+    const folders: string[] = rootPkg.workspaces.flatMap(workspace => {
+      if (workspace.includes('/*')) {
+        const folderWithWorkspaces = workspace.replace('/*', '');
+        const workspacesFolders = fs.readdirSync(path.resolve(__dirname, rootPath, folderWithWorkspaces));
+        return workspacesFolders.map(folderName => path.join(folderWithWorkspaces, folderName));
+      }
+      return workspace;
+    });
+
+    const findEntry = (folderPath: string): [string, string] | void => {
+      const resolve = (...paths: string[]): string => path.resolve(folderPath, ...paths);
+      try {
+        // eslint-disable-next-line
+        const name: string = require(resolve('package.json')).name;
+        // 首先寻找根位置的 `index.ts`, 其次是 `src/index.ts`
+        const rootPath = resolve('./index.ts');
+        if (fs.existsSync(rootPath)) return [name, rootPath];
+        const srcPath = resolve('./src/index.ts');
+        if (fs.existsSync(srcPath)) return [name, srcPath];
+      } catch (e) {
+        throw new Error(`vite-plugin-watch-workspaces: ${e.message}`);
+      }
+    };
+    return folders
+      .map(folder => path.resolve(process.cwd(), rootPath, folder))
+      .map(findEntry)
+      .filter(Boolean);
+  } catch (e) {
+    throw new Error(`vite-plugin-watch-workspaces: ${e.message}`);
+  }
 };
 
 /**

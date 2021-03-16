@@ -17,9 +17,9 @@ const EVENT_TYPE_CHILD_APPEND = Symbol('CHILD_APPEND');
 const EVENT_TYPE_VISIBLE = Symbol('VISIBLE');
 const EVENT_TYPE_CHANGE_GROUPS = Symbol('CHANGE_GROUPS');
 
-export class MenuItem<T extends MenuItem<T> = MenuItem<any>> extends Subject {
+export class MenuItem extends Subject {
   public readonly command?: CommandId;
-  public children?: Map<string, T>;
+  public children?: Map<string, this>;
 
   private _text: string;
   private _extra?: string;
@@ -99,7 +99,7 @@ export class MenuItem<T extends MenuItem<T> = MenuItem<any>> extends Subject {
     this._emitGroups();
   }
 
-  appendChild(key: string, child: T) {
+  appendChild(key: string, child: this) {
     if (!this.children) this.children = new Map();
     this.children.set(key, child);
     if (!this._groups.includes(key)) this._groups.push(key);
@@ -107,7 +107,7 @@ export class MenuItem<T extends MenuItem<T> = MenuItem<any>> extends Subject {
     this.emit(EVENT_TYPE_CHILD_APPEND, { key, child });
   }
 
-  onDidAppendChild(callback: Observer<{ key: string; child: T }>) {
+  onDidAppendChild(callback: Observer<{ key: string; child: MenuItem }>) {
     return this.on(EVENT_TYPE_CHILD_APPEND, callback);
   }
 

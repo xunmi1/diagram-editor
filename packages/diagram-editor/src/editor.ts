@@ -69,7 +69,7 @@ class DiagramEditor extends Subject {
   }
 
   mount(rootContainer: string | HTMLElement) {
-    const vm = this._app?.mount(rootContainer) as ComponentPublicInstance<{}, {}, { graph: Graph }>;
+    const vm = this._app?.mount(rootContainer) as ComponentPublicInstance<unknown, unknown, { graph: Graph }>;
 
     return new Promise<Graph>(resolve => {
       useOnceWatch(() => {

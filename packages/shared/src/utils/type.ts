@@ -3,8 +3,10 @@ export const toRawType = (val: unknown): string => objectToString.call(val).slic
 
 export const isNumber = (val: unknown): val is number => typeof val === 'number';
 export const isUndefined = (val: unknown): val is undefined => val === undefined;
-export const isFunction = (val: unknown): val is Function => typeof val === 'function';
+// eslint-disable-next-line
+export const isFunction = <T extends Function>(val: unknown): val is T => typeof val === 'function';
 export const isArray = Array.isArray;
+// eslint-disable-next-line
 export const isObject = (val: unknown): val is object => val !== null && typeof val === 'object';
 
 export const asyncify = <T extends (...args: unknown[]) => any>(fn: T) => (

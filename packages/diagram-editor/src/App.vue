@@ -78,7 +78,7 @@ const useStyle = (options: Ref<EditorOptions>) => {
   return { contentStyle, toolbarStyle };
 };
 
-const useLayout = (editor: DiagramEditor) => {
+const useLayout = editor => {
   // eslint-disable-next-line
   const { graph, ...options }: EditorOptions = editor.options;
   const layout = shallowRef(options);

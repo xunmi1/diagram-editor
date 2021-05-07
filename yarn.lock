@@ -34,10 +34,10 @@
     "@types/lodash" "^4.14.165"
     lodash "^4.17.15"
 
-"@antv/x6@^1.21.1":
-  version "1.21.1"
-  resolved "https://registry.nlark.com/@antv/x6/download/@antv/x6-1.21.1.tgz#66777d46cba9898a40a158913f0a3b5fb975cfc2"
-  integrity sha1-Znd9RsupiYpAoViRPwo7X7l1z8I=
+"@antv/x6@^1.21.2":
+  version "1.21.2"
+  resolved "https://registry.nlark.com/@antv/x6/download/@antv/x6-1.21.2.tgz#57ee585bb3216a4afd4fdb04529c691fb125b84a"
+  integrity sha1-V+5YW7Mhakr9T9sEUpxpH7EluEo=
   dependencies:
     csstype "^3.0.3"
     jquery "^3.5.1"
@@ -2084,10 +2084,10 @@ rollup@^2.38.5:
   optionalDependencies:
     fsevents "~2.3.1"
 
-rollup@^2.44.0:
-  version "2.45.2"
-  resolved "https://registry.npm.taobao.org/rollup/download/rollup-2.45.2.tgz#8fb85917c9f35605720e92328f3ccbfba6f78b48"
-  integrity sha1-j7hZF8nzVgVyDpIyjzzL+6b3i0g=
+rollup@^2.47.0:
+  version "2.47.0"
+  resolved "https://registry.nlark.com/rollup/download/rollup-2.47.0.tgz?cache=0&sync_timestamp=1620105049091&other_urls=https%3A%2F%2Fregistry.nlark.com%2Frollup%2Fdownload%2Frollup-2.47.0.tgz#9d958aeb2c0f6a383cacc0401dff02b6e252664d"
+  integrity sha1-nZWK6ywPajg8rMBAHf8CtuJSZk0=
   optionalDependencies:
     fsevents "~2.3.1"
 

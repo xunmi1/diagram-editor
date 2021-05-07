@@ -86,7 +86,7 @@ class DiagramEditor extends Subject {
           });
 
           this.emit(EventType.EDITOR_DID_MOUNT, this._graph);
-          resolve(vm.graph);
+          resolve(this._graph);
         }
 
         return !!vm.graph;

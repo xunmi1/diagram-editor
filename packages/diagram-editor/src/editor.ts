@@ -1,6 +1,6 @@
 import { createApp, App as VueApp, ComponentPublicInstance } from 'vue';
 import type { Graph } from '@antv/x6';
-import type { Cell } from '@antv/x6/src/model/cell';
+import type { Cell } from '@antv/x6/es/model/cell';
 import { warn, merge } from '@diagram-editor/shared';
 
 import App from './App.vue';
@@ -15,7 +15,7 @@ import { ContextMenu } from './contextMenu';
 import { Toolbar } from './toolbar';
 import { Statusbar } from './statusbar';
 
-import { Subject, Observer, CommandsRegistry } from './utils';
+import { Subject, Observer, BaseEvents, CommandsRegistry } from './utils';
 import { defaultOptions } from './defaultOptions';
 import { bindActiveEvent, bindMouseEvent } from './events';
 
@@ -24,7 +24,7 @@ const EDITOR_DID_CHANGE_ACTIVE_CELL = Symbol('DID_CHANGE_ACTIVE_CELL');
 const EDITOR_DID_CHANGE_MOUSE_CELL = Symbol('DID_CHANGE_MOUSE_CELL');
 const EDITOR_DID_CHANGE_OPTIONS = Symbol('DID_CHANGE_OPTIONS');
 
-interface EditorEvents extends Record<any, any> {
+interface EditorEvents extends BaseEvents {
   [EDITOR_DID_MOUNT]: Graph;
   [EDITOR_DID_CHANGE_ACTIVE_CELL]: Cell | undefined;
   [EDITOR_DID_CHANGE_MOUSE_CELL]: Cell | undefined;
@@ -40,9 +40,8 @@ class DiagramEditor extends Subject<EditorEvents> {
   public readonly toolbar: Toolbar;
   public readonly statusbar: Statusbar;
 
-  #options: EditorOptions;
   readonly #installedPlugins: Set<Plugin>;
-
+  #options: EditorOptions;
   #graph?: Graph;
   #activeCell: Cell | undefined;
   #mouseCell: Cell | undefined;

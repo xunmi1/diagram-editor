@@ -1,9 +1,9 @@
-import { EventType, Observer, Subject } from '../utils';
+import { BaseEvents, Observer, Subject } from '../utils';
 import type { ControllerItem } from './ControllerItem';
 
 const EVENT_TYPE_LOAD = Symbol('CONTROLLER_ITEM_LOAD');
 
-interface Events extends Record<EventType, unknown> {
+interface Events extends BaseEvents {
   [EVENT_TYPE_LOAD]: { key: string; item: ControllerItem };
 }
 

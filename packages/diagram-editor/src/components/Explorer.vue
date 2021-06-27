@@ -27,7 +27,6 @@ import { useEditor, useGlobalGraph } from '../use';
 import { Addon, Cell } from '@antv/x6';
 import type { ExplorerItem } from '../explorer';
 import Container from './Container';
-import type { Node } from '@antv/x6/lib/model/node';
 import { EventType } from '../constants';
 
 const useDnd = () => {
@@ -85,7 +84,7 @@ export default defineComponent({
 
     const drag = (args: { cell: Cell; event: MouseEvent }) => {
       const dnd = unref(dndRef);
-      dnd?.start(args.cell as Node, args.event);
+      dnd?.start(args.cell, args.event);
     };
 
     const panelList = usePanelList(item => {

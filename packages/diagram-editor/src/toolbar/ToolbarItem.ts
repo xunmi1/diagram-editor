@@ -1,5 +1,5 @@
 import { lazyTask } from '@diagram-editor/shared';
-import { CommandId, EventType, Observer, Subject } from '../utils';
+import { CommandId, BaseEvents, Observer, Subject } from '../utils';
 
 export interface ToolbarItemOptions {
   command: CommandId;
@@ -11,7 +11,7 @@ export interface ToolbarItemOptions {
 
 const EVENT_TYPE_UPDATE = Symbol('UPDATE');
 
-interface Events extends Record<EventType, unknown> {
+interface Events extends BaseEvents {
   [EVENT_TYPE_UPDATE]: void;
 }
 

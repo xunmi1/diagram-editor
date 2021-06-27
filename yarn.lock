@@ -34,10 +34,10 @@
     "@types/lodash" "^4.14.165"
     lodash "^4.17.15"
 
-"@antv/x6@^1.21.2":
-  version "1.21.2"
-  resolved "https://registry.nlark.com/@antv/x6/download/@antv/x6-1.21.2.tgz#57ee585bb3216a4afd4fdb04529c691fb125b84a"
-  integrity sha1-V+5YW7Mhakr9T9sEUpxpH7EluEo=
+"@antv/x6@^1.24.4":
+  version "1.24.4"
+  resolved "https://registry.nlark.com/@antv/x6/download/@antv/x6-1.24.4.tgz#b8c6d853458ff5ed313e8fd019c47a965d1574a3"
+  integrity sha1-uMbYU0WP9e0xPo/QGcR6ll0VdKM=
   dependencies:
     csstype "^3.0.3"
     jquery "^3.5.1"

@@ -1,4 +1,4 @@
-import type { Options } from '@antv/x6/lib/graph/options';
+import type { Options } from '@antv/x6/es/graph/options';
 import type DiagramEditor from './editor';
 import type { Disposable, Observer } from './utils';
 

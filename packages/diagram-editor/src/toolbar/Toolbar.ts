@@ -1,9 +1,9 @@
-import { EventType, Observer, Subject } from '../utils';
+import { BaseEvents, Observer, Subject } from '../utils';
 import { ToolbarItem } from './ToolbarItem';
 
 const EVENT_TYPE_LOAD = Symbol('TOOLBAR_ITEM_LOAD');
 
-interface Events<T> extends Record<EventType, unknown> {
+interface Events<T> extends BaseEvents {
   [EVENT_TYPE_LOAD]: { key: string; item: T };
 }
 

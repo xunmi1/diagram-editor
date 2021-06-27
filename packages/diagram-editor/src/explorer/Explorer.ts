@@ -1,9 +1,9 @@
-import { Subject, Observer, EventType } from '../utils';
+import { Subject, Observer, BaseEvents } from '../utils';
 import type { ExplorerItem } from './ExplorerItem';
 
 const EVENT_TYPE_LOAD = Symbol('EXPLORER_ITEM_LOAD');
 
-interface Events<T> extends Record<EventType, unknown> {
+interface Events<T> extends BaseEvents {
   [EVENT_TYPE_LOAD]: { key: string; item: T };
 }
 

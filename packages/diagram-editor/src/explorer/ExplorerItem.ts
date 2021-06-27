@@ -1,5 +1,5 @@
 import { Subject, Disposable, Observer } from '../utils';
-import type { Cell } from '@antv/x6/src/model/cell';
+import type { Cell } from '@antv/x6/es/model/cell';
 import { DiagramEditor, Lifecycle, LifecycleCallback } from '../interfaces';
 import { EventType } from '../constants';
 

@@ -1,4 +1,4 @@
-import { CommandId, Observer, Subject, EventType } from '../utils';
+import { CommandId, Observer, Subject, BaseEvents } from '../utils';
 import { lazyTask } from '@diagram-editor/shared';
 
 import { getGroups } from './utils';
@@ -17,7 +17,7 @@ const EVENT_TYPE_CHILD_APPEND = Symbol('CHILD_APPEND');
 const EVENT_TYPE_VISIBLE = Symbol('VISIBLE');
 const EVENT_TYPE_CHANGE_GROUPS = Symbol('CHANGE_GROUPS');
 
-interface Events extends Record<EventType, unknown> {
+interface Events extends BaseEvents {
   [EVENT_TYPE_UPDATE]: void;
   [EVENT_TYPE_CHILD_APPEND]: { key: string; child: MenuItem };
   [EVENT_TYPE_VISIBLE]: void;

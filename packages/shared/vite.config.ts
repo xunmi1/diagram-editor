@@ -29,8 +29,4 @@ export default defineConfig({
       },
     },
   },
-
-  optimizeDeps: {
-    include: ['ant-design-vue/es/locale/zh_CN'],
-  },
 });

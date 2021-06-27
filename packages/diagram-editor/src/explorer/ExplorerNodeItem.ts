@@ -2,7 +2,7 @@ import { Graph, Node } from '@antv/x6';
 import { grid, LayoutOptions } from './grid';
 import ResizeObserver from 'resize-observer-polyfill';
 import { throttle, lazyTask } from '@diagram-editor/shared';
-import { ExplorerItem, DragEvent } from './ExplorerItem';
+import { ExplorerItem, DragEvent, ExplorerEvents } from './ExplorerItem';
 import { Observer } from '../utils';
 
 export type { LayoutOptions };
@@ -33,7 +33,12 @@ const NODE_EVENT_MOUSEDOWN = 'cell:mousedown';
 const EVENT_TYPE_WILL_DRAG = Symbol('WILL_DRAG');
 const EVENT_TYPE_DID_RESIZE = Symbol('DID_RESIZE');
 
-export class ExplorerNodeItem extends ExplorerItem {
+interface Events extends ExplorerEvents {
+  [EVENT_TYPE_WILL_DRAG]: Parameters<DragEvent>[0];
+  [EVENT_TYPE_DID_RESIZE]: DOMRectReadOnly;
+}
+
+export class ExplorerNodeItem extends ExplorerItem<Events> {
   public readonly title: string;
   public graph: Graph | undefined;
 
@@ -114,6 +119,7 @@ export class ExplorerNodeItem extends ExplorerItem {
   private _bindDragEvent() {
     this.onDidMount(() => {
       this.graph?.on(NODE_EVENT_MOUSEDOWN, args => {
+        // @ts-ignore
         this.emit(EVENT_TYPE_WILL_DRAG, { cell: args.cell, event: args.e });
       });
     });

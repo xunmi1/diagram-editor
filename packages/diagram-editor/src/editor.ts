@@ -1,5 +1,6 @@
 import { createApp, App as VueApp, ComponentPublicInstance } from 'vue';
-import type { Graph, Cell } from '@antv/x6';
+import type { Graph } from '@antv/x6';
+import type { Cell } from '@antv/x6/src/model/cell';
 import { warn, merge } from '@diagram-editor/shared';
 
 import App from './App.vue';
@@ -15,11 +16,22 @@ import { Toolbar } from './toolbar';
 import { Statusbar } from './statusbar';
 
 import { Subject, Observer, CommandsRegistry } from './utils';
-import { EventType } from './constants';
 import { defaultOptions } from './defaultOptions';
 import { bindActiveEvent, bindMouseEvent } from './events';
 
-class DiagramEditor extends Subject {
+const EDITOR_DID_MOUNT = Symbol('DID_MOUNT');
+const EDITOR_DID_CHANGE_ACTIVE_CELL = Symbol('DID_CHANGE_ACTIVE_CELL');
+const EDITOR_DID_CHANGE_MOUSE_CELL = Symbol('DID_CHANGE_MOUSE_CELL');
+const EDITOR_DID_CHANGE_OPTIONS = Symbol('DID_CHANGE_OPTIONS');
+
+interface EditorEvents extends Record<any, any> {
+  [EDITOR_DID_MOUNT]: Graph;
+  [EDITOR_DID_CHANGE_ACTIVE_CELL]: Cell | undefined;
+  [EDITOR_DID_CHANGE_MOUSE_CELL]: Cell | undefined;
+  [EDITOR_DID_CHANGE_OPTIONS]: Omit<EditorOptions, 'graph'>;
+}
+
+class DiagramEditor extends Subject<EditorEvents> {
   public readonly explorer: Explorer;
   public readonly controller: Controller;
   public readonly commands: CommandsRegistry;
@@ -28,13 +40,13 @@ class DiagramEditor extends Subject {
   public readonly toolbar: Toolbar;
   public readonly statusbar: Statusbar;
 
-  private _options: EditorOptions;
-  private readonly _installedPlugins: Set<Plugin>;
+  #options: EditorOptions;
+  readonly #installedPlugins: Set<Plugin>;
 
-  private _graph?: Graph;
-  private _activeCell?: Cell;
-  private _mouseCell?: Cell;
-  private _app?: VueApp;
+  #graph?: Graph;
+  #activeCell: Cell | undefined;
+  #mouseCell: Cell | undefined;
+  #app?: VueApp;
 
   constructor(options?: EditorOptions) {
     super();
@@ -46,47 +58,47 @@ class DiagramEditor extends Subject {
     this.toolbar = new Toolbar();
     this.statusbar = new Statusbar();
 
-    this._options = merge(defaultOptions, options);
-    this._installedPlugins = new Set();
+    this.#options = merge(defaultOptions, options);
+    this.#installedPlugins = new Set();
 
-    this._app = createApp(App, { editor: this }).use(antd);
+    this.#app = createApp(App, { editor: this }).use(antd);
   }
 
   get options(): EditorOptions {
-    return { ...this._options };
+    return { ...this.#options };
   }
 
   get graph() {
-    return this._graph;
+    return this.#graph;
   }
 
   get activeCell() {
-    return this._activeCell;
+    return this.#activeCell;
   }
 
   get mouseCell() {
-    return this._mouseCell;
+    return this.#mouseCell;
   }
 
   mount(rootContainer: string | HTMLElement) {
-    const vm = this._app?.mount(rootContainer) as ComponentPublicInstance<unknown, unknown, { graph: Graph }>;
+    const vm = this.#app?.mount(rootContainer) as ComponentPublicInstance<unknown, unknown, { graph: Graph }>;
 
     return new Promise<Graph>(resolve => {
       useOnceWatch(() => {
         if (vm.graph) {
-          this._graph = vm.graph as Graph;
-          bindActiveEvent(this._graph, cell => {
-            this._activeCell = cell;
-            this.emit(EventType.EDITOR_DID_CHANGE_ACTIVE_CELL, this._activeCell);
+          this.#graph = vm.graph as Graph;
+          bindActiveEvent(this.#graph, cell => {
+            this.#activeCell = cell;
+            this.emit(EDITOR_DID_CHANGE_ACTIVE_CELL, this.#activeCell);
           });
 
-          bindMouseEvent(this._graph, cell => {
-            this._mouseCell = cell;
-            this.emit(EventType.EDITOR_DID_CHANGE_MOUSE_CELL, this._mouseCell);
+          bindMouseEvent(this.#graph, cell => {
+            this.#mouseCell = cell;
+            this.emit(EDITOR_DID_CHANGE_MOUSE_CELL, this.#mouseCell);
           });
 
-          this.emit(EventType.EDITOR_DID_MOUNT, this._graph);
-          resolve(this._graph);
+          this.emit(EDITOR_DID_MOUNT, this.#graph!);
+          resolve(this.#graph);
         }
 
         return !!vm.graph;
@@ -96,13 +108,13 @@ class DiagramEditor extends Subject {
 
   unmount() {
     this.dispose();
-    this._app?.unmount();
-    this._app = undefined;
+    this.#app?.unmount();
+    this.#app = undefined;
   }
 
   dispose() {
     super.dispose();
-    this._graph?.dispose();
+    this.#graph?.dispose();
   }
 
   /**
@@ -110,31 +122,31 @@ class DiagramEditor extends Subject {
    * @description options 属于 object, 为便于使用而合并选项，不合适定义为 setter.
    */
   update(options: Omit<EditorOptions, 'graph'>) {
-    this._options = merge(this._options, options);
+    this.#options = merge(this.#options, options);
     // eslint-disable-next-line
-    const { graph, ...rest } = this._options;
-    this.emit(EventType.EDITOR_DID_CHANGE_OPTIONS, rest);
+    const { graph, ...rest } = this.#options;
+    this.emit(EDITOR_DID_CHANGE_OPTIONS, rest);
   }
 
   onDidMount(callback: Observer<Graph>) {
-    return this.once(EventType.EDITOR_DID_MOUNT, callback);
+    return this.once(EDITOR_DID_MOUNT, callback);
   }
   // 配置项更新
   onDidUpdate(callback: Observer<Omit<EditorOptions, 'graph'>>) {
-    return this.on<EditorOptions>(EventType.EDITOR_DID_CHANGE_OPTIONS, callback);
+    return this.on(EDITOR_DID_CHANGE_OPTIONS, callback);
   }
 
   onDidChangeActiveCell(callback: Observer<Cell | undefined>) {
-    return this.on(EventType.EDITOR_DID_CHANGE_ACTIVE_CELL, callback);
+    return this.on(EDITOR_DID_CHANGE_ACTIVE_CELL, callback);
   }
 
   onDidChangeMouseCell(callback: Observer<Cell | undefined>) {
-    return this.on(EventType.EDITOR_DID_CHANGE_MOUSE_CELL, callback);
+    return this.on(EDITOR_DID_CHANGE_MOUSE_CELL, callback);
   }
 
   // Plugin API
   use(plugin: Plugin) {
-    const installed = this._installedPlugins;
+    const installed = this.#installedPlugins;
     if (installed.has(plugin)) {
       warn(`Plugin '${plugin.name}' has already been applied to target editor.`);
     } else {

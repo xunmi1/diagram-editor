@@ -1,6 +1,6 @@
 import type { Options } from '@antv/x6/lib/graph/options';
 import type DiagramEditor from './editor';
-import type { Disposable } from './utils';
+import type { Disposable, Observer } from './utils';
 
 export type { Observer, Disposable, Command, CommandId, CommandsRegistry } from './utils';
 
@@ -23,9 +23,7 @@ export interface Plugin {
   (editor: DiagramEditor): void;
 }
 
-export interface LifecycleCallback {
-  (editor: DiagramEditor): void;
-}
+export interface LifecycleCallback extends Observer<DiagramEditor> {}
 
 /**
  * Lifecycle: 生命周期

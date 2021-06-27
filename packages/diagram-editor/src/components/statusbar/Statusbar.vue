@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeUnmount, ref } from 'vue';
+import { defineComponent, onBeforeUnmount, shallowRef } from 'vue';
 import { useEditor } from '../../use';
 import { lazyTask } from '@diagram-editor/shared';
 import type { StatusbarItem } from '../../statusbar';
@@ -21,7 +21,7 @@ type MenubarList = Map<string, StatusbarItem>;
 
 const useStatusbarList = () => {
   const { statusbar } = useEditor();
-  const statusbarList = ref<MenubarList>(new Map([...statusbar]));
+  const statusbarList = shallowRef<MenubarList>(new Map([...statusbar]));
   const disposable = statusbar.onDidLoad(
     lazyTask(() => {
       statusbarList.value = new Map([...statusbar]);

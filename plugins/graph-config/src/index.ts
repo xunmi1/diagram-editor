@@ -74,9 +74,11 @@ export interface PluginOptions {
   title?: string;
 }
 
-export const graphConfigPlugin = (options: PluginOptions): Plugin => editor => {
-  const graphConfig = new GraphConfig({ title: options.title ?? '画布属性' });
+export const graphConfigPlugin =
+  (options: PluginOptions): Plugin =>
+  editor => {
+    const graphConfig = new GraphConfig({ title: options.title ?? '画布属性' });
 
-  registerCommands(editor, graphConfig.state);
-  editor.controller.load(options.key, graphConfig);
-};
+    registerCommands(editor, graphConfig.state);
+    editor.controller.load(options.key, graphConfig);
+  };

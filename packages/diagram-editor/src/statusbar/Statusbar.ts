@@ -1,9 +1,13 @@
-import { Observer, Subject } from '../utils';
+import { EventType, Observer, Subject } from '../utils';
 import { StatusbarItem } from './StatusbarItem';
 
 const EVENT_TYPE_LOAD = Symbol('STATUSBAR_ITEM_LOAD');
 
-export class Statusbar extends Subject {
+interface Events<T> extends Record<EventType, unknown> {
+  [EVENT_TYPE_LOAD]: { key: string; item: T };
+}
+
+export class Statusbar extends Subject<Events<StatusbarItem>> {
   protected readonly list: Map<string, StatusbarItem>;
 
   constructor() {

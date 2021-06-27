@@ -58,7 +58,7 @@ import Statusbar from './components/statusbar/Statusbar.vue';
 import Explorer from './components/Explorer.vue';
 import Controller from './components/Controller.vue';
 import ContextMenu from './components/ContextMenu.vue';
-import { EditorOptions, DiagramEditor } from './interfaces';
+import type { EditorOptions, DiagramEditor } from './interfaces';
 
 const useStyle = (options: Ref<EditorOptions>) => {
   const contentStyle = computed(() => {
@@ -78,7 +78,7 @@ const useStyle = (options: Ref<EditorOptions>) => {
   return { contentStyle, toolbarStyle };
 };
 
-const useLayout = editor => {
+const useLayout = (editor: DiagramEditor) => {
   // eslint-disable-next-line
   const { graph, ...options }: EditorOptions = editor.options;
   const layout = shallowRef(options);

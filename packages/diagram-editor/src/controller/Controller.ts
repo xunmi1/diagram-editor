@@ -1,9 +1,13 @@
-import { Observer, Subject } from '../utils';
+import { EventType, Observer, Subject } from '../utils';
 import type { ControllerItem } from './ControllerItem';
 
 const EVENT_TYPE_LOAD = Symbol('CONTROLLER_ITEM_LOAD');
 
-export class Controller extends Subject {
+interface Events extends Record<EventType, unknown> {
+  [EVENT_TYPE_LOAD]: { key: string; item: ControllerItem };
+}
+
+export class Controller extends Subject<Events> {
   protected readonly list: Map<string, ControllerItem>;
 
   constructor() {

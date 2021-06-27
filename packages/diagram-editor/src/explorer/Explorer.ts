@@ -1,9 +1,13 @@
-import { Subject, Observer } from '../utils';
+import { Subject, Observer, EventType } from '../utils';
 import type { ExplorerItem } from './ExplorerItem';
 
 const EVENT_TYPE_LOAD = Symbol('EXPLORER_ITEM_LOAD');
 
-export class Explorer extends Subject {
+interface Events<T> extends Record<EventType, unknown> {
+  [EVENT_TYPE_LOAD]: { key: string; item: T };
+}
+
+export class Explorer extends Subject<Events<ExplorerItem>> {
   protected readonly list: Map<string, ExplorerItem>;
 
   constructor() {

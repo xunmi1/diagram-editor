@@ -2,7 +2,7 @@ import { Subject } from '../utils';
 import { EventType } from '../constants';
 import { DiagramEditor, Lifecycle, LifecycleCallback } from '../interfaces';
 
-export abstract class ControllerItem extends Subject implements Lifecycle {
+export abstract class ControllerItem extends Subject<Record<string | symbol, DiagramEditor>> implements Lifecycle {
   readonly title: string;
 
   created?(editor: DiagramEditor): void;

@@ -18,7 +18,7 @@ export default defineConfig({
       output: {
         exports: 'named',
         globals: {
-          '@antv/x6': 'X6',
+          '@antv/x6': 'x6',
           moment: 'moment',
         },
       },

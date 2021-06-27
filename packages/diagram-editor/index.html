@@ -13,7 +13,7 @@
     <script type="module">
       // import { DiagramEditor, ExplorerNodeItem, builtInPlugin } from './dist/diagram-editor.es';
       // import './dist/style.css'
-      import { DiagramEditor, ExplorerNodeItem } from './src/index';
+      import { DiagramEditor, ExplorerNodeItem, StatusbarItem } from './src/index';
       import { nodeCountPlugin } from '@diagram-editor/plugin-cell-count';
       import { graphConfigPlugin } from '@diagram-editor/plugin-graph-config';
       import { actionsPlugin } from '@diagram-editor/plugin-actions';
@@ -62,6 +62,11 @@
         .use(nodeCountPlugin({ key: 'xxxx' }))
         .use(graphConfigPlugin({ key: 'config' }))
         .mount('#app');
+
+      setTimeout(() => {
+        const item = new StatusbarItem({ text: 'xxxx' });
+        editor.statusbar.load('xxxxxxxx', item);
+      }, 1000)
     </script>
   </body>
 </html>

@@ -1,9 +1,13 @@
-import { Observer, Subject } from '../utils';
+import { EventType, Observer, Subject } from '../utils';
 import { ToolbarItem } from './ToolbarItem';
 
 const EVENT_TYPE_LOAD = Symbol('TOOLBAR_ITEM_LOAD');
 
-export class Toolbar extends Subject {
+interface Events<T> extends Record<EventType, unknown> {
+  [EVENT_TYPE_LOAD]: { key: string; item: T };
+}
+
+export class Toolbar extends Subject<Events<ToolbarItem>> {
   protected readonly list: Map<string, ToolbarItem>;
 
   constructor() {

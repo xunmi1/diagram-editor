@@ -1,12 +1,17 @@
 import { warn, error, lazyTask } from '@diagram-editor/shared';
-import { Observer, Subject } from '../utils';
+import { EventType, Observer, Subject } from '../utils';
 import { MenuItem } from './MenuItem';
 import { getGroups } from './utils';
 
 const EVENT_TYPE_LOAD = Symbol('MENU_ITEM_LOAD');
 const EVENT_TYPE_CHANGE_GROUPS = Symbol('CHANGE_GROUPS');
 
-export class Menu<T extends MenuItem> extends Subject {
+interface Events<T> extends Record<EventType, unknown> {
+  [EVENT_TYPE_LOAD]: { parentKey?: string; parent?: T; key: string; item: T };
+  [EVENT_TYPE_CHANGE_GROUPS]: void;
+}
+
+export class Menu<T extends MenuItem> extends Subject<Events<T>> {
   protected readonly list: Map<string, T>;
   private _groups: string[];
 

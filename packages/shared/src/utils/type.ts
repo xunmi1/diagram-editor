@@ -9,6 +9,7 @@ export const isArray = Array.isArray;
 // eslint-disable-next-line
 export const isObject = (val: unknown): val is object => val !== null && typeof val === 'object';
 
-export const asyncify = <T extends (...args: unknown[]) => any>(fn: T) => (
-  ...args: Parameters<T>
-): Promise<ReturnType<T>> => Promise.resolve().then(() => fn(...args));
+export const asyncify =
+  <T extends (...args: unknown[]) => any>(fn: T) =>
+  (...args: Parameters<T>): Promise<ReturnType<T>> =>
+    Promise.resolve().then(() => fn(...args));

@@ -1,5 +1,5 @@
 import { Subject, Disposable, Observer } from '../utils';
-import type { Cell } from '@antv/x6';
+import type { Cell } from '@antv/x6/src/model/cell';
 import { DiagramEditor, Lifecycle, LifecycleCallback } from '../interfaces';
 import { EventType } from '../constants';
 
@@ -8,7 +8,9 @@ export type DragEvent = Observer<{
   event: MouseEvent;
 }>;
 
-export abstract class ExplorerItem extends Subject implements Lifecycle {
+export type ExplorerEvents = Record<string | symbol, DiagramEditor>;
+
+export abstract class ExplorerItem<T extends ExplorerEvents = ExplorerEvents> extends Subject<T> implements Lifecycle {
   abstract readonly title: string;
 
   created?(editor: DiagramEditor): void;

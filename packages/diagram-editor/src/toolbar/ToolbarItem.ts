@@ -17,9 +17,13 @@ interface Events extends BaseEvents {
 
 export class ToolbarItem extends Subject<Events> {
   public readonly command: CommandId;
+
   private _tooltip?: string;
+
   private _icon: string;
+
   private _disabled: boolean;
+
   private _checked: boolean;
 
   constructor(options: ToolbarItemOptions) {

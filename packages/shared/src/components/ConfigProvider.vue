@@ -23,6 +23,7 @@ export default defineComponent({
     const instance = getCurrentInstance();
     const getPopupContainer = (el?: HTMLElement, dialogContext?: DialogContext) => {
       if (dialogContext) return dialogContext.getDialogWrap();
+      // eslint-disable-next-line
       return el?.parentElement ?? (instance?.appContext.app._container as HTMLElement).firstElementChild;
     };
     return { locale, prefixClass, getPopupContainer };

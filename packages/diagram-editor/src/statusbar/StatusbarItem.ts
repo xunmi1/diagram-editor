@@ -17,9 +17,13 @@ interface Events extends BaseEvents {
 
 export class StatusbarItem extends Subject<Events> {
   public readonly command?: CommandId;
+
   private _text?: string;
+
   private _tooltip?: string;
+
   private _icon?: string | undefined;
+
   private _visible: boolean;
 
   constructor(options: StatusbarItemOptions = {}) {

@@ -18,7 +18,6 @@ export class Statusbar extends Subject<Events<StatusbarItem>> {
   load(key: string, item: StatusbarItem) {
     this.list.set(key, item);
     this.emit(EVENT_TYPE_LOAD, { key, item });
-    return;
   }
 
   onDidLoad(callback: Observer<{ key: string; item: StatusbarItem }>) {

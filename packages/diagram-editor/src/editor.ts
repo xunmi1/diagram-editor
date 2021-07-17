@@ -33,18 +33,29 @@ interface EditorEvents extends BaseEvents {
 
 class DiagramEditor extends Subject<EditorEvents> {
   public readonly explorer: Explorer;
+
   public readonly controller: Controller;
+
   public readonly commands: CommandsRegistry;
+
   public readonly menubar: Menubar;
+
   public readonly contextMenu: ContextMenu;
+
   public readonly toolbar: Toolbar;
+
   public readonly statusbar: Statusbar;
 
   readonly #installedPlugins: Set<Plugin>;
+
   #options: EditorOptions;
+
   #graph?: Graph;
+
   #activeCell: Cell | undefined;
+
   #mouseCell: Cell | undefined;
+
   #app?: VueApp;
 
   constructor(options?: EditorOptions) {
@@ -122,7 +133,6 @@ class DiagramEditor extends Subject<EditorEvents> {
    */
   update(options: Omit<EditorOptions, 'graph'>) {
     this.#options = merge(this.#options, options);
-    // eslint-disable-next-line
     const { graph, ...rest } = this.#options;
     this.emit(EDITOR_DID_CHANGE_OPTIONS, rest);
   }
@@ -130,6 +140,7 @@ class DiagramEditor extends Subject<EditorEvents> {
   onDidMount(callback: Observer<Graph>) {
     return this.once(EDITOR_DID_MOUNT, callback);
   }
+
   // 配置项更新
   onDidUpdate(callback: Observer<Omit<EditorOptions, 'graph'>>) {
     return this.on(EDITOR_DID_CHANGE_OPTIONS, callback);

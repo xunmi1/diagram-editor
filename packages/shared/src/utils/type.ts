@@ -6,10 +6,9 @@ export const isUndefined = (val: unknown): val is undefined => val === undefined
 // eslint-disable-next-line
 export const isFunction = <T extends Function>(val: unknown): val is T => typeof val === 'function';
 export const isArray = Array.isArray;
-// eslint-disable-next-line
-export const isObject = (val: unknown): val is object => val !== null && typeof val === 'object';
+export const isObject = (val: unknown): val is Record<string, unknown> => val !== null && typeof val === 'object';
 
 export const asyncify =
-  <T extends (...args: unknown[]) => any>(fn: T) =>
+  <T extends (...args: unknown[]) => ReturnType<T>>(fn: T) =>
   (...args: Parameters<T>): Promise<ReturnType<T>> =>
     Promise.resolve().then(() => fn(...args));

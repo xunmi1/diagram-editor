@@ -1,14 +1,15 @@
 import { warn } from '@diagram-editor/shared';
 import { DisposableDelegate, Disposable } from './disposable';
 
-export interface Command<T = any> {
+export interface Command<T = unknown> {
   (params: T): void | Promise<void>;
 }
 
 export type CommandId = string | symbol;
 
 export class CommandsRegistry {
-  readonly #commands: Map<CommandId, Command[]>;
+  // eslint-disable-next-line
+  readonly #commands: Map<CommandId, Command<any>[]>;
 
   constructor() {
     this.#commands = new Map();
@@ -32,10 +33,10 @@ export class CommandsRegistry {
     }
 
     const dispose = () => {
-      const list = this.#commands.get(commandId);
-      if (list) {
-        const index = list.indexOf(command);
-        if (index > -1) list.splice(index, 1);
+      const commands = this.#commands.get(commandId);
+      if (commands) {
+        const index = commands.indexOf(command);
+        if (index > -1) commands.splice(index, 1);
       }
     };
 

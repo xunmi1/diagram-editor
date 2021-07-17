@@ -9,7 +9,7 @@
       }"
       @click="trigger"
     >
-      <span v-html="toolItem.icon" class="editor-toolbar-item-icon"></span>
+      <span class="editor-toolbar-item-icon" v-html="toolItem.icon"></span>
     </div>
   </ATooltip>
 </template>

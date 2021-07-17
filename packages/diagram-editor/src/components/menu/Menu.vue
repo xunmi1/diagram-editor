@@ -1,5 +1,5 @@
 <template>
-  <AMenu v-show="show" @click="clickMenu" class="editor-widget-menu">
+  <AMenu v-show="show" class="editor-widget-menu" @click="clickMenu">
     <template v-for="key in visibleList" :key="key">
       <!-- use `v-if` to avoid vue compiler error about `key` -->
       <SubMenu v-if="true" :key="key" :item="getChild(key)" />

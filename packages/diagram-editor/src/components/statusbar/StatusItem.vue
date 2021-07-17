@@ -7,7 +7,7 @@
       :class="{ 'editor-pointer': !!statusItem.command }"
       @click="trigger"
     >
-      <span v-show="statusItem.icon" v-html="statusItem.icon" class="editor-statusbar-item-icon"></span>
+      <span v-show="statusItem.icon" class="editor-statusbar-item-icon" v-html="statusItem.icon"></span>
       <span>{{ statusItem.text }}</span>
     </div>
   </ATooltip>

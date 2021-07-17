@@ -16,6 +16,7 @@ export class Subject<T extends BaseEvents = BaseEvents> extends Disposable {
     this.#emitter.all.clear();
     super.dispose();
   }
+
   on<Key extends keyof T>(type: Key, handler: Observer<T[Key]>): Disposable {
     this.#emitter.on(type, handler);
     return new DisposableDelegate(() => this.off(type, handler));
@@ -33,7 +34,7 @@ export class Subject<T extends BaseEvents = BaseEvents> extends Disposable {
     this.#emitter.off(type, handler);
   }
 
-  emit<Key extends keyof T>(...args: T[Key] extends undefined ? [Key] : [Key, T[Key]]) {
+  emit<Key extends keyof T>(...args: T[Key] extends void ? [Key] : [Key, T[Key]]) {
     // 如果 `Observer` 没有入参，则可以省略第二个参数
     this.#emitter.emit(args[0], args[1] as T[Key]);
   }

@@ -7,7 +7,7 @@
   </ASubMenu>
   <AMenuItem v-else :title="menuItem.text" :disabled="menuItem.disabled">
     <div class="editor-widget-menu-item-inner">
-      <span v-show="menuItem.checked" v-html="checkSVG" class="editor-widget-menu-item-icon" />
+      <span v-show="menuItem.checked" class="editor-widget-menu-item-icon" v-html="checkSVG" />
       <span class="editor-widget-menu-item-text">{{ menuItem.text }}</span>
       <span v-if="menuItem.extra" class="editor-widget-menu-item-extra">{{ menuItem.extra }}</span>
     </div>

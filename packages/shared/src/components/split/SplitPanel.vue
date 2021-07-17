@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-split-panel" ref="container">
+  <div ref="container" class="editor-split-panel">
     <slot />
   </div>
 </template>

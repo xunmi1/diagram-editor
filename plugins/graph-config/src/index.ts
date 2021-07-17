@@ -1,6 +1,6 @@
 import { createApp, reactive, App } from 'vue';
-import antd from './antd';
 import { DiagramEditor, ControllerItem, Plugin } from '@diagram-editor/diagram-editor';
+import antd from './antd';
 import Panel from './Panel.vue';
 import { registerCommands } from './commands';
 
@@ -22,22 +22,11 @@ export interface RootProps extends Record<string, unknown> {
   editor: DiagramEditor;
 }
 
-const initState = (editor: DiagramEditor, state: State) => {
-  editor.onDidMount(async () => {
-    const graph = editor.graph!;
-    const options = graph.options;
-    state.gridVisible = options.grid.visible;
-    state.gridSize = graph.getGridSize();
-    state.backgroundColor = (options.background ? options.background.color : null) ?? 'transparent';
-    state.scrollerEnable = options.scroller.enabled ?? false;
-    state.scrollerPannable = graph.isPannable();
-  });
-};
-
 class GraphConfig extends ControllerItem {
   public readonly title: string;
 
   public readonly state: State;
+
   private app?: App;
 
   constructor(options: { title: string }) {
@@ -53,7 +42,7 @@ class GraphConfig extends ControllerItem {
   }
 
   mount(container: HTMLElement, editor: DiagramEditor) {
-    initState(editor, this.state);
+    this.#initState(editor);
     const rootProps: RootProps = { editor, state: this.state };
     this.app = createApp(Panel, rootProps).use(antd);
     this.app.mount(container);
@@ -66,6 +55,18 @@ class GraphConfig extends ControllerItem {
 
   activate(editor: DiagramEditor): boolean {
     return !editor.activeCell;
+  }
+
+  #initState(editor: DiagramEditor) {
+    editor.onDidMount(async () => {
+      const graph = editor.graph!;
+      const options = graph.options;
+      this.state.gridVisible = options.grid.visible;
+      this.state.gridSize = graph.getGridSize();
+      this.state.backgroundColor = (options.background ? options.background.color : null) ?? 'transparent';
+      this.state.scrollerEnable = options.scroller.enabled ?? false;
+      this.state.scrollerPannable = graph.isPannable();
+    });
   }
 }
 

@@ -6,6 +6,7 @@ export abstract class ControllerItem extends Subject<Record<string | symbol, Dia
   readonly title: string;
 
   created?(editor: DiagramEditor): void;
+
   destroy?(editor: DiagramEditor): void;
 
   onWillMount(callback: LifecycleCallback) {

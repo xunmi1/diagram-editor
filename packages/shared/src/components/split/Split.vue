@@ -33,6 +33,7 @@ import {
 import ResizeObserver from 'resize-observer-polyfill';
 import { throttle, lazyTask, addEvent, removeEvent, setProperty } from '../../utils';
 import { INJECT_KEY } from './contants';
+
 type ResizeObserverCallback = ConstructorParameters<typeof ResizeObserver>[0];
 const useResizeObserver = (callback: ResizeObserverCallback, container: Ref<HTMLElement | undefined>) => {
   const observer = shallowRef<ResizeObserver | undefined>();
@@ -54,7 +55,7 @@ type MoveFunc = (event: MouseEvent) => void;
 
 const useSplit = (callback: (offsetX: number, totalX: number) => void) => {
   const active = ref(false);
-  let axisIndex = ref(0);
+  const axisIndex = ref(0);
   let startOffsetX = 0;
   let offsetX = 0;
 
@@ -160,7 +161,7 @@ export default defineComponent({
       if ((x > 0 && prev.width < threshold) || (x < 0 && next.width < threshold)) {
         // 如果累计位移低于阈值, 则不移动; 相反，移动已累计的距离
         if (Math.abs(totalX) < threshold) return;
-        else x = totalX;
+        x = totalX;
       }
       // 向左移动，左侧已经低于阈值, 则隐藏左侧面板
       if (x < 0 && prev.width < threshold) {

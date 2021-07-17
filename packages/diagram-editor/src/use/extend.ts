@@ -11,6 +11,7 @@ import {
   WatchOptionsBase,
 } from 'vue';
 import { Graph } from '@antv/x6';
+import { GraphOptions } from '../interfaces';
 
 export type OnceEffect = (...args: Parameters<WatchEffect>) => boolean;
 
@@ -22,8 +23,6 @@ export const useOnceWatch = (effect: OnceEffect, options?: WatchOptionsBase) => 
   }, options);
   watchEffect(() => isStopRef.value && stop());
 };
-
-type GraphOptions = ConstructorParameters<typeof Graph>[0];
 
 export const useGraph = (container: Ref<HTMLElement | undefined>, options?: GraphOptions) => {
   const graph = shallowRef<Graph>();

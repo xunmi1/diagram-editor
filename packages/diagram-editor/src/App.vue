@@ -79,10 +79,9 @@ const useStyle = (options: Ref<EditorOptions>) => {
 };
 
 const useLayout = (editor: DiagramEditor) => {
-  // eslint-disable-next-line
   const { graph, ...options }: EditorOptions = editor.options;
   const layout = shallowRef(options);
-  const disposable = editor.onDidUpdate(lazyTask((options: Omit<EditorOptions, 'graph'>) => (layout.value = options)));
+  const disposable = editor.onDidUpdate(lazyTask((v: Omit<EditorOptions, 'graph'>) => (layout.value = v)));
   onBeforeUnmount(() => disposable.dispose());
   return layout;
 };
@@ -107,6 +106,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    // eslint-disable-next-line
     const editor = props.editor;
     useEditor(editor);
 

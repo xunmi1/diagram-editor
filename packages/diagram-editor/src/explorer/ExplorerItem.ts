@@ -1,5 +1,5 @@
-import { Subject, Disposable, Observer } from '../utils';
 import type { Cell } from '@antv/x6/es/model/cell';
+import { Subject, Disposable, Observer } from '../utils';
 import { DiagramEditor, Lifecycle, LifecycleCallback } from '../interfaces';
 import { EventType } from '../constants';
 
@@ -14,6 +14,7 @@ export abstract class ExplorerItem<T extends ExplorerEvents = ExplorerEvents> ex
   abstract readonly title: string;
 
   created?(editor: DiagramEditor): void;
+
   destroy?(editor: DiagramEditor): void;
 
   onWillDrag?(callback: DragEvent): Disposable;

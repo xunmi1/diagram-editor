@@ -1,3 +1,4 @@
+/* eslint-disable */
 // @ts-nocheck
 import path from 'path';
 import fs from 'fs';
@@ -5,7 +6,6 @@ import type { Plugin } from 'vite';
 
 const getPackages = (rootPath: string): [string, string][] => {
   try {
-    // eslint-disable-next-line
     const rootPkg = require(path.resolve(__dirname, rootPath, 'package.json'));
     const folders: string[] = rootPkg.workspaces.flatMap(workspace => {
       if (workspace.includes('/*')) {
@@ -16,24 +16,22 @@ const getPackages = (rootPath: string): [string, string][] => {
       return workspace;
     });
 
-    const findEntry = (folderPath: string): [string, string] | void => {
+    const findEntry = (folderPath: string): [string, string] => {
       const resolve = (...paths: string[]): string => path.resolve(folderPath, ...paths);
       try {
-        // eslint-disable-next-line
         const name: string = require(resolve('package.json')).name;
         // 首先寻找根位置的 `index.ts`, 其次是 `src/index.ts`
-        const rootPath = resolve('./index.ts');
-        if (fs.existsSync(rootPath)) return [name, rootPath];
+        const filePath = resolve('./index.ts');
+        if (fs.existsSync(filePath)) return [name, filePath];
         const srcPath = resolve('./src/index.ts');
         if (fs.existsSync(srcPath)) return [name, srcPath];
       } catch (e) {
         throw new Error(`vite-plugin-watch-workspaces: ${e.message}`);
       }
+      throw new Error(`vite-plugin-watch-workspaces: The entry file was not found.`);
     };
-    return folders
-      .map(folder => path.resolve(process.cwd(), rootPath, folder))
-      .map(findEntry)
-      .filter(Boolean);
+
+    return folders.map(folder => path.resolve(process.cwd(), rootPath, folder)).map(findEntry);
   } catch (e) {
     throw new Error(`vite-plugin-watch-workspaces: ${e.message}`);
   }
@@ -57,7 +55,7 @@ const watchWorkspaces = (rootPath: string, exclude: string[] = []): Plugin => {
       const optimizeDeps = userConfig.optimizeDeps ?? {};
       const excludeList = [...exclude, ...(optimizeDeps.include ?? []), ...(optimizeDeps.exclude ?? [])];
       const addition = packages.filter(
-        ([name, fullPath]) => !excludeList.includes(name) && !userAlias.find(path => fullPath.includes(path))
+        ([name, fullPath]) => !excludeList.includes(name) && !userAlias.find(v => fullPath.includes(v))
       );
 
       const modifiedConfig = {

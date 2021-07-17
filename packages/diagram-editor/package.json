@@ -16,7 +16,7 @@
   },
   "types": "types/index.d.ts",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "dev:force": "vite --force",
     "build": "vite build && yarn run build:dts",
     "build:dts": "rimraf types && tsc -p tsconfig.d.json"

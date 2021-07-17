@@ -2,10 +2,10 @@
   <ConfigProvider>
     <section class="editor-graph-config-panel">
       <AForm :model="state" class="editor-graph-config-form">
-        <AFormItem label="网格显示" key="gridVisible">
+        <AFormItem key="gridVisible" label="网格显示">
           <ASwitch v-model:checked="state.gridVisible" />
         </AFormItem>
-        <AFormItem label="网格大小" key="gridSize">
+        <AFormItem key="gridSize" label="网格大小">
           <ASlider
             v-model:value="state.gridSize"
             :min="2"
@@ -14,13 +14,13 @@
             :get-tooltip-popup-container="getPopupContainer"
           />
         </AFormItem>
-        <AFormItem label="背景颜色" key="backgroundColor">
+        <AFormItem key="backgroundColor" label="背景颜色">
           <ColorPicker v-model:value="state.backgroundColor" />
         </AFormItem>
-        <AFormItem label="画布滚动" key="scrollerEnable">
+        <AFormItem key="scrollerEnable" label="画布滚动">
           <ASwitch v-model:checked="state.scrollerEnable" />
         </AFormItem>
-        <AFormItem label="画布平移" key="scrollerPannable">
+        <AFormItem key="scrollerPannable" label="画布平移">
           <ASwitch v-model:checked="state.scrollerPannable" />
         </AFormItem>
       </AForm>
@@ -31,8 +31,8 @@
 <script lang="ts">
 import { defineComponent, watchEffect, getCurrentInstance, PropType } from 'vue';
 import { ConfigProvider } from '@diagram-editor/shared';
-import type { RootProps } from './index';
 import type { CommandsRegistry } from '@diagram-editor/diagram-editor';
+import type { RootProps } from './index';
 import ColorPicker from './ColorPicker.vue';
 import { CommandId } from './commands';
 
@@ -53,6 +53,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    // eslint-disable-next-line
     const { state, editor } = props;
     const execute: CommandsRegistry['execute'] = (...args) => editor.commands.execute(...args);
 
@@ -63,6 +64,7 @@ export default defineComponent({
     watchEffect(() => execute(CommandId.SET_SCROLLER, { pannable: state.scrollerPannable }));
 
     const instance = getCurrentInstance();
+    // eslint-disable-next-line
     const getPopupContainer = () => instance?.appContext.app._container;
     return { getPopupContainer };
   },

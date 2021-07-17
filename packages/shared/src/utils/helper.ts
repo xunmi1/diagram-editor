@@ -1,5 +1,6 @@
-export { merge, throttle } from 'lodash-es';
 import type { Icon, IIconProps } from '@icon-park/svg/es/runtime';
+
+export { merge, throttle } from 'lodash-es';
 
 export const warn = (msg: string, ...args: any[]) => {
   console.warn(`[Editor warn]: ${msg}`, ...args);
@@ -11,7 +12,7 @@ export const error = (msg: string, ...args: any[]) => {
 
 export const delay = (timeout: number) => new Promise(resolve => setTimeout(resolve, timeout));
 
-export const lazyTask = <T extends (...args: any[]) => any>(func: T) => {
+export const lazyTask = <T extends (...args: any[]) => ReturnType<T>>(func: T) => {
   let timer: number | undefined;
   let result: ReturnType<T>;
 

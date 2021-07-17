@@ -74,27 +74,27 @@ export const grid = (model: Model, options: LayoutOptions = {}) => {
   nodes.forEach((node, index) => {
     const rowIndex = index % columns;
     const columnIndex = Math.floor(index / columns);
-    const columnWidth = columnWidths[rowIndex];
-    const rowHeight = rowHeights[columnIndex];
+    const col = columnWidths[rowIndex];
+    const row = rowHeights[columnIndex];
     const size = node.getSize();
 
     let cx = 0;
     let cy = 0;
 
     if (resizeToFit) {
-      let width = columnWidth - 2 * dx;
-      let height = rowHeight - 2 * dy;
+      let width = col - 2 * dx;
+      let height = row - 2 * dy;
       const calcHeight = size.height * (size.width ? width / size.width : 1);
       const calcWidth = size.width * (size.height ? height / size.height : 1);
-      if (rowHeight < calcHeight) width = calcWidth;
+      if (row < calcHeight) width = calcWidth;
       else height = calcHeight;
 
       node.setSize({ width, height }, options);
     }
 
     if (centre) {
-      cx = (columnWidth - size.width) / 2;
-      cy = (rowHeight - size.height) / 2;
+      cx = (col - size.width) / 2;
+      cy = (row - size.height) / 2;
     }
 
     node.position(columnLefts[rowIndex] + dx + cx, rowTops[columnIndex] + dy + cy, options);
@@ -114,7 +114,7 @@ const getNodesInRow = (nodes: Node[], rowIndex: number, columnCount: number) => 
 
 const getNodesInColumn = (nodes: Node[], columnIndex: number, columnCount: number) => {
   const res: Node[] = [];
-  for (let i = columnIndex, ii = nodes.length; i < ii; i = i + columnCount) {
+  for (let i = columnIndex, ii = nodes.length; i < ii; i += columnCount) {
     res.push(nodes[i]);
   }
   return res;

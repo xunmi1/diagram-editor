@@ -12,30 +12,31 @@ interface Events<T> extends BaseEvents {
 }
 
 export class Menu<T extends MenuItem> extends Subject<Events<T>> {
+  #groups: string[];
+
   protected readonly list: Map<string, T>;
-  private _groups: string[];
 
   protected constructor() {
     super();
     this.list = new Map();
-    this._groups = [];
+    this.#groups = [];
 
     this._emitGroups = lazyTask(this._emitGroups);
   }
 
   get groups() {
-    return [...this._groups];
+    return [...this.#groups];
   }
 
   set groups(groups: string[]) {
-    this._groups = getGroups(groups);
+    this.#groups = getGroups(groups);
     this._emitGroups();
   }
 
   load(key: string, item: T, parentKey?: string) {
     if (!parentKey) {
       this.list.set(key, item);
-      if (!this._groups.includes(key)) this._groups.push(key);
+      if (!this.#groups.includes(key)) this.#groups.push(key);
       this._emitGroups();
       this.emit(EVENT_TYPE_LOAD, { key, item });
       return;
@@ -57,7 +58,7 @@ export class Menu<T extends MenuItem> extends Subject<Events<T>> {
   }
 
   get(key: string) {
-    return this._get(key, this.list);
+    return this.#findChild(key, this.list);
   }
 
   onDidLoad(callback: Observer<{ parentKey?: string; parent?: T; key: string; item: T }>) {
@@ -76,14 +77,18 @@ export class Menu<T extends MenuItem> extends Subject<Events<T>> {
     return this.list.forEach((v, k) => callback(v, k));
   }
 
-  private _get(key: string, list: Map<string, T>): T | undefined {
+  #findChild(key: string, list: Map<string, T>): T | undefined {
+    // TODO 使用迭代器
+    // eslint-disable-next-line
     for (const [k, v] of list) {
       if (k === key) return v;
       if (v.children?.size) {
-        const target = this._get(key, v.children);
+        const target = this.#findChild(key, v.children);
         if (target) return target;
       }
     }
+
+    return undefined;
   }
 
   private _emitGroups() {

@@ -23,8 +23,8 @@
 
 <script lang="ts">
 import { defineComponent, shallowReactive, shallowRef, ref, unref, onBeforeUnmount } from 'vue';
-import { useEditor, useGlobalGraph } from '../use';
 import { Addon, Cell } from '@antv/x6';
+import { useEditor, useGlobalGraph } from '../use';
 import type { ExplorerItem } from '../explorer';
 import Container from './Container';
 import { EventType } from '../constants';

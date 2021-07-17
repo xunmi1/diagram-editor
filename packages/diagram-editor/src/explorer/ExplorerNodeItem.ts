@@ -1,7 +1,7 @@
 import { Graph, Node } from '@antv/x6';
-import { grid, LayoutOptions } from './grid';
 import ResizeObserver from 'resize-observer-polyfill';
 import { throttle, lazyTask } from '@diagram-editor/shared';
+import { grid, LayoutOptions } from './grid';
 import { ExplorerItem, DragEvent, ExplorerEvents } from './ExplorerItem';
 import { Observer } from '../utils';
 
@@ -10,7 +10,7 @@ export type { LayoutOptions };
 // 根据参数，拦截相同参数的函数调用
 const unique = <T extends (...params: any[]) => void>(func: T) => {
   let cacheParams: string;
-  return function (this: unknown, ...args: Parameters<T>) {
+  return function fn(this: unknown, ...args: Parameters<T>) {
     const str = JSON.stringify(args);
     if (cacheParams === str) return;
     cacheParams = str;
@@ -40,27 +40,30 @@ interface Events extends ExplorerEvents {
 
 export class ExplorerNodeItem extends ExplorerItem<Events> {
   public readonly title: string;
+
   public graph: Graph | undefined;
 
-  private _container?: HTMLElement;
-  private _containerRect?: DOMRectReadOnly;
-  private readonly _layout: { cellWidth: number };
+  #container?: HTMLElement;
+
+  #containerRect?: DOMRectReadOnly;
+
+  readonly #layout: { cellWidth: number };
 
   constructor(options?: Partial<{ title: string; layout: { cellWidth?: number } }>) {
     super();
     const title = options?.title;
     if (title) this.title = title;
-    this._layout = { cellWidth: 100, ...options?.layout };
+    this.#layout = { cellWidth: 100, ...options?.layout };
 
     this.applyLayout = lazyTask(this.applyLayout);
 
-    this._observeContainerSize();
-    this._bindResetEvent();
-    this._bindDragEvent();
+    this.#observeContainerSize();
+    this.#bindResetEvent();
+    this.#bindDragEvent();
   }
 
   mount(container: HTMLElement): void {
-    this._container = container;
+    this.#container = container;
     this.graph = new Graph({
       container,
       interacting: false,
@@ -73,13 +76,13 @@ export class ExplorerNodeItem extends ExplorerItem<Events> {
   unmount() {
     this.graph?.dispose();
     this.graph = undefined;
-    this._container = undefined;
+    this.#container = undefined;
   }
 
   load(...nodeList: (Node.Metadata | Node)[]) {
     const loadNode = () => {
-      nodeList.forEach(node => this.graph?.addNode(<Node>node));
-      const columns = this._calcColumns();
+      this.graph?.addNodes(nodeList);
+      const columns = this.#calcColumns();
       if (columns) this.applyLayout({ columns });
     };
 
@@ -97,8 +100,8 @@ export class ExplorerNodeItem extends ExplorerItem<Events> {
       // `resizeToFit` 必须是 `false`, 否则多次调用 `applyLayout` 时，会不断缩小节点
       const layout = { ...defaultLayoutOptions, ...options, resizeToFit: false };
       const columns = layout.columns ?? 0;
-      if (columns < 1 || columns > graph.getCellCount()) return;
-      grid(graph.model as any, layout);
+      if (columns < 1) return;
+      grid(graph.model, layout);
       this.fitToContent();
     }
   }
@@ -116,7 +119,7 @@ export class ExplorerNodeItem extends ExplorerItem<Events> {
   }
 
   /** 传递拖拽事件 */
-  private _bindDragEvent() {
+  #bindDragEvent() {
     this.onDidMount(() => {
       this.graph?.on(NODE_EVENT_MOUSEDOWN, args => {
         // @ts-ignore
@@ -127,34 +130,36 @@ export class ExplorerNodeItem extends ExplorerItem<Events> {
       this.graph?.off(NODE_EVENT_MOUSEDOWN);
     });
   }
+
   /** 观察容器尺寸变化 */
-  private _observeContainerSize() {
+  #observeContainerSize() {
     const resizeObserver = new ResizeObserver(
       throttle(entries => {
         this.emit(EVENT_TYPE_DID_RESIZE, entries[0].contentRect);
       }, 160)
     );
     this.onDidMount(() => {
-      const element = this._container?.parentElement;
+      const element = this.#container?.parentElement;
       if (element) resizeObserver.observe(element);
     });
     this.onWillUnmount(() => resizeObserver.disconnect());
   }
 
-  private _calcColumns() {
-    const { width, height } = this._containerRect ?? {};
+  #calcColumns() {
+    const { width, height } = this.#containerRect ?? {};
     if (width && height && this.graph) {
-      return Math.floor(width / this._layout.cellWidth);
+      return Math.floor(width / this.#layout.cellWidth);
     }
+    return 0;
   }
 
   /** 根据尺寸变化，自动调整布局 */
-  private _bindResetEvent() {
-    const _applyLayout = unique(this.applyLayout).bind(this);
+  #bindResetEvent() {
+    const applyLayout = unique(this.applyLayout).bind(this);
     this.onDidResize(rect => {
-      this._containerRect = rect;
-      const columns = this._calcColumns();
-      if (columns) _applyLayout({ columns });
+      this.#containerRect = rect;
+      const columns = this.#calcColumns();
+      if (columns) applyLayout({ columns });
     });
   }
 }

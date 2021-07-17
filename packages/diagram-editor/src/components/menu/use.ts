@@ -43,12 +43,12 @@ export const useDivider = (groups: Ref<string[]>, list: Ref<Map<string, MenuItem
   });
 
   const has = (key: string) => {
-    const list = visibleList.value;
-    const index = list.indexOf(key);
-    if (index === list.length - 1) return false;
+    const data = visibleList.value;
+    const index = data.indexOf(key);
+    if (index === data.length - 1) return false;
 
     const origin = groups.value;
-    const next = list[index + 1];
+    const next = data[index + 1];
     const start = origin.indexOf(key);
     const end = origin.indexOf(next);
     return origin.slice(start + 1, end).includes(GROUP_TAG);

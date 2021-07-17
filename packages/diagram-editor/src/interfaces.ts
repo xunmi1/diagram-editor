@@ -1,4 +1,4 @@
-import type { Options } from '@antv/x6/es/graph/options';
+import type { Graph } from '@antv/x6';
 import type DiagramEditor from './editor';
 import type { Disposable, Observer } from './utils';
 
@@ -6,7 +6,7 @@ export type { Observer, Disposable, Command, CommandId, CommandsRegistry } from 
 
 export type { DiagramEditor };
 
-export type GraphOptions = Partial<Options.Manual> | undefined;
+export type GraphOptions = Omit<ConstructorParameters<typeof Graph>[0], 'container'>;
 
 export interface EditorOptions {
   graph?: GraphOptions;

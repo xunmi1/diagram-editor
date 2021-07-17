@@ -18,7 +18,6 @@ export class Toolbar extends Subject<Events<ToolbarItem>> {
   load(key: string, item: ToolbarItem) {
     this.list.set(key, item);
     this.emit(EVENT_TYPE_LOAD, { key, item });
-    return;
   }
 
   onDidLoad(callback: Observer<{ key: string; item: ToolbarItem }>) {

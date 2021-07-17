@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@diagram-editor/shared": "^0.1.0",
-    "ant-design-vue": "^2.0.0",
-    "vue-color-kit": "^1.0.3"
+    "ant-design-vue": "^2.2.2",
+    "vue-color-kit": "^1.0.5"
   }
 }

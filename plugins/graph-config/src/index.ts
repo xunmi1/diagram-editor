@@ -4,7 +4,6 @@ import antd from './antd';
 import Panel from './Panel.vue';
 import { registerCommands } from './commands';
 
-export { CommandId } from './commands';
 export type { GridOptions, ScrollerOptions, BackgroundOptions } from './commands';
 
 export interface State {
@@ -29,9 +28,9 @@ class GraphConfig extends ControllerItem {
 
   private app?: App;
 
-  constructor(options: { title: string }) {
+  constructor(options?: Partial<{ title: string }>) {
     super();
-    this.title = options.title;
+    this.title = options?.title ?? '画布属性';
     this.state = reactive<State>({
       gridVisible: true,
       gridSize: 10,
@@ -78,7 +77,7 @@ export interface PluginOptions {
 export const graphConfigPlugin =
   (options: PluginOptions): Plugin =>
   editor => {
-    const graphConfig = new GraphConfig({ title: options.title ?? '画布属性' });
+    const graphConfig = new GraphConfig({ title: options.title });
 
     registerCommands(editor, graphConfig.state);
     editor.controller.load(options.key, graphConfig);

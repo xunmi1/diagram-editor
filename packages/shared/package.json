@@ -9,6 +9,12 @@
   ],
   "main": "./dist/shared.cjs.js",
   "module": "./dist/shared.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/shared.es.js",
+      "require": "./dist/shared.umd.js"
+    }
+  },
   "types": "types/index.d.ts",
   "scripts": {
     "build": "vite build && yarn run build:dts",
@@ -22,12 +28,10 @@
   "author": "xunmi <xunmi1@outlook.com>",
   "license": "AGPL-3.0",
   "peerDependencies": {
-    "vue": "^3.1.5",
-    "ant-design-vue": "^2.2.2"
+    "vue": "^3.1.5"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.4",
-    "resize-observer-polyfill": "^1.5.1",
     "lodash-es": "^4.17.21"
   }
 }

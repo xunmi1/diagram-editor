@@ -5,7 +5,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, unref, onMounted, onActivated, onDeactivated, inject } from 'vue';
+import {
+  defineComponent,
+  unref,
+  shallowRef,
+  onMounted,
+  onActivated,
+  onDeactivated,
+  onBeforeUnmount,
+  inject,
+} from 'vue';
 import { INJECT_KEY } from './contants';
 
 interface Props {
@@ -19,20 +28,22 @@ export default defineComponent({
   },
   setup(props) {
     const meta = inject<Map<HTMLElement, Props>>(INJECT_KEY)!;
-    const container = ref<HTMLElement>();
+    const container = shallowRef<HTMLElement>();
 
-    onMounted(() => {
-      const el = unref(container)!;
-      meta.set(el, props);
-    });
+    const update = () => {
+      const el = unref(container);
+      if (el) meta.set(el, props);
+    };
 
-    onActivated(() => {
-      meta.set(unref(container)!, props);
-    });
+    const remove = () => {
+      const el = unref(container);
+      if (el) meta.delete(el);
+    };
 
-    onDeactivated(() => {
-      meta.delete(unref(container)!);
-    });
+    onMounted(update);
+    onActivated(update);
+    onDeactivated(remove);
+    onBeforeUnmount(remove);
 
     return { container };
   },

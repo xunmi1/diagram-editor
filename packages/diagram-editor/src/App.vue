@@ -49,9 +49,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, shallowRef, onBeforeUnmount, Ref, PropType } from 'vue';
-import { ConfigProvider, Split, SplitPanel, lazyTask } from '@diagram-editor/shared';
+import { defineComponent, computed, shallowRef, onBeforeUnmount, Ref, PropType } from 'vue';
+import { Split, SplitPanel, lazyTask } from '@diagram-editor/shared';
 import { useGraph, useEditor, useGlobalGraph } from './use';
+import ConfigProvider from './components/ConfigProvider.vue';
 import Menubar from './components/menubar/Menubar.vue';
 import Toolbar from './components/toolbar/Toolbar.vue';
 import Statusbar from './components/statusbar/Statusbar.vue';
@@ -110,7 +111,7 @@ export default defineComponent({
     const editor = props.editor;
     useEditor(editor);
 
-    const container = ref<HTMLElement>();
+    const container = shallowRef<HTMLElement>();
     const graph = useGraph(container, editor.options.graph);
     useGlobalGraph(graph);
 
@@ -123,7 +124,7 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-@import '@diagram-editor/shared/dist/style.css';
+@import '../../shared/dist/style.css';
 
 .editor-layout {
   position: relative;

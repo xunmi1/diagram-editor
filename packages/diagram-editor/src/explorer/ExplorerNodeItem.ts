@@ -1,5 +1,4 @@
 import { Graph, Node } from '@antv/x6';
-import ResizeObserver from 'resize-observer-polyfill';
 import { throttle, lazyTask } from '@diagram-editor/shared';
 import { grid, LayoutOptions } from './grid';
 import { ExplorerItem, DragEvent, ExplorerEvents } from './ExplorerItem';

@@ -12,12 +12,11 @@ export default defineConfig({
     },
     brotliSize: false,
     rollupOptions: {
-      external: ['vue', 'moment'],
+      external: ['vue'],
       output: {
         exports: 'named',
         globals: {
           vue: 'Vue',
-          moment: 'moment',
         },
       },
     },

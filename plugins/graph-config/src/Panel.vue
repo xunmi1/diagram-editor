@@ -30,9 +30,9 @@
 
 <script lang="ts">
 import { defineComponent, watchEffect, getCurrentInstance, PropType } from 'vue';
-import { ConfigProvider } from '@diagram-editor/shared';
 import type { CommandsRegistry } from '@diagram-editor/diagram-editor';
 import type { RootProps } from './index';
+import ConfigProvider from './ConfigProvider.vue';
 import ColorPicker from './ColorPicker.vue';
 import { CommandId } from './commands';
 

@@ -31,8 +31,4 @@ export default defineConfig({
       },
     },
   },
-
-  optimizeDeps: {
-    include: ['@diagram-editor/shared'],
-  },
 });

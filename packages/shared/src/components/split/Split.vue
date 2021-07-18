@@ -30,7 +30,6 @@ import {
   Ref,
   provide,
 } from 'vue';
-import ResizeObserver from 'resize-observer-polyfill';
 import { throttle, lazyTask, addEvent, removeEvent, setProperty } from '../../utils';
 import { INJECT_KEY } from './contants';
 
